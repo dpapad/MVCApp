@@ -20,9 +20,6 @@ import org.mypackage.model.Email;
 @WebServlet(name = "NewEmailServlet", urlPatterns = {"/newEmail"})
 public class NewEmailServlet extends HttpServlet {
     
-    private String excMessage;
-    
-    
     private ContactRepository contactRepository;
     
     public NewEmailServlet() {

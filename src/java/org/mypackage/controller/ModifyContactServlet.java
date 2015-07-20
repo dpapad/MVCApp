@@ -11,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.dal.mysql.MySqlConnectionProvider;
 import org.mypackage.dal.mysql.MysqlContactRepository;
@@ -24,6 +26,16 @@ import org.mypackage.model.Contact;
 @WebServlet(name = "ModifyContactServlet", urlPatterns = {"/modifyContact"})
 public class ModifyContactServlet extends HttpServlet {
 
+    private ContactRepository contactRepository;
+
+    public ModifyContactServlet() {
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
+    }
+
+    public ModifyContactServlet(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,8 +45,6 @@ public class ModifyContactServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    private String excMessage;
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Contact contact = new Contact();
@@ -46,8 +56,7 @@ public class ModifyContactServlet extends HttpServlet {
         request.setAttribute("contact", contact);
         
         try {
-            MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
-            contactRepository.updateContact(contact);
+            this.contactRepository.updateContact(contact);
             request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
             
 //            String redirectUrl = this.getServletContext().getContextPath() + "/modifyContact";

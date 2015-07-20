@@ -22,8 +22,6 @@ import org.mypackage.model.Email;
  * @author dpa
  */
 public class ViewContactServlet extends HttpServlet {
-
-    private String excMessage;
     
     private ContactRepository contactRepository;
     
@@ -38,18 +36,15 @@ public class ViewContactServlet extends HttpServlet {
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("contactId"));
+        
         try{            
             request.setAttribute("contact", contactRepository.getContactById(id));
-            
             List<Email> list = contactRepository.getAllEmailsByContactId(id);
             request.setAttribute("emailList", list);
-           
-            
-            
             request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
+        } catch (DalException ex) {
             
-            
-        } catch (DalException ex) {}
+        }
         
     }
     

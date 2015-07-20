@@ -23,8 +23,6 @@ import org.mypackage.model.Contact;
  */
 public class GetAllContactsServlet extends HttpServlet {
 
-   private String excMessage;
-
     private ContactRepository contactRepository;
 
     public GetAllContactsServlet() {
