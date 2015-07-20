@@ -29,7 +29,8 @@ public class DeleteContactServlet extends HttpServlet {
         try{
             MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
             contactRepository.deleteContactById(id);
-            request.getRequestDispatcher("/contacts.jsp").forward(request, response);
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
+            response.sendRedirect(redirectUrl);
         } catch  (DalException ex) {
             excMessage = "Error Deleting the contact";
             DalException deleteContactServletExc = new DalException(excMessage, ex);
