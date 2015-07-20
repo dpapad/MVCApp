@@ -57,7 +57,8 @@ public class ModifyContactServlet extends HttpServlet {
         
         try {
             this.contactRepository.updateContact(contact);
-            request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
+            String redirectUrl = this.getServletContext().getContextPath() + "/viewContact?contactId=" + contact.getContid();
+            response.sendRedirect(redirectUrl);
             
 //            String redirectUrl = this.getServletContext().getContextPath() + "/modifyContact";
 //            response.sendRedirect(redirectUrl);  
@@ -72,8 +73,8 @@ public class ModifyContactServlet extends HttpServlet {
             throws ServletException, IOException { 
         Contact contact = new Contact();
         Integer id = Integer.parseInt(request.getParameter("contactId"));
+        
         try {
-            MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
             contact = contactRepository.getContactById(id);
         } catch (DalException ex) {
             
