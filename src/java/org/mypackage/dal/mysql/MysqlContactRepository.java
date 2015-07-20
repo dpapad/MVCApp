@@ -37,7 +37,7 @@ public class MysqlContactRepository implements ContactRepository {
 
                 try {
                     contactPstmt = con.prepareStatement("INSERT INTO contacts(contid, fullname, nickname, notes) VALUES(?,?,?,?)");
-                    contactPstmt.setInt(1, (NumberOfContacts()+1));
+                    contactPstmt.setInt(1, (numberOfContacts()+1));
                     contactPstmt.setString(2, c.getFullname());
                     contactPstmt.setString(3, c.getNickname());
                     contactPstmt.setString(4, c.getNotes());
@@ -209,7 +209,7 @@ public class MysqlContactRepository implements ContactRepository {
                 try {
                     
                     emailPstmt = con.prepareStatement("INSERT INTO emails(emailid, address, email_type, contid) VALUES(?,?,?,?)");
-                    emailPstmt.setInt(1, (NumberOfEmails()+1));
+                    emailPstmt.setInt(1, (numberOfEmails()+1));
                     emailPstmt.setString(2, e.getAddress());
                     emailPstmt.setString(3, e.getType());
                     //Contact id
@@ -276,7 +276,7 @@ public class MysqlContactRepository implements ContactRepository {
         return list;
     }
     
-    public int NumberOfContacts() throws DalException {
+    public int numberOfContacts() throws DalException {
         Connection con = null;
         Statement stmt = null;
         int contactEntries = 0;
@@ -310,7 +310,7 @@ public class MysqlContactRepository implements ContactRepository {
         return contactEntries;
     }
     
-    public int NumberOfEmails() throws DalException {
+    public int numberOfEmails() throws DalException {
         Connection con = null;
         Statement stmt = null;
         int emailEntries = 0;
