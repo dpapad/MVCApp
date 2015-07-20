@@ -9,10 +9,6 @@ package org.mypackage.model;
  *
  * @author dpa
  */
-
-
-
-
 public class Email {
     private int emailid;
     
