@@ -102,7 +102,7 @@ public class MysqlContactRepository implements ContactRepository {
                     pstmt.setString(1, c.getFullname());
                     pstmt.setString(2, c.getNickname());
                     pstmt.setString(3, c.getNotes());
-                    pstmt.setInt(4, c.getContid());
+                    pstmt.setInt(4, c.getContactId());
                     pstmt.executeUpdate();
                 } finally {
                     if(pstmt!=null){
@@ -133,7 +133,7 @@ public class MysqlContactRepository implements ContactRepository {
                     ResultSet rs = stmt.executeQuery("SELECT * FROM contacts WHERE contid=" + id);
                     if (rs.next()) {
                         contact = new Contact();
-                        contact.setContid(rs.getInt(1));
+                        contact.setContactId(rs.getInt(1));
                         contact.setFullname(rs.getString(2));
                         contact.setNickname(rs.getString(3));
                         contact.setNotes(rs.getString(4));
@@ -172,7 +172,7 @@ public class MysqlContactRepository implements ContactRepository {
                     ResultSet rs = stmt.executeQuery("SELECT * FROM contacts ORDER BY contid");
                     while(rs.next()) {
                         Contact contact = new Contact();
-                        contact.setContid(rs.getInt(1));
+                        contact.setContactId(rs.getInt(1));
                         contact.setFullname(rs.getString(2));
                         contact.setNickname(rs.getString(3));
                         contact.setNotes(rs.getString(4));
@@ -213,7 +213,7 @@ public class MysqlContactRepository implements ContactRepository {
                     emailPstmt.setString(2, e.getAddress());
                     emailPstmt.setString(3, e.getType());
                     //Contact id
-                    emailPstmt.setInt(4, e.getContid());
+                    emailPstmt.setInt(4, e.getContactId());
                     emailPstmt.execute();
                                         
                 }
@@ -251,10 +251,10 @@ public class MysqlContactRepository implements ContactRepository {
                     ResultSet rs = stmt.executeQuery("SELECT * FROM emails WHERE contid=" + id);
                     while(rs.next()) {
                         Email email = new Email();
-                        email.setEmailid(rs.getInt(1));
+                        email.setEmailId(rs.getInt(1));
                         email.setAddress(rs.getString(2));
                         email.setType(rs.getString(3));
-                        email.setContid(rs.getInt(4));
+                        email.setContactId(rs.getInt(4));
                         list.add(email);
                     }
                 } finally {

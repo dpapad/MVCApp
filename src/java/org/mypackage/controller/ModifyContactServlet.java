@@ -34,7 +34,7 @@ public class ModifyContactServlet extends HttpServlet {
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Contact contact = new Contact();
-        contact.setContid(Integer.parseInt(request.getParameter("contid")));
+        contact.setContactId(Integer.parseInt(request.getParameter("contactId")));
         contact.setFullname(request.getParameter("fullname"));
         contact.setNickname(request.getParameter("nickname"));
         contact.setNotes(request.getParameter("notes"));
@@ -43,7 +43,7 @@ public class ModifyContactServlet extends HttpServlet {
         
         try {
             this.contactRepository.updateContact(contact);
-            String redirectUrl = this.getServletContext().getContextPath() + "/viewContact?contactId=" + contact.getContid();
+            String redirectUrl = this.getServletContext().getContextPath() + "/viewContact?contactId=" + contact.getContactId();
             response.sendRedirect(redirectUrl);           
         } catch (DalException ex) {
             

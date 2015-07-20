@@ -1,8 +1,4 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="org.mypackage.dal.mysql.MySqlConnectionProvider"%>
-<%@page import="org.mypackage.dal.mysql.MysqlContactRepository"%>
-<%@page import="org.mypackage.model.Contact"%>
-<%@page import="org.mypackage.model.Email"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -30,7 +26,7 @@
                     <option id="work" name="work" value="Work">Work</option>
                 </select>
 
-                <input type="hidden" name="contid" id="contid" value="${param.contactId}" />
+                <input type="hidden" name="contactId" id="contactId" value="${param.contactId}" />
                 
                 <button type="submit">Add New Email</button>
                 <div class="spacer"></div>

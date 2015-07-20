@@ -5,34 +5,36 @@ package org.mypackage.model;
  * @author dpa
  */
 public class Email {
-    private int emailid;
+    private int emailId;
     
     private String address;
     
     private String type;
     
-    private int contid;
-    
+    private int contactId;
     
     public Email() {
-        this.emailid = emailid;
+    }
+    
+    public Email(int emailId, String address, String type, int contactId) {
+        this.emailId = emailId;
         this.address = address;
         this.type = type;
-        this.contid = contid;
+        this.contactId = contactId;
     }
 
     /**
-     * @return the emailid
+     * @return the emailId
      */
-    public int getEmailid() {
-        return emailid;
+    public int getEmailId() {
+        return emailId;
     }
 
     /**
-     * @param emailid the emailid to set
+     * @param emailId the emailId to set
      */
-    public void setEmailid(int emailid) {
-        this.emailid = emailid;
+    public void setEmailId(int emailId) {
+        this.emailId = emailId;
     }
 
     /**
@@ -64,16 +66,16 @@ public class Email {
     }
 
     /**
-     * @return the contid
+     * @return the contactId
      */
-    public int getContid() {
-        return contid;
+    public int getContactId() {
+        return contactId;
     }
 
     /**
-     * @param contid the cont_id to set
+     * @param contactId the cont_id to set
      */
-    public void setContid(int contid) {
-        this.contid = contid;
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 }

@@ -6,7 +6,7 @@ package org.mypackage.model;
  */
 public class Contact {
 
-    private int contid;
+    private int contactId;
     private String fullname;
     private String nickname;
     private String notes;
@@ -14,25 +14,25 @@ public class Contact {
     public Contact() {              
     }
     
-    public Contact(int contid, String fullname, String nickname, String notes) {
-        this.contid = contid;
+    public Contact(int contactId, String fullname, String nickname, String notes) {
+        this.contactId = contactId;
         this.fullname = fullname;
         this.nickname = nickname;
         this.notes = notes;
     }
 
     /**
-     * @return the contid
+     * @return the contactId
      */
-    public int getContid() {
-        return contid;
+    public int getContactId() {
+        return contactId;
     }
     
     /**
-     * @param contid the contid to set
+     * @param contactId the contactId to set
      */
-    public void setContid(int contid) {
-        this.contid = contid;
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 
     /**

@@ -16,11 +16,11 @@
             <form id="form" name="form" action="modifyContact" method="post">
                 
                 
-                <h1>Update Contact ID:<c:out value="${contact.contid}"/></h1>
-                <p>Modify the following information to update employee ID:<c:out value="${contact.contid}"/></p>
+                <h1>Update Contact ID:<c:out value="${contact.contactId}"/></h1>
+                <p>Modify the following information to update employee ID:<c:out value="${contact.contactId}"/></p>
                 
                 
-                <label><input type="hidden" name="contid" id="contid" value="${contact.contid}"/><span class="small"></span></label>                    
+                <label><input type="hidden" name="contactId" id="contactId" value="${contact.contactId}"/><span class="small"></span></label>                    
                 
                 <label>Full Name<span class="small">Enter full name</span></label>
                 <input type="text" name="fullname" id="fullname" value="${contact.fullname}"/>

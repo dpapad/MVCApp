@@ -29,7 +29,7 @@
                           
                         <td style="border: none;">                            
                             <div>
-                                <a href="<c:url value="/addEmail?contactId=${contact.contid}" />">Add New Email</a>
+                                <a href="<c:url value="/addEmail?contactId=${contact.contactId}" />">Add New Email</a>
                             </div>                                    
                         </td>
                     </tr>                   
