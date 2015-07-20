@@ -38,7 +38,7 @@ public class NewEmailServlet extends HttpServlet {
     
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException { 
-        request.getRequestDispatcher("newEmail.jsp").forward(request, response);
+        request.getRequestDispatcher("/newEmail.jsp").forward(request, response);
     }
 
     
@@ -54,7 +54,7 @@ public class NewEmailServlet extends HttpServlet {
         try {
             
             this.contactRepository.addEmail(email);
-            String redirectUrl = this.getServletContext().getContextPath()  +"/newEmail";
+            String redirectUrl = this.getServletContext().getContextPath()  +"/viewContact?contactId=" + email.getContid();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
             excMessage = "Error Adding the email";

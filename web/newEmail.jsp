@@ -16,15 +16,13 @@
         <%@include file="header.jsp" %>
         
         <div id="mystyle" class="myform">
-            <form id="form" name="form"  method="post" action="newEmail">
+            <form id="form" name="form"  method="post" action="addEmail">
                 <h1>Email</h1>
                 <p>To add a new Email enter following information</p>
 
 
                 <label>Address<span class="small">Enter Email Address</span></label>
                 <input type="text" name="address" id="address" />
-                  
-                <input type="hidden" name="contid" id="contid" value="${param.emailContId}" />
 
                 <label>Type</label>
                 <select name="email_type" id="email_type">
@@ -32,6 +30,8 @@
                     <option id="work" name="work" value="Work">Work</option>
                 </select>
 
+                <input type="hidden" name="contid" id="contid" value="${param.contactId}" />
+                
                 <button type="submit">Add New Email</button>
                 <div class="spacer"></div>
             </form>

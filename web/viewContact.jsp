@@ -35,12 +35,7 @@
                         <td style="border: none;">
                             
                             <div>
-                                <form method="post" action="newEmail.jsp">
-                                    <input type="hidden" id="emailContId" name="emailContId" value="${contact.contid}"/> 
-                                    <input type="submit" value="Add Email"/>
-                                    
-                                </form>
-                                <!--<a href="<c:url value="/newEmail?contactId=${contact.contid}" />">Add New Email</a>-->
+                                <a href="<c:url value="/addEmail?contactId=${contact.contid}" />">Add New Email</a>
                             </div>
                                     
                             

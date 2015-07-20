@@ -46,7 +46,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewEmailServlet</servlet-name>
-        <url-pattern>/newEmail</url-pattern>        
+        <url-pattern>/addEmail</url-pattern>        
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GetAllEmailsServlet</servlet-name>
