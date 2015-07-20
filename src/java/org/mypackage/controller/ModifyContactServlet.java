@@ -6,8 +6,6 @@
 package org.mypackage.controller;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,10 +56,6 @@ public class ModifyContactServlet extends HttpServlet {
             //response.sendRedirect("contView.jsp"); 
         } catch (DalException ex) {
             
-            excMessage = "Error Updating the contact";
-            DalException updateContactServletExc = new DalException(excMessage, ex);
-            
-            Logger.getLogger("Error in servlet method processRequest(HttpServletRequest request, HttpServletResponse response) at " + ModifyContactServlet.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, updateContactServletExc);
         }
     }
     

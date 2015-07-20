@@ -2,8 +2,6 @@
 package org.mypackage.controller;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,10 +55,7 @@ public class NewEmailServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath()  +"/viewContact?contactId=" + email.getContid();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
-            excMessage = "Error Adding the email";
-            DalException addNewEmailServletExc = new DalException(excMessage, ex);
             
-            Logger.getLogger("Error in servlet method processRequest(HttpServletRequest request, HttpServletResponse response) at " +NewEmailServlet.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, addNewEmailServletExc);
         }
     }
 

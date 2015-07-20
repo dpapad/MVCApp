@@ -1,8 +1,6 @@
 package org.mypackage.controller;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,10 +30,7 @@ public class DeleteContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
             response.sendRedirect(redirectUrl);
         } catch  (DalException ex) {
-            excMessage = "Error Deleting the contact";
-            DalException deleteContactServletExc = new DalException(excMessage, ex);
             
-            Logger.getLogger("Error in servlet method processRequest(HttpServletRequest request, HttpServletResponse response) at " + DeleteContactServlet.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, deleteContactServletExc);
         }
     }
     

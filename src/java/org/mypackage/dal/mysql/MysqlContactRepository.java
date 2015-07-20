@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
@@ -61,9 +59,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
         }
         catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Error inserting a new contact into the database.";
-            DalException addContactException = new DalException(excMessage, ex);
-            Logger.getLogger("Error in method addContact() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, addContactException);
+            DalException addContactException = new DalException(ex);
             throw addContactException;
         }
     }
@@ -91,11 +87,7 @@ public class MysqlContactRepository implements ContactRepository {
             
         }
         catch (SQLException | ClassNotFoundException ex){
-            
-            excMessage = "Error deleting contact by ID.";
-            DalException deleteContactByIdException = new DalException(excMessage, ex);
-            
-            Logger.getLogger("Error in method deleteContactById() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, deleteContactByIdException);
+            DalException deleteContactByIdException = new DalException(ex);
             throw deleteContactByIdException;
         }
     }
@@ -124,13 +116,8 @@ public class MysqlContactRepository implements ContactRepository {
                 con.close();
                     }
             }
-        } catch( Exception ex) {
-            excMessage = "Error updating the contact.";
-            
-            DalException updateContactException = new DalException(excMessage, ex);
-            
-            Logger.getLogger("Error in method updateContact() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, updateContactException);
-            
+        } catch(SQLException | ClassNotFoundException ex) {
+            DalException updateContactException = new DalException(ex);
             throw updateContactException;
         }
     }
@@ -166,10 +153,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Error retrieving contact by ID.";
-            DalException getContactByIdException = new DalException(excMessage, ex);
-            
-            Logger.getLogger("Error in method getContactById() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, getContactByIdException);
+            DalException getContactByIdException = new DalException(ex);
             throw getContactByIdException;
         }
         
@@ -208,9 +192,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Error retrieving all contacts from the database.";
-            DalException getAllContactsException = new DalException(excMessage, ex);
-            Logger.getLogger("Error in method getAllContacts() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, getAllContactsException);
+            DalException getAllContactsException = new DalException(ex);
             throw getAllContactsException;
         }
         
@@ -251,9 +233,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
         }
         catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Error inserting a new email into the database.";
-            DalException addEmailException = new DalException(excMessage, ex);
-            Logger.getLogger("Error in method addEmail() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, addEmailException);
+            DalException addEmailException = new DalException(ex);
             throw addEmailException;
         }
     }
@@ -291,9 +271,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Error retrieving all emails for this contact from the database.";
-            DalException getAllEmailsByContactError = new DalException(excMessage, ex);
-            Logger.getLogger("Error in method getAllEmailsByContactId() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, getAllEmailsByContactError);
+            DalException getAllEmailsByContactError = new DalException(ex);
             throw getAllEmailsByContactError;
         }
         
@@ -327,9 +305,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Couldn't execute \"SELECT * FROM contacts\" query.";
             DalException numberOfContactsException = new DalException(ex);
-            Logger.getLogger("Error in method NumberOfContacts() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, numberOfContactsException);
             throw numberOfContactsException;
         }
         
@@ -362,10 +338,7 @@ public class MysqlContactRepository implements ContactRepository {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            excMessage = "Couldn't execute \"SELECT * FROM emails\" query.";
-            DalException numberOfEmailsException = new DalException(excMessage, ex);
-            Logger.getLogger("Error in method NumberOfEmails() at " + MysqlContactRepository.class.getName()).log(Level.SEVERE,"Message returned: " + excMessage, numberOfEmailsException);
-
+            DalException numberOfEmailsException = new DalException(ex);
             throw numberOfEmailsException;
         }
         
