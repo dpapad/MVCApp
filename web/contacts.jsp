@@ -12,7 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="style.css" rel="stylesheet" type="text/css"/>
-        <title>JSP Page</title>
+        <title>My contact list demo</title>
     </head>
     <body>
         <%@include file="header.jsp"%>
@@ -20,29 +20,22 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Contact ID</th>
-                        
                         <th>Full Name</th>
-                        <%--
-                        <th>Nickname</th>
-                        <th>Notes</th>
-                        --%>
                     </tr>
                 </thead>
                 <tbody>                    
                     <c:forEach var="contact" items="${contactsList}">
                         <tr>
-                            <td><c:out value="${contact.contid}" /></td>
                             <td><c:out value="${contact.fullname}" /></td>    
-                        
-                            
                             <td style="border: none;">
-                                <div>
-                                    <form method="post" action="ContactDetailsServlet">
-                                        <input type="hidden" id="detailsId" name="detailsId" value="${contact.contid}"> 
-                                        <input type="submit" value="Details"> 
-                                    </form>
-                                </div>
+                                
+                                <a href="<c:url value="/viewContact?contactId=${contact.contid}"/>">View</a>
+                                <!--
+                                    TODO
+                                    fix values for "Modify" and "Delete"
+                                -->
+                                <a href="<c:url value="/modifyContact?contactId=${contact.contid}" />">Modify</a>
+                                <a href="<c:url value="/deleteContact?contactId=${contact.contid}" />">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>

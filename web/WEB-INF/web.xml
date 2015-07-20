@@ -9,20 +9,48 @@
         <servlet-class>org.mypackage.controller.GetAllContactsServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ContactDetailsServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.ContactDetailsServlet</servlet-class>
+        <servlet-name>ViewContactServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.ViewContactServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModifyContactServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.ModifyContactServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteContactServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.DeleteContactServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewEmailServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.NewEmailServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetAllEmailsServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.GetAllEmailsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>GetAllServlet</servlet-name>
-        <url-pattern>/GetAllServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>GetAllContactsServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/contacts</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ContactDetailsServlet</servlet-name>
-        <url-pattern>/ContactDetailsServlet</url-pattern>
+        <servlet-name>ViewContactServlet</servlet-name>
+        <url-pattern>/viewContact</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifyContactServlet</servlet-name>
+        <url-pattern>/modifyContact</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteContactServlet</servlet-name>
+        <url-pattern>/deleteContact</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewEmailServlet</servlet-name>
+        <url-pattern>/newEmail</url-pattern>        
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetAllEmailsServlet</servlet-name>
+        <url-pattern>/allEmails</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -31,7 +59,7 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>
-            contView.jsp
+            contacts
         </welcome-file>
     </welcome-file-list>
 </web-app>

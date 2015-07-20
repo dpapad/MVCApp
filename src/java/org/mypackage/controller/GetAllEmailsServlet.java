@@ -1,8 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+// Not used anymore, merged with ViewContactServlet.
+
 package org.mypackage.controller;
 
 import java.io.IOException;
@@ -41,20 +39,27 @@ public class GetAllEmailsServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GetAllServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GetAllServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        //RequestDispatcher rd = null;
+        MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
+        int id = Integer.parseInt(request.getParameter("contid"));
+        try {
+            List<Email> list = contactRepository.getAllEmailsByContactId(id);
+            request.setAttribute("emailList", list);
+            request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
         }
+        catch (DalException ex) {}
+
     }
+
+
+    
+        @Override
+        public String getServletInfo
+        
+            () {
+        return "Short description";
+        }// </editor-fold> 
+
 
 
     @Override
@@ -66,24 +71,26 @@ public class GetAllEmailsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //RequestDispatcher rd = null;
-        MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
-        int id = Integer.parseInt(request.getParameter("contid"));
-        try {
-            List<Email> list = contactRepository.getAllEmailsByContactId(id);
-            request.setAttribute("emailList", list);
-            request.getRequestDispatcher("/emailsByContact.jsp").forward(request, response);
-        }
-        catch (DalException ex) {}
-
-        }
-
-    
-        @Override
-        public String getServletInfo
-        
-            () {
-        return "Short description";
-        }// </editor-fold>
+        processRequest(request, response);
+    }
+//        //RequestDispatcher rd = null;
+//        MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
+//        int id = Integer.parseInt(request.getParameter("contid"));
+//        try {
+//            List<Email> list = contactRepository.getAllEmailsByContactId(id);
+//            request.setAttribute("emailList", list);
+//            request.getRequestDispatcher("/emailsByContact.jsp").forward(request, response);
+//        }
+//        catch (DalException ex) {}
+//
+//        }
+//
+//    
+//        @Override
+//        public String getServletInfo
+//        
+//            () {
+//        return "Short description";
+//        }// </editor-fold>
 
     }

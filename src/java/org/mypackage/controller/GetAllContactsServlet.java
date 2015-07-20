@@ -6,7 +6,6 @@
 package org.mypackage.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import java.util.List;
 import javax.servlet.ServletException;
@@ -16,9 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
-import org.mypackage.dal.mysql.MySqlConnectionProvider;
-import org.mypackage.dal.mysql.MysqlContactRepository;
 import org.mypackage.model.Contact;
 
 /**
@@ -32,27 +28,22 @@ public class GetAllContactsServlet extends HttpServlet {
     private ContactRepository contactRepository;
 
     public GetAllContactsServlet() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
 
-    public GetAllContactsServlet(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
+    public GetAllContactsServlet(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
      
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GetAllContactsServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GetAllContactsServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            List<Contact> list = this.contactRepository.getAllContacts();
+            request.setAttribute("contactsList", list);
+            request.getRequestDispatcher("/contacts.jsp").forward(request, response);
+        } 
+        catch (DalException ex) {
+            
         }
     }
 
@@ -68,13 +59,7 @@ public class GetAllContactsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MysqlContactRepository contactRepository = new MysqlContactRepository(new MySqlConnectionProvider());
-        try {
-            List<Contact> list = contactRepository.getAllContacts();
-            request.setAttribute("contactsList", list);
-            request.getRequestDispatcher("/contView.jsp").forward(request, response);
-        } catch (DalException ex) {
-        }
+        this.processRequest(request, response);
     }
 
     /**

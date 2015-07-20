@@ -13,10 +13,12 @@
         <%@include file="header.jsp"%>
         
         <div id="mystyle" class="myform">
-            <form id="form" name="form" action="UpdateContactServlet" method="post">
-                <c:set var="contact" value="contact" />
+            <form id="form" name="form" action="modifyContact" method="post">
+                
+                
                 <h1>Update Contact ID:<c:out value="${contact.contid}"/></h1>
                 <p>Modify the following information to update employee ID:<c:out value="${contact.contid}"/></p>
+                
                 
                 <label><input type="hidden" name="contid" id="contid" value="${contact.contid}"/><span class="small"></span></label>                    
                 
@@ -29,7 +31,7 @@
                 <label>Notes<span class="small">Enter notes</span></label>
                 <input type="text" name="notes" id="notes" value="${contact.notes}"/>
                 
-                <button type="submit">Update Employee</button>
+                <button type="submit">Modify Contact</button>
                 
                 <div class="spacer"></div>
             </form>

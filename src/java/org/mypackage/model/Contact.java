@@ -16,7 +16,10 @@ public class Contact {
     private String nickname;
     private String notes;
 
-    public Contact() {
+    public Contact() {              
+    }
+    
+    public Contact(int contid, String fullname, String nickname, String notes) {
         this.contid = contid;
         this.fullname = fullname;
         this.nickname = nickname;
@@ -29,7 +32,7 @@ public class Contact {
     public int getContid() {
         return contid;
     }
-
+    
     /**
      * @param contid the contid to set
      */

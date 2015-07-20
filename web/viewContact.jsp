@@ -17,7 +17,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Contact ID</th>                        
+<!--                        <th>Contact ID</th>                        -->
                         <th>Full Name</th>
                         <th>Nickname</th>
                         <th>Notes</th>
@@ -26,7 +26,7 @@
                 <tbody>contact
                     <c:set var="contact" value="${contact}"/>
                     <tr>
-                        <td><c:out value="${contact.contid}"/></td>
+                        <!--<td><c:out value="${contact.contid}"/></td>-->
                         <td><c:out value="${contact.fullname}"/></td>  
                         <td><c:out value="${contact.nickname}" /></td>
                         <td><c:out value="${contact.notes}"/></td>
@@ -35,34 +35,44 @@
                         <td style="border: none;">
                             
                             <div>
-                                <form method="post" action="emailAddNew.jsp">
+                                <form method="post" action="newEmail.jsp">
                                     <input type="hidden" id="emailContId" name="emailContId" value="${contact.contid}"/> 
-                                    <input type="submit" value="Add Email"/> 
+                                    <input type="submit" value="Add Email"/>
+                                    
                                 </form>
+                                <!--<a href="<c:url value="/newEmail?contactId=${contact.contid}" />">Add New Email</a>-->
                             </div>
                                     
-                            <div>
-                                <form method="post" action="GetAllEmailsServlet">
-                                    <input type="hidden" id="contid" name="contid" value="${contact.contid}"/> 
-                                    <input type="submit" value="Show Emails"/> 
-                                </form>
-                            </div>
-                            <div>
-                                <form method="post" action="UpdateContactServlet">
-                                    <input type="hidden" id="updateId" name="updateId" value="${contact.contid}"/> 
-                                    <input type="submit" value="Modify"/> 
-                                </form>
-                            </div>
+                            
+                            
                         </td>
                         <td style="border: none;">
                             <div>
-                                <form method="post" action="DeleteContactServlet">
-                                    <input type="hidden" id="delId" name="delId" value="${contact.contid}"/> 
-                                    <input type="submit" value="Delete"/> 
-                                </form>
+                                
                             </div>
                         </td>
+                        
                     </tr>
+                
+                    
+                </tbody>
+            </table> 
+                                    
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email Address</th>
+                        <th>Email Type</th>
+                    </tr>
+                </thead>
+                <tbody>e-mails
+                    <c:forEach var="email" items="${emailList}">
+                        <tr>
+                            <td><c:out value="${email.address}"/></td>
+                            <td><c:out value="${email.type}"/></td>
+                        </tr>
+                    </c:forEach>
+                        
                 
                     
                 </tbody>
