@@ -1,4 +1,3 @@
-
 package org.mypackage.controller;
 
 import java.io.IOException;
@@ -41,7 +40,6 @@ public class NewEmailServlet extends HttpServlet {
             throws ServletException, IOException {
         
         Email email = new Email();
-        //email.setEmailid(Integer.parseInt(request.getParameter("emailid")));
         email.setAddress(request.getParameter("address"));
         email.setType(request.getParameter(("email_type")));
         email.setContid(Integer.parseInt(request.getParameter("contid")));
@@ -55,7 +53,6 @@ public class NewEmailServlet extends HttpServlet {
             
         }
     }
-
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -70,11 +67,7 @@ public class NewEmailServlet extends HttpServlet {
         processPostRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";

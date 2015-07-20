@@ -20,7 +20,6 @@ import org.mypackage.model.Email;
 public class MysqlContactRepository implements ContactRepository {
 
     private final SqlConnectionProvider connectionProvider;
-    private String excMessage;
     
     
     public MysqlContactRepository(SqlConnectionProvider connectionProvider) {
@@ -31,7 +30,6 @@ public class MysqlContactRepository implements ContactRepository {
     public void addContact(Contact c) throws DalException {
         Connection con = null;
         PreparedStatement contactPstmt = null;
-        PreparedStatement emailPstmt = null;
         
         try {
             try {

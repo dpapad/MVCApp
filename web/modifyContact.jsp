@@ -34,14 +34,7 @@
                 <button type="submit">Modify Contact</button>
                 
                 <div class="spacer"></div>
-            </form>
-                
-                
-            </div>
-                
-            </form>
-                
-            
+            </form>                                
         </div>   
     </body>
 </html>

@@ -1,8 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +15,6 @@
             <table>
                 <thead>
                     <tr>
-<!--                        <th>Contact ID</th>                        -->
                         <th>Full Name</th>
                         <th>Nickname</th>
                         <th>Notes</th>
@@ -26,33 +23,18 @@
                 <tbody>contact
                     <c:set var="contact" value="${contact}"/>
                     <tr>
-                        <!--<td><c:out value="${contact.contid}"/></td>-->
                         <td><c:out value="${contact.fullname}"/></td>  
                         <td><c:out value="${contact.nickname}" /></td>
                         <td><c:out value="${contact.notes}"/></td>
-                        
-                        
-                        <td style="border: none;">
-                            
+                          
+                        <td style="border: none;">                            
                             <div>
                                 <a href="<c:url value="/addEmail?contactId=${contact.contid}" />">Add New Email</a>
-                            </div>
-                                    
-                            
-                            
+                            </div>                                    
                         </td>
-                        <td style="border: none;">
-                            <div>
-                                
-                            </div>
-                        </td>
-                        
-                    </tr>
-                
-                    
+                    </tr>                   
                 </tbody>
-            </table> 
-                                    
+            </table>                                     
             <table>
                 <thead>
                     <tr>
@@ -67,9 +49,6 @@
                             <td><c:out value="${email.type}"/></td>
                         </tr>
                     </c:forEach>
-                        
-                
-                    
                 </tbody>
             </table>
         </div>

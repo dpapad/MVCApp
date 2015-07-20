@@ -27,13 +27,8 @@
                     <c:forEach var="contact" items="${contactsList}">
                         <tr>
                             <td><c:out value="${contact.fullname}" /></td>    
-                            <td style="border: none;">
-                                
+                            <td style="border: none;">                                
                                 <a href="<c:url value="/viewContact?contactId=${contact.contid}"/>">View</a>
-                                <!--
-                                    TODO
-                                    fix values for "Modify" and "Delete"
-                                -->
                                 <a href="<c:url value="/modifyContact?contactId=${contact.contid}" />">Modify</a>
                                 <a href="<c:url value="/deleteContact?contactId=${contact.contid}" />">Delete</a>
                             </td>
