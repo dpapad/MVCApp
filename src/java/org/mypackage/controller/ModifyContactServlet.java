@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.mysql.MySqlConnectionProvider;
-import org.mypackage.dal.mysql.MysqlContactRepository;
 import org.mypackage.model.Contact;
 
 
@@ -34,8 +32,8 @@ public class ModifyContactServlet extends HttpServlet {
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Contact contact = new Contact();
-        contact.setContactId(Integer.parseInt(request.getParameter("contactId")));
-        contact.setFullname(request.getParameter("fullname"));
+        contact.setId(Integer.parseInt(request.getParameter("contactId")));
+        contact.setFullName(request.getParameter("fullname"));
         contact.setNickname(request.getParameter("nickname"));
         contact.setNotes(request.getParameter("notes"));
         
@@ -43,7 +41,7 @@ public class ModifyContactServlet extends HttpServlet {
         
         try {
             this.contactRepository.updateContact(contact);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getContactId();
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getId();
             response.sendRedirect(redirectUrl);           
         } catch (DalException ex) {
             

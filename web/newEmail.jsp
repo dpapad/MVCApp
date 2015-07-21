@@ -27,7 +27,7 @@
                     <option id="work" name="work" value="Work">Work</option>
                 </select>
 
-                <input type="hidden" name="contactId" id="contactId" value="${param.contactId}" />
+                <input type="hidden" name="contactId" id="contactId" value="${param.fContactId}" />
                 
                 <button type="submit">Add New Email</button>
                 <div class="spacer"></div>

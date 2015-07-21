@@ -38,7 +38,7 @@ public class NewContactServlet extends HttpServlet {
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Contact cont = new Contact();
-        cont.setFullname(request.getParameter("fullname"));
+        cont.setFullName(request.getParameter("fullname"));
         cont.setNickname(request.getParameter("nickname"));
         cont.setNotes(request.getParameter("notes"));
     

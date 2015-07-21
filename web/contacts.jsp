@@ -18,7 +18,7 @@
     <body>
         <%@include file="jsp_includes/global_menu.jsp" %>
         <div>
-            Contact id: <c:out value="${contactId}" />
+            Contact id: <c:out value="${id}" />
             <br />
             <table>
                 <thead>
@@ -29,11 +29,11 @@
                 <tbody>                    
                     <c:forEach var="contact" items="${contactsList}">
                         <tr>
-                            <td><c:out value="${contact.fullname}" /></td>    
+                            <td><c:out value="${contact.fullName}" /></td>    
                             <td style="border: none;">                                
-                                <a href="<c:url value="/contacts/${contact.contactId}"/>">View</a>
-                                <a href="<c:url value="/modifyContact?contactId=${contact.contactId}" />">Modify</a>
-                                <a href="<c:url value="/deleteContact?contactId=${contact.contactId}" />">Delete</a>
+                                <a href="<c:url value="/contacts/${contact.id}"/>">View</a>
+                                <a href="<c:url value="/modifyContact?contactId=${contact.id}" />">Modify</a>
+                                <a href="<c:url value="/deleteContact?contactId=${contact.id}" />">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>

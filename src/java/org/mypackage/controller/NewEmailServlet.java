@@ -41,13 +41,13 @@ public class NewEmailServlet extends HttpServlet {
         
         Email email = new Email();
         email.setAddress(request.getParameter("address"));
-        email.setType(request.getParameter(("email_type")));
-        email.setContactId(Integer.parseInt(request.getParameter("contactId")));
+        email.setCategory(request.getParameter(("email_type")));
+        email.setfContactId(Integer.parseInt(request.getParameter("contactId")));
         
         try {
             
             this.contactRepository.addEmail(email);
-            String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getContactId();
+            String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getfContactId();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
             

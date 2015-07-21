@@ -36,9 +36,9 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    contactPstmt = con.prepareStatement("INSERT INTO contacts(id, fullname, nickname, notes) VALUES(?,?,?,?)");
+                    contactPstmt = con.prepareStatement("INSERT INTO Contact(Id, FullName, Nickname, Notes) VALUES(?,?,?,?)");
                     contactPstmt.setInt(1, (numberOfContacts()+1));
-                    contactPstmt.setString(2, c.getFullname());
+                    contactPstmt.setString(2, c.getFullName());
                     contactPstmt.setString(3, c.getNickname());
                     contactPstmt.setString(4, c.getNotes());
                     
@@ -71,7 +71,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try{
                     stmt = con.createStatement();
-                    stmt.execute("DELETE FROM contacts WHERE id=" + String.valueOf(id));
+                    stmt.execute("DELETE FROM Contact WHERE Id=" + String.valueOf(id));
                 } finally {
                     if (stmt != null) {
                         stmt.close();
@@ -98,11 +98,11 @@ public class MysqlContactRepository implements ContactRepository {
             try{
                 con = this.connectionProvider.createConnection();
                 try {
-                    pstmt = con.prepareStatement("UPDATE contacts SET fullname=?, nickname=?, notes=? WHERE id=?");
-                    pstmt.setString(1, c.getFullname());
+                    pstmt = con.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
+                    pstmt.setString(1, c.getFullName());
                     pstmt.setString(2, c.getNickname());
                     pstmt.setString(3, c.getNotes());
-                    pstmt.setInt(4, c.getContactId());
+                    pstmt.setInt(4, c.getId());
                     pstmt.executeUpdate();
                 } finally {
                     if(pstmt!=null){
@@ -130,11 +130,11 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try {
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts WHERE id=" + id);
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact WHERE Id=" + id);
                     if (rs.next()) {
                         contact = new Contact();
-                        contact.setContactId(rs.getInt(1));
-                        contact.setFullname(rs.getString(2));
+                        contact.setId(rs.getInt(1));
+                        contact.setFullName(rs.getString(2));
                         contact.setNickname(rs.getString(3));
                         contact.setNotes(rs.getString(4));
                     }
@@ -169,11 +169,11 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try{
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts ORDER BY id");
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact ORDER BY Id");
                     while(rs.next()) {
                         Contact contact = new Contact();
-                        contact.setContactId(rs.getInt(1));
-                        contact.setFullname(rs.getString(2));
+                        contact.setId(rs.getInt(1));
+                        contact.setFullName(rs.getString(2));
                         contact.setNickname(rs.getString(3));
                         contact.setNotes(rs.getString(4));
                         list.add(contact);
@@ -208,12 +208,12 @@ public class MysqlContactRepository implements ContactRepository {
 
                 try {
                     
-                    emailPstmt = con.prepareStatement("INSERT INTO emails(emailId, address, emailType, id) VALUES(?,?,?,?)");
+                    emailPstmt = con.prepareStatement("INSERT INTO Emails(Id, Address, Category, fContactId) VALUES(?,?,?,?)");
                     emailPstmt.setInt(1, (numberOfEmails()+1));
                     emailPstmt.setString(2, e.getAddress());
-                    emailPstmt.setString(3, e.getType());
+                    emailPstmt.setString(3, e.getCategory());
                     //Contact id
-                    emailPstmt.setInt(4, e.getContactId());
+                    emailPstmt.setInt(4, e.getfContactId());
                     emailPstmt.execute();
                                         
                 }
@@ -248,13 +248,13 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try{
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM emails WHERE id=" + id);
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Emails WHERE fContactId=" + id);
                     while(rs.next()) {
                         Email email = new Email();
-                        email.setEmailId(rs.getInt(1));
+                        email.setId(rs.getInt(1));
                         email.setAddress(rs.getString(2));
-                        email.setType(rs.getString(3));
-                        email.setContactId(rs.getInt(4));
+                        email.setCategory(rs.getString(3));
+                        email.setfContactId(rs.getInt(4));
                         list.add(email);
                     }
                 } finally {
@@ -286,7 +286,7 @@ public class MysqlContactRepository implements ContactRepository {
                 
                 try {
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts");
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact");
                     while(rs.next()) {
                         
                         contactEntries = rs.getInt(1);
@@ -320,7 +320,7 @@ public class MysqlContactRepository implements ContactRepository {
                 
                 try {
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM emails");
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Emails");
                     while(rs.next()) {
                         emailEntries = rs.getInt(1);
                     }

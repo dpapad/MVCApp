@@ -24,13 +24,13 @@
                 <tbody>contact
                     <c:set var="contact" value="${contact}"/>
                     <tr>
-                        <td><c:out value="${contact.fullname}"/></td>  
+                        <td><c:out value="${contact.fullName}"/></td>  
                         <td><c:out value="${contact.nickname}" /></td>
                         <td><c:out value="${contact.notes}"/></td>
                           
                         <td style="border: none;">                            
                             <div>
-                                <a href="<c:url value="/addEmail?contactId=${contact.contactId}" />">Add New Email</a>
+                                <a href="<c:url value="/addEmail?contactId=${contact.id}" />">Add New Email</a>
                             </div>                                    
                         </td>
                     </tr>                   
@@ -47,7 +47,7 @@
                     <c:forEach var="email" items="${emailList}">
                         <tr>
                             <td><c:out value="${email.address}"/></td>
-                            <td><c:out value="${email.type}"/></td>
+                            <td><c:out value="${email.category}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>

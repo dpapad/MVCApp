@@ -5,36 +5,36 @@ package org.mypackage.model;
  * @author dpa
  */
 public class Email {
-    private int emailId;
+    private int id;
     
     private String address;
     
-    private String type;
+    private String category;
     
-    private int contactId;
+    private int fContactId;
     
     public Email() {
     }
     
     public Email(int emailId, String address, String type, int contactId) {
-        this.emailId = emailId;
+        this.id = emailId;
         this.address = address;
-        this.type = type;
-        this.contactId = contactId;
+        this.category = type;
+        this.fContactId = contactId;
     }
 
     /**
-     * @return the emailId
+     * @return the id
      */
-    public int getEmailId() {
-        return emailId;
+    public int getId() {
+        return id;
     }
 
     /**
-     * @param emailId the emailId to set
+     * @param Id the id to set
      */
-    public void setEmailId(int emailId) {
-        this.emailId = emailId;
+    public void setId(int Id) {
+        this.id = Id;
     }
 
     /**
@@ -52,30 +52,30 @@ public class Email {
     }
 
     /**
-     * @return the type
+     * @return the category
      */
-    public String getType() {
-        return type;
+    public String getCategory() {
+        return category;
     }
 
     /**
-     * @param type the type to set
+     * @param category the category to set
      */
-    public void setType(String type) {
-        this.type = type;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     /**
-     * @return the contactId
+     * @return the fContactId
      */
-    public int getContactId() {
-        return contactId;
+    public int getfContactId() {
+        return fContactId;
     }
 
     /**
-     * @param contactId the cont_id to set
+     * @param fContactId the fContactId to set
      */
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    public void setfContactId(int fContactId) {
+        this.fContactId = fContactId;
     }
 }

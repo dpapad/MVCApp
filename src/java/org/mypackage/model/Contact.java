@@ -1,52 +1,56 @@
 package org.mypackage.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author dpa
  */
 public class Contact {
 
-    private int contactId;
-    private String fullname;
+    private int id;
+    private String fullName;
     private String nickname;
     private String notes;
 
-    public Contact() {              
+    public Contact() {    
+        List<Email> emailList = new ArrayList<Email>();
     }
     
-    public Contact(int contactId, String fullname, String nickname, String notes) {
-        this.contactId = contactId;
-        this.fullname = fullname;
+    public Contact(int id, String fullName, String nickname, String notes) {
+        this.id = id;
+        this.fullName = fullName;
         this.nickname = nickname;
         this.notes = notes;
     }
 
     /**
-     * @return the contactId
+     * @return the id
      */
-    public int getContactId() {
-        return contactId;
+    public int getId() {
+        return id;
     }
     
     /**
-     * @param contactId the contactId to set
+     * @param id the id to set
      */
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
-     * @return the fullname
+     * @return the fullName
      */
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
     /**
-     * @param fullname the fullname to set
+     * @param fullName the fullName to set
      */
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     /**
