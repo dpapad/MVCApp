@@ -11,12 +11,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="style.css" rel="stylesheet" type="text/css"/>
+        <link href="<c:url value="/style.css"/>" rel="stylesheet" type="text/css"/>
         <title>My contact list demo</title>
     </head>
     <body>
         <%@include file="header.jsp"%>
         <div>
+            Contact id: <c:out value="${contactId}" />
+            <br />
             <table>
                 <thead>
                     <tr>
@@ -28,7 +30,7 @@
                         <tr>
                             <td><c:out value="${contact.fullname}" /></td>    
                             <td style="border: none;">                                
-                                <a href="<c:url value="/viewContact?contactId=${contact.contactId}"/>">View</a>
+                                <a href="<c:url value="/contacts/${contact.contactId}"/>">View</a>
                                 <a href="<c:url value="/modifyContact?contactId=${contact.contactId}" />">Modify</a>
                                 <a href="<c:url value="/deleteContact?contactId=${contact.contactId}" />">Delete</a>
                             </td>

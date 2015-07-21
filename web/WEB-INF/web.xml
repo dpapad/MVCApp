@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>ContactsRestFilter</filter-name>
+        <filter-class>org.mypackage.filters.ContactsRestFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>ContactsRestFilter</filter-name>
+        <url-pattern>/contacts/*</url-pattern>
+    </filter-mapping>
+    
     <servlet>
-        <servlet-name>GetAllContactsServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.GetAllContactsServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ViewContactServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.ViewContactServlet</servlet-class>
+        <servlet-name>ContactsServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.ContactsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ModifyContactServlet</servlet-name>
@@ -20,17 +26,10 @@
         <servlet-name>NewEmailServlet</servlet-name>
         <servlet-class>org.mypackage.controller.NewEmailServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>GetAllEmailsServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.GetAllEmailsServlet</servlet-class>
-    </servlet>
+    
     <servlet-mapping>
-        <servlet-name>GetAllContactsServlet</servlet-name>
-        <url-pattern>/contacts</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ViewContactServlet</servlet-name>
-        <url-pattern>/viewContact</url-pattern>
+        <servlet-name>ContactsServlet</servlet-name>
+        <url-pattern>/contacts/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ModifyContactServlet</servlet-name>
@@ -42,12 +41,9 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewEmailServlet</servlet-name>
-        <url-pattern>/addEmail</url-pattern>        
+        <url-pattern>/addEmail</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GetAllEmailsServlet</servlet-name>
-        <url-pattern>/allEmails</url-pattern>
-    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
