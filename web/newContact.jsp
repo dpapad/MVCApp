@@ -4,13 +4,16 @@
     Author     : dpa
 --%>
 
+<%@include file="jsp_includes/taglibs.jsp"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="style.css" rel="stylesheet" type="text/css"/>
         <title>New Contact</title>
+        
+        <%@include file="jsp_includes/head.jsp"%>
     </head>
     <body>
         <%@include file="header.jsp"%>
