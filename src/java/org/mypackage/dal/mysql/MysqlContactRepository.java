@@ -208,7 +208,7 @@ public class MysqlContactRepository implements ContactRepository {
 
                 try {
                     
-                    emailPstmt = con.prepareStatement("INSERT INTO emails(emailid, address, email_type, id) VALUES(?,?,?,?)");
+                    emailPstmt = con.prepareStatement("INSERT INTO emails(emailId, address, emailType, id) VALUES(?,?,?,?)");
                     emailPstmt.setInt(1, (numberOfEmails()+1));
                     emailPstmt.setString(2, e.getAddress());
                     emailPstmt.setString(3, e.getType());
