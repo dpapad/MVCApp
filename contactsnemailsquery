@@ -1,11 +1,22 @@
-CREATE TABLE emails(
-	emailId INT NOT NULL,
-	address VARCHAR(45),
-	emailType VARCHAR(45),
-	PRIMARY KEY (emailId),
-	CONSTRAINT fk_contacts 
-	FOREIGN KEY (id)
-	REFERENCES contacts(id)
-	ON DELETE CASCADE
-	ON UPDATE CASCADE
-)
+CREATE SCHEMA mvcproject;
+
+CREATE TABLE contacts (
+    id INT NOT NULL,
+    fullname VARCHAR(45),
+    nickname VARCHAR(45),
+    notes VARCHAR(45),
+    PRIMARY KEY (id)
+);
+
+
+CREATE TABLE emails (
+    emailId INT NOT NULL,
+    address VARCHAR(45),
+    emailType VARCHAR(45),
+    PRIMARY KEY (emailId),
+    CONSTRAINT fk_contacts FOREIGN KEY (id)
+        REFERENCES contacts (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
