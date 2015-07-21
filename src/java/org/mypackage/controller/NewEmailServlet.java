@@ -47,7 +47,7 @@ public class NewEmailServlet extends HttpServlet {
         try {
             
             this.contactRepository.addEmail(email);
-            String redirectUrl = this.getServletContext().getContextPath()  +"/viewContact?contactId=" + email.getContactId();
+            String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getContactId();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
             

@@ -43,7 +43,7 @@ public class ModifyContactServlet extends HttpServlet {
         
         try {
             this.contactRepository.updateContact(contact);
-            String redirectUrl = this.getServletContext().getContextPath() + "/viewContact?contactId=" + contact.getContactId();
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getContactId();
             response.sendRedirect(redirectUrl);           
         } catch (DalException ex) {
             
