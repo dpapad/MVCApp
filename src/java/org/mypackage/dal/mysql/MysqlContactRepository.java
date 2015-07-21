@@ -36,7 +36,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    contactPstmt = con.prepareStatement("INSERT INTO contacts(contid, fullname, nickname, notes) VALUES(?,?,?,?)");
+                    contactPstmt = con.prepareStatement("INSERT INTO contacts(id, fullname, nickname, notes) VALUES(?,?,?,?)");
                     contactPstmt.setInt(1, (numberOfContacts()+1));
                     contactPstmt.setString(2, c.getFullname());
                     contactPstmt.setString(3, c.getNickname());
@@ -71,7 +71,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try{
                     stmt = con.createStatement();
-                    stmt.execute("DELETE FROM contacts WHERE contid=" + String.valueOf(id));
+                    stmt.execute("DELETE FROM contacts WHERE id=" + String.valueOf(id));
                 } finally {
                     if (stmt != null) {
                         stmt.close();
@@ -98,7 +98,7 @@ public class MysqlContactRepository implements ContactRepository {
             try{
                 con = this.connectionProvider.createConnection();
                 try {
-                    pstmt = con.prepareStatement("UPDATE contacts SET fullname=?, nickname=?, notes=? WHERE contid=?");
+                    pstmt = con.prepareStatement("UPDATE contacts SET fullname=?, nickname=?, notes=? WHERE id=?");
                     pstmt.setString(1, c.getFullname());
                     pstmt.setString(2, c.getNickname());
                     pstmt.setString(3, c.getNotes());
@@ -130,7 +130,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try {
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts WHERE contid=" + id);
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts WHERE id=" + id);
                     if (rs.next()) {
                         contact = new Contact();
                         contact.setContactId(rs.getInt(1));
@@ -169,7 +169,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try{
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts ORDER BY contid");
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM contacts ORDER BY id");
                     while(rs.next()) {
                         Contact contact = new Contact();
                         contact.setContactId(rs.getInt(1));
@@ -208,7 +208,7 @@ public class MysqlContactRepository implements ContactRepository {
 
                 try {
                     
-                    emailPstmt = con.prepareStatement("INSERT INTO emails(emailid, address, email_type, contid) VALUES(?,?,?,?)");
+                    emailPstmt = con.prepareStatement("INSERT INTO emails(emailid, address, email_type, id) VALUES(?,?,?,?)");
                     emailPstmt.setInt(1, (numberOfEmails()+1));
                     emailPstmt.setString(2, e.getAddress());
                     emailPstmt.setString(3, e.getType());
@@ -248,7 +248,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try{
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM emails WHERE contid=" + id);
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM emails WHERE id=" + id);
                     while(rs.next()) {
                         Email email = new Email();
                         email.setEmailId(rs.getInt(1));
