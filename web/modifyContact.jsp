@@ -10,7 +10,7 @@
         <%@include file="jsp_includes/head.jsp"%>
     </head>
     <body>
-        <%@include file="header.jsp"%>
+        <%@include file="jsp_includes/global_menu.jsp" %>
         
         <div id="mystyle" class="myform">
             <form id="form" name="form" action="modifyContact" method="post">

@@ -16,7 +16,8 @@
         <%@include file="jsp_includes/head.jsp"%>
     </head>
     <body>
-        <%@include file="header.jsp"%>
+        <%@include file="jsp_includes/global_menu.jsp" %>
+        
         <div id="mystyle" class="myform">
             <form id="form" name="form" action="newContact" method="post">
                 <h1>Contact</h1>
