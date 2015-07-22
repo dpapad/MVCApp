@@ -47,7 +47,7 @@
                     <c:forEach var="email" items="${emailList}">
                         <tr>
                             <td><c:out value="${email.address}"/></td>
-                            <td><c:out value="${email.category}"/></td>
+                            <td><c:out value="${email.category.name()}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>

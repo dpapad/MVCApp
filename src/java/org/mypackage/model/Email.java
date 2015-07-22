@@ -5,21 +5,27 @@ package org.mypackage.model;
  * @author dpa
  */
 public class Email {
+    
+    public static enum Category {
+        
+        PERSONAL, WORK;
+    }
+    
     private int id;
     
     private String address;
     
-    private String category;
+    private Category category;
     
     private int fContactId;
     
     public Email() {
     }
     
-    public Email(int emailId, String address, String type, int contactId) {
-        this.id = emailId;
+    public Email(int id, String address, Category category, int contactId) {
+        this.id = id;
         this.address = address;
-        this.category = type;
+        this.category = category;
         this.fContactId = contactId;
     }
 
@@ -54,16 +60,23 @@ public class Email {
     /**
      * @return the category
      */
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
     /**
-     * @param category the category to set
+     * @param value the value to set
      */
-    public void setCategory(String category) {
-        this.category = category;
+    
+    public void setCategory(int value) {
+        if (value == 0) {
+            category = Category.PERSONAL;
+        }
+        else {
+            category = Category.WORK;
+        }
     }
+    
 
     /**
      * @return the fContactId

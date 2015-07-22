@@ -21,10 +21,10 @@
                 <label>Address<span class="small">Enter Email Address</span></label>
                 <input type="text" name="address" id="address" />
 
-                <label>Type</label>
-                <select name="email_type" id="email_type">
-                    <option id="personal" name="personal" value="Personal">Personal</option>
-                    <option id="work" name="work" value="Work">Work</option>
+                <label>Category</label>
+                <select name="cat" id="cat">
+                    <option id="personal" name="personal" value="0">Personal</option>
+                    <option id="work" name="work" value="1">Work</option>
                 </select>
 
                 <input type="hidden" name="contactId" id="contactId" value="${param.fContactId}" />

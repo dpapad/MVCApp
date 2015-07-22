@@ -41,7 +41,7 @@ public class NewEmailServlet extends HttpServlet {
         
         Email email = new Email();
         email.setAddress(request.getParameter("address"));
-        email.setCategory(request.getParameter(("email_type")));
+        email.setCategory(Integer.parseInt(request.getParameter(("cat"))));
         email.setfContactId(Integer.parseInt(request.getParameter("contactId")));
         
         try {

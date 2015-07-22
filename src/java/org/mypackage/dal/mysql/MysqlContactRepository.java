@@ -211,7 +211,8 @@ public class MysqlContactRepository implements ContactRepository {
                     emailPstmt = con.prepareStatement("INSERT INTO Emails(Id, Address, Category, fContactId) VALUES(?,?,?,?)");
                     emailPstmt.setInt(1, (numberOfEmails()+1));
                     emailPstmt.setString(2, e.getAddress());
-                    emailPstmt.setString(3, e.getCategory());
+                    
+                    emailPstmt.setInt(3, e.getCategory().ordinal());
                     //Contact id
                     emailPstmt.setInt(4, e.getfContactId());
                     emailPstmt.execute();
@@ -253,7 +254,7 @@ public class MysqlContactRepository implements ContactRepository {
                         Email email = new Email();
                         email.setId(rs.getInt(1));
                         email.setAddress(rs.getString(2));
-                        email.setCategory(rs.getString(3));
+                        email.setCategory(rs.getInt(3));
                         email.setfContactId(rs.getInt(4));
                         list.add(email);
                     }
