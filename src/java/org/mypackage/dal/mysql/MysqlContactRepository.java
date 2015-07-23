@@ -61,6 +61,7 @@ public class MysqlContactRepository implements ContactRepository {
         }
     }
 
+    // Fixed deleteContactById()
     @Override
     public void deleteContactById(int id) throws DalException{
         Connection con = null;
