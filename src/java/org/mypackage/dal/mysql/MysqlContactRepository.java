@@ -29,23 +29,23 @@ public class MysqlContactRepository implements ContactRepository {
     @Override
     public void addContact(Contact c) throws DalException {
         Connection con = null;
-        PreparedStatement contactPstmt = null;
+        PreparedStatement addContactStmt = null;
         
         try {
             try {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    contactPstmt = con.prepareStatement("INSERT INTO Contact(FullName, Nickname, Notes) VALUES(?,?,?)");
-                    contactPstmt.setString(1, c.getFullName());
-                    contactPstmt.setString(2, c.getNickname());
-                    contactPstmt.setString(3, c.getNotes());
+                    addContactStmt = con.prepareStatement("INSERT INTO Contact(FullName, Nickname, Notes) VALUES(?,?,?)");
+                    addContactStmt.setString(1, c.getFullName());
+                    addContactStmt.setString(2, c.getNickname());
+                    addContactStmt.setString(3, c.getNotes());
                     
-                    contactPstmt.execute();                   
+                    addContactStmt.execute();                   
                 }
                 finally {
-                    if (contactPstmt != null) {
-                        contactPstmt.close();
+                    if (addContactStmt != null) {
+                        addContactStmt.close();
                     }
                 }
             } 
@@ -117,20 +117,20 @@ public class MysqlContactRepository implements ContactRepository {
     @Override
     public void updateContact(Contact c) throws DalException{
         Connection con = null;
-        PreparedStatement pstmt = null;
+        PreparedStatement udpateContactStmt = null;
         try{
             try{
                 con = this.connectionProvider.createConnection();
                 try {
-                    pstmt = con.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
-                    pstmt.setString(1, c.getFullName());
-                    pstmt.setString(2, c.getNickname());
-                    pstmt.setString(3, c.getNotes());
-                    pstmt.setInt(4, c.getId());
-                    pstmt.executeUpdate();
+                    udpateContactStmt = con.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
+                    udpateContactStmt.setString(1, c.getFullName());
+                    udpateContactStmt.setString(2, c.getNickname());
+                    udpateContactStmt.setString(3, c.getNotes());
+                    udpateContactStmt.setInt(4, c.getId());
+                    udpateContactStmt.executeUpdate();
                 } finally {
-                    if(pstmt!=null){
-                        pstmt.close();
+                    if(udpateContactStmt!=null){
+                        udpateContactStmt.close();
                     }
                 }
             } finally {
@@ -148,13 +148,14 @@ public class MysqlContactRepository implements ContactRepository {
     public Contact getContactById(int id) throws DalException{
         Contact contact = null;
         Connection con = null;
-        Statement stmt = null;
+        PreparedStatement getContactStmt = null;
         try {           
             try{
                 con = this.connectionProvider.createConnection();
                 try {
-                    stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact WHERE Id= " + id);
+                    getContactStmt = con.prepareStatement("SELECT * FROM Contact WHERE Id= ?");
+                    getContactStmt.setInt(1, id);
+                    ResultSet rs = getContactStmt.executeQuery();
                     if (rs.next()) {
                         contact = new Contact();
                         contact.setId(rs.getInt(1));
@@ -164,8 +165,8 @@ public class MysqlContactRepository implements ContactRepository {
                     }
                     
                 } finally {
-                    if(stmt != null) {
-                        stmt.close();
+                    if(getContactStmt != null) {
+                        getContactStmt.close();
                     }
                 }
             } finally {
@@ -186,14 +187,14 @@ public class MysqlContactRepository implements ContactRepository {
     public List<Contact> getAllContacts() throws DalException{
         List<Contact> list = new ArrayList<>();
         Connection con = null;
-        Statement stmt = null;
+        PreparedStatement getAllContactsStmt = null;
         
         try {
             try{
                 con = this.connectionProvider.createConnection();
                 try{
-                    stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact ORDER BY Id");
+                    getAllContactsStmt = con.prepareStatement("SELECT * FROM Contact ORDER BY Id");
+                    ResultSet rs = getAllContactsStmt.executeQuery();
                     while(rs.next()) {
                         Contact contact = new Contact();
                         contact.setId(rs.getInt(1));
@@ -203,8 +204,8 @@ public class MysqlContactRepository implements ContactRepository {
                         list.add(contact);
                     }
                 } finally {
-                    if(stmt != null) {
-                        stmt.close();
+                    if(getAllContactsStmt != null) {
+                        getAllContactsStmt.close();
                     }
                 }
             } finally {
@@ -266,14 +267,15 @@ public class MysqlContactRepository implements ContactRepository {
     public List<Email> getAllEmailsByContactId(int id) throws DalException{
         List<Email> list = new ArrayList<>();
         Connection con = null;
-        Statement stmt = null;
+        PreparedStatement getAllEmailsByContactIdStmt = null;
         
         try {
             try{
                 con = this.connectionProvider.createConnection();
                 try{
-                    stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Emails WHERE fContactId=" + id);
+                    getAllEmailsByContactIdStmt = con.prepareStatement("SELECT * FROM Emails WHERE fContactId= ?");
+                    getAllEmailsByContactIdStmt.setInt(1, id);
+                    ResultSet rs = getAllEmailsByContactIdStmt.executeQuery();
                     while(rs.next()) {
                         Email email = new Email();
                         email.setId(rs.getInt(1));
@@ -284,8 +286,8 @@ public class MysqlContactRepository implements ContactRepository {
                         list.add(email);
                     }
                 } finally {
-                    if(stmt != null) {
-                        stmt.close();
+                    if(getAllEmailsByContactIdStmt != null) {
+                        getAllEmailsByContactIdStmt.close();
                     }
                 }
             } finally {
