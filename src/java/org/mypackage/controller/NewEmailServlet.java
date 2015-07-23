@@ -32,6 +32,7 @@ public class NewEmailServlet extends HttpServlet {
     
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException { 
+        request.setAttribute("mailCategories", Email.Category.values());
         request.getRequestDispatcher("/newEmail.jsp").forward(request, response);
     }
 
@@ -41,8 +42,10 @@ public class NewEmailServlet extends HttpServlet {
         
         Email email = new Email();
         email.setAddress(request.getParameter("address"));
-        email.setCategory(Integer.parseInt(request.getParameter(("cat"))));
-        email.setfContactId(Integer.parseInt(request.getParameter("contactId")));
+        byte categoryValue = Byte.parseByte(request.getParameter("category"));
+        email.setCategory(Email.Category.forValue(categoryValue));
+        int contid = Integer.parseInt(request.getParameter("contactId"));
+        email.setfContactId(contid);
         
         try {
             

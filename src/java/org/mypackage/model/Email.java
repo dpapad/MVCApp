@@ -8,7 +8,28 @@ public class Email {
     
     public static enum Category {
         
-        PERSONAL, WORK;
+        PERSONAL((byte)1), 
+        WORK((byte)2);
+        
+        private final byte byteValue;
+        
+        private Category(byte value) {
+            this.byteValue = value;
+        }
+        
+        public byte getByteValue() {
+            return this.byteValue;
+        }
+        
+        public static Category forValue(byte value) {
+            for (Category c : Category.values()) {
+                if (value == c.getByteValue()) {
+                    return c;
+                }
+            }
+            
+            throw new IllegalArgumentException();
+        }
     }
     
     private int id;
@@ -65,16 +86,10 @@ public class Email {
     }
 
     /**
-     * @param value the value to set
+     * @param category 
      */
-    
-    public void setCategory(int value) {
-        if (value == 0) {
-            category = Category.PERSONAL;
-        }
-        else {
-            category = Category.WORK;
-        }
+    public void setCategory(Category category) {
+        this.category = category;
     }
     
 

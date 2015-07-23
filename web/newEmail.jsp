@@ -22,12 +22,15 @@
                 <input type="text" name="address" id="address" />
 
                 <label>Category</label>
-                <select name="cat" id="cat">
-                    <option id="personal" name="personal" value="0">Personal</option>
-                    <option id="work" name="work" value="1">Work</option>
+                <select name="category" id="category">
+                    <c:forEach var="mailCategory" items="${mailCategories}">
+                        <option value="${mailCategory.byteValue}">
+                            <c:out value="${mailCategory.name()}" />
+                        </option>
+                    </c:forEach>                    
                 </select>
 
-                <input type="hidden" name="contactId" id="contactId" value="${param.fContactId}" />
+                <input type="hidden" name="contactId" id="contactId" value="${param.contactId}" />
                 
                 <button type="submit">Add New Email</button>
                 <div class="spacer"></div>
