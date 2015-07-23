@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.mypackage.dal.ContactRepository;
@@ -302,6 +301,37 @@ public class MysqlContactRepository implements ContactRepository {
         }
         
         return list;
+    }
+    
+    @Override
+    public void deleteEmailById(int id) {
+        Connection con = null;
+        PreparedStatement deleteEmailStmt = null;
+        try {
+            try {
+                con = this.connectionProvider.createConnection();
+
+                try {
+                    deleteEmailStmt = con.prepareStatement("DELETE FROM Emails WHERE Id = ?");
+                    deleteEmailStmt.setInt(1, id);                    
+                    deleteEmailStmt.execute();                   
+                }
+                finally {
+                    if (deleteEmailStmt != null) {
+                        deleteEmailStmt.close();
+                    }
+                }
+            } 
+            finally {
+                if (con != null) {
+                    con.close();
+                }
+            }
+        }
+        catch (SQLException | ClassNotFoundException ex) {
+            DalException deleteEmailException = new DalException(ex);
+            //throw deleteEmailException;
+        }
     }
     
 }

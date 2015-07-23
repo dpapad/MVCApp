@@ -48,6 +48,11 @@
                         <tr>
                             <td><c:out value="${email.address}"/></td>
                             <td><c:out value="${email.category.name()}"/></td>
+                            <td>
+                                <div>
+                                    <a href="<c:url value="/deleteEmail?emailId=${email.id}"/>">Delete</a>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>

@@ -4,12 +4,10 @@
         <filter-name>ContactsRestFilter</filter-name>
         <filter-class>org.mypackage.filters.ContactsRestFilter</filter-class>
     </filter>
-    
     <filter-mapping>
         <filter-name>ContactsRestFilter</filter-name>
         <url-pattern>/contacts/*</url-pattern>
     </filter-mapping>
-    
     <servlet>
         <servlet-name>ContactsServlet</servlet-name>
         <servlet-class>org.mypackage.controller.ContactsServlet</servlet-class>
@@ -26,7 +24,10 @@
         <servlet-name>NewEmailServlet</servlet-name>
         <servlet-class>org.mypackage.controller.NewEmailServlet</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>DeleteEmailServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.DeleteEmailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ContactsServlet</servlet-name>
         <url-pattern>/contacts/*</url-pattern>
@@ -43,7 +44,10 @@
         <servlet-name>NewEmailServlet</servlet-name>
         <url-pattern>/addEmail</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>DeleteEmailServlet</servlet-name>
+        <url-pattern>/deleteEmail</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
