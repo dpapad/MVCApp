@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.mypackage.dal.ContactRepository;
@@ -19,42 +20,43 @@ import org.mypackage.model.Email;
 public class MysqlContactRepository implements ContactRepository {
 
     private final SqlConnectionProvider connectionProvider;
-    
-    
+
     public MysqlContactRepository(SqlConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
-    
+
     @Override
-    public void addContact(Contact c) throws DalException {
+    public int addContact(Contact c) throws DalException {
         Connection con = null;
         PreparedStatement addContactStmt = null;
-        
+
         try {
             try {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    addContactStmt = con.prepareStatement("INSERT INTO Contact(FullName, Nickname, Notes) VALUES(?,?,?)");
+                    addContactStmt = con.prepareStatement("INSERT INTO Contact(FullName, Nickname, Notes) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     addContactStmt.setString(1, c.getFullName());
                     addContactStmt.setString(2, c.getNickname());
                     addContactStmt.setString(3, c.getNotes());
-                    
-                    addContactStmt.execute();                   
-                }
-                finally {
+
+                    addContactStmt.execute();
+
+                    ResultSet rs = addContactStmt.getGeneratedKeys();
+                    rs.next();
+
+                    return rs.getInt(1);
+                } finally {
                     if (addContactStmt != null) {
                         addContactStmt.close();
                     }
                 }
-            } 
-            finally {
+            } finally {
                 if (con != null) {
                     con.close();
                 }
             }
-        }
-        catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             DalException addContactException = new DalException(ex);
             throw addContactException;
         }
@@ -62,16 +64,16 @@ public class MysqlContactRepository implements ContactRepository {
 
     // Fixed deleteContactById()
     @Override
-    public void deleteContactById(int id) throws DalException{
+    public void deleteContactById(int id) throws DalException {
         Connection con = null;
         PreparedStatement deleteContactStmt = null, deleteMailsStmt = null;
-        try{
+        try {
             try {
                 con = this.connectionProvider.createConnection();
                 con.setAutoCommit(false);
-                
+
                 try {
-                    try{
+                    try {
                         deleteMailsStmt = con.prepareStatement("DELETE FROM Emails WHERE fContactId = ?");
                         deleteMailsStmt.setInt(1, id);
                         deleteMailsStmt.executeUpdate();
@@ -81,7 +83,7 @@ public class MysqlContactRepository implements ContactRepository {
                         }
                     }
 
-                    try{
+                    try {
                         deleteContactStmt = con.prepareStatement("DELETE FROM Contact WHERE Id = ?");
                         deleteContactStmt.setInt(1, id);
                         deleteContactStmt.executeUpdate();
@@ -90,35 +92,32 @@ public class MysqlContactRepository implements ContactRepository {
                             deleteContactStmt.close();
                         }
                     }
-                    
+
                     con.commit();
-                }
-                catch (SQLException ex) {
+                } catch (SQLException ex) {
                     con.rollback();
                     throw ex;
-                }
-                finally {
+                } finally {
                     con.setAutoCommit(true);
                 }
             } finally {
-                if(con != null){
+                if (con != null) {
                     con.close();
                 }
             }
-            
-        }
-        catch (SQLException | ClassNotFoundException ex){
+
+        } catch (SQLException | ClassNotFoundException ex) {
             DalException deleteContactByIdException = new DalException(ex);
             throw deleteContactByIdException;
         }
     }
 
     @Override
-    public void updateContact(Contact c) throws DalException{
+    public void updateContact(Contact c) throws DalException {
         Connection con = null;
         PreparedStatement udpateContactStmt = null;
-        try{
-            try{
+        try {
+            try {
                 con = this.connectionProvider.createConnection();
                 try {
                     udpateContactStmt = con.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
@@ -128,28 +127,28 @@ public class MysqlContactRepository implements ContactRepository {
                     udpateContactStmt.setInt(4, c.getId());
                     udpateContactStmt.executeUpdate();
                 } finally {
-                    if(udpateContactStmt!=null){
+                    if (udpateContactStmt != null) {
                         udpateContactStmt.close();
                     }
                 }
             } finally {
-                    if(con != null){
-                con.close();
-                    }
+                if (con != null) {
+                    con.close();
+                }
             }
-        } catch(SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             DalException updateContactException = new DalException(ex);
             throw updateContactException;
         }
     }
 
     @Override
-    public Contact getContactById(int id) throws DalException{
+    public Contact getContactById(int id) throws DalException {
         Contact contact = null;
         Connection con = null;
         PreparedStatement getContactStmt = null;
-        try {           
-            try{
+        try {
+            try {
                 con = this.connectionProvider.createConnection();
                 try {
                     getContactStmt = con.prepareStatement("SELECT * FROM Contact WHERE Id= ?");
@@ -162,9 +161,9 @@ public class MysqlContactRepository implements ContactRepository {
                         contact.setNickname(rs.getString(3));
                         contact.setNotes(rs.getString(4));
                     }
-                    
+
                 } finally {
-                    if(getContactStmt != null) {
+                    if (getContactStmt != null) {
                         getContactStmt.close();
                     }
                 }
@@ -173,28 +172,28 @@ public class MysqlContactRepository implements ContactRepository {
                     con.close();
                 }
             }
-            
+
         } catch (SQLException | ClassNotFoundException ex) {
             DalException getContactByIdException = new DalException(ex);
             throw getContactByIdException;
         }
-        
+
         return contact;
     }
 
     @Override
-    public List<Contact> getAllContacts() throws DalException{
+    public List<Contact> getAllContacts() throws DalException {
         List<Contact> list = new ArrayList<>();
         Connection con = null;
         PreparedStatement getAllContactsStmt = null;
-        
+
         try {
-            try{
+            try {
                 con = this.connectionProvider.createConnection();
-                try{
+                try {
                     getAllContactsStmt = con.prepareStatement("SELECT * FROM Contact ORDER BY Id");
                     ResultSet rs = getAllContactsStmt.executeQuery();
-                    while(rs.next()) {
+                    while (rs.next()) {
                         Contact contact = new Contact();
                         contact.setId(rs.getInt(1));
                         contact.setFullName(rs.getString(2));
@@ -203,79 +202,75 @@ public class MysqlContactRepository implements ContactRepository {
                         list.add(contact);
                     }
                 } finally {
-                    if(getAllContactsStmt != null) {
+                    if (getAllContactsStmt != null) {
                         getAllContactsStmt.close();
                     }
                 }
             } finally {
-                if(con != null) {
+                if (con != null) {
                     con.close();
                 }
             }
-            
+
         } catch (SQLException | ClassNotFoundException ex) {
             DalException getAllContactsException = new DalException(ex);
             throw getAllContactsException;
         }
-        
+
         return list;
     }
-    
+
     @Override
-    public void addEmail (Email e)  throws DalException{
+    public void addEmail(Email e) throws DalException {
         Connection con = null;
         PreparedStatement emailPstmt = null;
-        
+
         try {
             try {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    
+
                     emailPstmt = con.prepareStatement("INSERT INTO Emails(Address, Category, fContactId) VALUES(?,?,?)");
-                    
+
                     emailPstmt.setString(1, e.getAddress());
-                    
+
                     emailPstmt.setInt(2, e.getCategory().getByteValue());
                     //Contact id
                     emailPstmt.setInt(3, e.getfContactId());
                     emailPstmt.execute();
-                                        
-                }
-                finally {
-                                 
+
+                } finally {
+
                     if (emailPstmt != null) {
                         emailPstmt.close();
                     }
                 }
-            } 
-            finally {
+            } finally {
                 if (con != null) {
                     con.close();
                 }
             }
-        }
-        catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             DalException addEmailException = new DalException(ex);
             throw addEmailException;
         }
     }
-    
 
-     @Override
-    public List<Email> getAllEmailsByContactId(int id) throws DalException{
+    @Override
+    public List<Email> getAllEmailsByContactId(int id) throws DalException {
         List<Email> list = new ArrayList<>();
         Connection con = null;
         PreparedStatement getAllEmailsByContactIdStmt = null;
-        
+
         try {
-            try{
+            try {
                 con = this.connectionProvider.createConnection();
-                try{
+                try {
                     getAllEmailsByContactIdStmt = con.prepareStatement("SELECT * FROM Emails WHERE fContactId= ?");
                     getAllEmailsByContactIdStmt.setInt(1, id);
                     ResultSet rs = getAllEmailsByContactIdStmt.executeQuery();
-                    while(rs.next()) {
+                    while (rs.next()) {
                         Email email = new Email();
                         email.setId(rs.getInt(1));
                         email.setAddress(rs.getString(2));
@@ -285,24 +280,24 @@ public class MysqlContactRepository implements ContactRepository {
                         list.add(email);
                     }
                 } finally {
-                    if(getAllEmailsByContactIdStmt != null) {
+                    if (getAllEmailsByContactIdStmt != null) {
                         getAllEmailsByContactIdStmt.close();
                     }
                 }
             } finally {
-                if(con != null) {
+                if (con != null) {
                     con.close();
                 }
             }
-            
+
         } catch (SQLException | ClassNotFoundException ex) {
             DalException getAllEmailsByContactError = new DalException(ex);
             throw getAllEmailsByContactError;
         }
-        
+
         return list;
     }
-    
+
     @Override
     public void deleteEmailById(int id) {
         Connection con = null;
@@ -313,25 +308,22 @@ public class MysqlContactRepository implements ContactRepository {
 
                 try {
                     deleteEmailStmt = con.prepareStatement("DELETE FROM Emails WHERE Id = ?");
-                    deleteEmailStmt.setInt(1, id);                    
-                    deleteEmailStmt.execute();                   
-                }
-                finally {
+                    deleteEmailStmt.setInt(1, id);
+                    deleteEmailStmt.execute();
+                } finally {
                     if (deleteEmailStmt != null) {
                         deleteEmailStmt.close();
                     }
                 }
-            } 
-            finally {
+            } finally {
                 if (con != null) {
                     con.close();
                 }
             }
-        }
-        catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             DalException deleteEmailException = new DalException(ex);
             //throw deleteEmailException;
         }
     }
-    
+
 }

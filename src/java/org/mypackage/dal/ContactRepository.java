@@ -10,7 +10,7 @@ import org.mypackage.model.Email;
  */
 public interface ContactRepository {
     
-    void addContact(Contact c) throws DalException;
+    int addContact(Contact c) throws DalException;
     
     void deleteContactById(int i) throws DalException;
     
