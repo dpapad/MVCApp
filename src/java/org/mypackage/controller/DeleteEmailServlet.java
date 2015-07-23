@@ -33,11 +33,12 @@ public class DeleteEmailServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("emailId"));
-        
+        int emailId = Integer.parseInt(request.getParameter("emailId"));
+        int contId = Integer.parseInt(request.getParameter("contId"));
         try {
-            this.contactRepository.deleteEmailById(id);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
+            
+            this.contactRepository.deleteEmailById(emailId);
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
             response.sendRedirect(redirectUrl);
         } catch  (DalException ex) {
             

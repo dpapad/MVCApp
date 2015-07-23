@@ -45,12 +45,14 @@
                 </thead>
                 <tbody>e-mails
                     <c:forEach var="email" items="${emailList}">
-                        <tr>
+                        
+                        <tr>                    
                             <td><c:out value="${email.address}"/></td>
                             <td><c:out value="${email.category.name()}"/></td>
+                            <td><c:out value="${email.fContactId}"/></td>
                             <td>
                                 <div>
-                                    <a href="<c:url value="/deleteEmail?emailId=${email.id}"/>">Delete</a>
+                                    <a href="<c:url value="/deleteEmail?emailId=${email.id}&contId=${email.fContactId}"/>">Delete</a>                                  
                                 </div>
                             </td>
                         </tr>
