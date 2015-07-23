@@ -36,11 +36,10 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    contactPstmt = con.prepareStatement("INSERT INTO Contact(Id, FullName, Nickname, Notes) VALUES(?,?,?,?)");
-                    contactPstmt.setInt(1, (numberOfContacts()+1));
-                    contactPstmt.setString(2, c.getFullName());
-                    contactPstmt.setString(3, c.getNickname());
-                    contactPstmt.setString(4, c.getNotes());
+                    contactPstmt = con.prepareStatement("INSERT INTO Contact(FullName, Nickname, Notes) VALUES(?,?,?)");
+                    contactPstmt.setString(1, c.getFullName());
+                    contactPstmt.setString(2, c.getNickname());
+                    contactPstmt.setString(3, c.getNotes());
                     
                     contactPstmt.execute();                   
                 }
@@ -65,17 +64,41 @@ public class MysqlContactRepository implements ContactRepository {
     @Override
     public void deleteContactById(int id) throws DalException{
         Connection con = null;
-        Statement stmt = null;
+        PreparedStatement deleteContactStmt = null, deleteMailsStmt = null;
         try{
             try {
                 con = this.connectionProvider.createConnection();
-                try{
-                    stmt = con.createStatement();
-                    stmt.execute("DELETE FROM Contact WHERE Id=" + String.valueOf(id));
-                } finally {
-                    if (stmt != null) {
-                        stmt.close();
+                con.setAutoCommit(false);
+                
+                try {
+                    try{
+                        deleteMailsStmt = con.prepareStatement("DELETE FROM Emails WHERE fContactId = ?");
+                        deleteMailsStmt.setInt(1, id);
+                        deleteMailsStmt.executeUpdate();
+                    } finally {
+                        if (deleteMailsStmt != null) {
+                            deleteMailsStmt.close();
+                        }
                     }
+
+                    try{
+                        deleteContactStmt = con.prepareStatement("DELETE FROM Contact WHERE Id = ?");
+                        deleteContactStmt.setInt(1, id);
+                        deleteContactStmt.executeUpdate();
+                    } finally {
+                        if (deleteContactStmt != null) {
+                            deleteContactStmt.close();
+                        }
+                    }
+                    
+                    con.commit();
+                }
+                catch (SQLException ex) {
+                    con.rollback();
+                    throw ex;
+                }
+                finally {
+                    con.setAutoCommit(true);
                 }
             } finally {
                 if(con != null){
@@ -130,7 +153,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
                 try {
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact WHERE Id=" + id);
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact WHERE Id= " + id);
                     if (rs.next()) {
                         contact = new Contact();
                         contact.setId(rs.getInt(1));
@@ -208,13 +231,13 @@ public class MysqlContactRepository implements ContactRepository {
 
                 try {
                     
-                    emailPstmt = con.prepareStatement("INSERT INTO Emails(Id, Address, Category, fContactId) VALUES(?,?,?,?)");
-                    emailPstmt.setInt(1, (numberOfEmails()+1));
-                    emailPstmt.setString(2, e.getAddress());
+                    emailPstmt = con.prepareStatement("INSERT INTO Emails(Address, Category, fContactId) VALUES(?,?,?)");
                     
-                    emailPstmt.setInt(3, e.getCategory().ordinal());
+                    emailPstmt.setString(1, e.getAddress());
+                    
+                    emailPstmt.setInt(2, e.getCategory().getByteValue());
                     //Contact id
-                    emailPstmt.setInt(4, e.getfContactId());
+                    emailPstmt.setInt(3, e.getfContactId());
                     emailPstmt.execute();
                                         
                 }
@@ -254,7 +277,8 @@ public class MysqlContactRepository implements ContactRepository {
                         Email email = new Email();
                         email.setId(rs.getInt(1));
                         email.setAddress(rs.getString(2));
-                        email.setCategory(rs.getInt(3));
+                        byte categoryValue = rs.getByte(3);
+                        email.setCategory(Email.Category.forValue(categoryValue));
                         email.setfContactId(rs.getInt(4));
                         list.add(email);
                     }
@@ -275,73 +299,6 @@ public class MysqlContactRepository implements ContactRepository {
         }
         
         return list;
-    }
-    
-    public int numberOfContacts() throws DalException {
-        Connection con = null;
-        Statement stmt = null;
-        int contactEntries = 0;
-        try {
-            try {
-                con = this.connectionProvider.createConnection();
-                
-                try {
-                    stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Contact");
-                    while(rs.next()) {
-                        
-                        contactEntries = rs.getInt(1);
-                    }
-                } finally {
-                    if(stmt!=null) {
-                        stmt.close();
-                    }
-                }
-            } finally {
-                if(con != null) {
-                    con.close();
-                }
-            }
-            
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException numberOfContactsException = new DalException(ex);
-            throw numberOfContactsException;
-        }
-        
-        return contactEntries;
-    }
-    
-    public int numberOfEmails() throws DalException {
-        Connection con = null;
-        Statement stmt = null;
-        int emailEntries = 0;
-        try {
-            try {
-                con = this.connectionProvider.createConnection();
-                
-                try {
-                    stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Emails");
-                    while(rs.next()) {
-                        emailEntries = rs.getInt(1);
-                    }
-                } finally {
-                    if(stmt!=null) {
-                        stmt.close();
-                    }
-                }
-            } finally {
-                if(con != null) {
-                    con.close();
-                }
-            }
-            
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException numberOfEmailsException = new DalException(ex);
-            throw numberOfEmailsException;
-        }
-        
-        return emailEntries;
     }
     
 }
