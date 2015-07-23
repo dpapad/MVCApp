@@ -36,7 +36,7 @@ public class NewEmailServlet extends HttpServlet {
         request.getRequestDispatcher("/newEmail.jsp").forward(request, response);
     }
 
-    
+    //Fixed    
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

@@ -6,6 +6,7 @@ package org.mypackage.model;
  */
 public class Email {
     
+    
     public static enum Category {
         
         PERSONAL((byte)1), 
