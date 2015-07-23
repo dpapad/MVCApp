@@ -43,8 +43,8 @@ public class NewContactServlet extends HttpServlet {
         cont.setNotes(request.getParameter("notes"));
     
         try {
-            int contactId = this.contactRepository.addContact(cont);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contactId;
+            this.contactRepository.addContact(cont);
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
             response.sendRedirect(redirectUrl);           
         } catch (DalException ex) {
             
