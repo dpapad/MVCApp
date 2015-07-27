@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import static org.junit.Assert.*;
 import org.mypackage.dal.DalException;
 import org.mypackage.dal.sql.SqlConnectionProvider;
 import org.mypackage.model.Contact;
+import org.mypackage.model.Email;
 
 /**
  *
@@ -31,23 +33,42 @@ public class MySqlContactRepositoryTest {
         Connection connection = null;
 
         PreparedStatement createContactTableStmt = null;
+        PreparedStatement createEmailsTableStmt = null;
 
         try {
-                connection = this.connectionProvider.createConnection();
+            connection = this.connectionProvider.createConnection();
                 
-                 try {
-                        createContactTableStmt = connection.prepareStatement("CREATE TABLE Contact ("
-                                + "Id INT primary key auto_increment, "
-                                + "FullName VARCHAR(45), "
-                                + "Nickname VARCHAR(45), "
-                                + "Notes VARCHAR(45) "
-                                + ");");
-                        createContactTableStmt.execute();
-                    } finally {
-                        if (createContactTableStmt != null) {
-                            createContactTableStmt.close();
-                        }
-                    }
+            try {
+                createContactTableStmt = connection.prepareStatement("CREATE TABLE Contact ("
+                    + "Id INT PRIMARY KEY AUTO_INCREMENT, "
+                    + "FullName VARCHAR(45), "
+                    + "Nickname VARCHAR(45), "
+                    + "Notes VARCHAR(45) "
+                    + ");");
+                createContactTableStmt.execute();
+            } 
+            finally {
+                if (createContactTableStmt != null) {
+                createContactTableStmt.close();
+                }
+            }
+                 
+            try {
+                createEmailsTableStmt = connection.prepareStatement("CREATE TABLE Emails (" 
+                + "Id INT PRIMARY KEY AUTO_INCREMENT, " 
+                + "Address VARCHAR(150) UNIQUE, " 
+                + "Category TINYINT, " 
+                + "fContactId INT, " 
+                + "FOREIGN KEY (fContactId) " 
+                        + "REFERENCES Contact (Id) " 
+                        + "ON UPDATE CASCADE); ");
+                createEmailsTableStmt.execute();
+            } 
+            finally{
+                if(createEmailsTableStmt != null) {
+                    createEmailsTableStmt.close();
+                }
+            }
 
             } finally {
                 if (connection != null) {
@@ -60,25 +81,39 @@ public class MySqlContactRepositoryTest {
     public void tearDown() throws ClassNotFoundException, SQLException{
         Connection connection = null;
 
-        PreparedStatement dropDatabaseStmt = null;
+        PreparedStatement dropEmailsTableStmt = null;
+        PreparedStatement dropContactTableStmt = null;
 
         try {
 
-                connection = this.connectionProvider.createConnection();
-
-                try {
-                    dropDatabaseStmt = connection.prepareStatement("DROP TABLE Contact;");
-                    dropDatabaseStmt.execute();
-                } finally {
-                    if (dropDatabaseStmt != null) {
-                        dropDatabaseStmt.close();
-                    }
-                }
-            } finally {
-                if (connection != null) {
-                    connection.close();
+            connection = this.connectionProvider.createConnection();
+                
+            try {
+                dropEmailsTableStmt = connection.prepareStatement("DROP TABLE Emails;");
+                dropEmailsTableStmt.execute();
+                
+            } 
+            finally {
+                if(dropEmailsTableStmt != null) {
+                    dropEmailsTableStmt.close();
                 }
             }
+
+            try {
+                dropContactTableStmt = connection.prepareStatement("DROP TABLE Contact;");
+                dropContactTableStmt.execute();
+            } 
+            finally {
+                if (dropContactTableStmt != null) {
+                    dropContactTableStmt.close();
+                }
+            }
+        } 
+        finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Test
@@ -103,13 +138,18 @@ public class MySqlContactRepositoryTest {
         c.setFullName("xxx");
         c.setNickname("xxx");
         c.setNotes("xxx");
-        this.contactRepository.addContact(c);
-        int contactId = this.getMaxContactId();
+        int contactId = this.contactRepository.addContact(c);
+        int maxContactId = this.getMaxContactId();
+        
+        assertEquals(contactId, maxContactId);
+        
         Contact c2 = this.contactRepository.getContactById(contactId);
 
         assertEquals(c.getFullName(), c2.getFullName());
         assertEquals(c.getNickname(), c2.getNickname());
         assertEquals(c.getNotes(), c2.getNotes());
+        
+        
 
     }
 
@@ -122,6 +162,53 @@ public class MySqlContactRepositoryTest {
         this.contactRepository.addContact(c);
         int count = this.getContactCount();
 
+        assertEquals(1, count);
+        
+    }
+    
+    @Test
+    public void testAddEmail() throws Exception {
+        
+        Contact c = new Contact();
+        c.setFullName("asdf");
+        c.setNickname("asdf");
+        c.setNotes("asdf");
+        this.contactRepository.addContact(c);
+        
+        Email e = new Email();
+        e.setAddress("mail1@test.com");
+        e.setCategory(Email.Category.WORK);
+        e.setfContactId(1);
+        
+        
+        int emailId = this.contactRepository.addEmail(e);
+        int maxEmailId = this.getMaxEmailId();
+        
+        assertEquals(emailId, maxEmailId);
+        
+        List<Email> emailList = this.contactRepository.getAllEmailsByContactId(1);
+        Email e2 = emailList.get(0);
+        
+        assertEquals(e.getAddress(), e2.getAddress());
+        assertEquals(e.getCategory(), e2.getCategory());
+        assertEquals(e.getfContactId(), e2.getfContactId());        
+    }
+    
+    @Test
+    public void testAddEmail2() throws DalException, SQLException, ClassNotFoundException{
+        Contact c = new Contact();
+        c.setFullName("asdf");
+        c.setNickname("asdf");
+        c.setNotes("asdf");
+        this.contactRepository.addContact(c);
+        
+        Email e = new Email();
+        e.setAddress("mail2@test.com");
+        e.setCategory(Email.Category.PERSONAL);
+        e.setfContactId(1);
+        this.contactRepository.addEmail(e);
+        int count = this.getEmailCount();
+        
         assertEquals(1, count);
     }
 
@@ -179,5 +266,63 @@ public class MySqlContactRepositoryTest {
         }
 
         return contactCount;
+    }
+    
+    private int getMaxEmailId() throws SQLException, ClassNotFoundException {
+        Connection connection = null;
+        PreparedStatement getMaxEmailIdStmt = null;
+        int maxEmailId;
+        
+        try {
+            connection = this.connectionProvider.createConnection();
+            try {
+                getMaxEmailIdStmt = connection.prepareStatement("SELECT MAX(Id) FROM Emails;");
+                ResultSet rs = getMaxEmailIdStmt.executeQuery();
+                
+                rs.next();
+                maxEmailId = rs.getInt(1);
+            }
+            finally {
+                if (getMaxEmailIdStmt != null) {
+                    getMaxEmailIdStmt.close();
+                }
+            }
+        }
+        finally {
+            if(connection != null) {
+                connection.close();
+            }
+        }
+        
+        return maxEmailId;
+    }
+    
+    private int getEmailCount() throws SQLException, ClassNotFoundException {
+        int emailCount;
+        Connection connection = null;
+        PreparedStatement getEmailCountStmt = null;
+        
+        try {
+            connection = this.connectionProvider.createConnection();
+            
+            try {
+                getEmailCountStmt = connection.prepareStatement("SELECT COUNT(*) FROM Emails;");
+                ResultSet rs =  getEmailCountStmt.executeQuery();
+                rs.next();
+                emailCount = rs.getInt(1);                
+            } 
+            finally {
+                if (getEmailCountStmt != null) {
+                    getEmailCountStmt.close();
+                }
+            }
+        } 
+        finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        
+        return emailCount;
     }
 }
