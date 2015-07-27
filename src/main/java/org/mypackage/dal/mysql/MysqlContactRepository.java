@@ -26,21 +26,27 @@ public class MysqlContactRepository implements ContactRepository {
     }
     
     @Override
-    public void addContact(Contact c) throws DalException {
+    public int addContact(Contact c) throws DalException {
         Connection con = null;
         PreparedStatement addContactStmt = null;
+        int contactId;
         
         try {
             try {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    addContactStmt = con.prepareStatement("INSERT INTO Contact(FullName, Nickname, Notes) VALUES(?,?,?)");
+                    addContactStmt = con.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)");
                     addContactStmt.setString(1, c.getFullName());
                     addContactStmt.setString(2, c.getNickname());
                     addContactStmt.setString(3, c.getNotes());
                     
-                    addContactStmt.execute();                   
+                    addContactStmt.execute();
+                    
+                    ResultSet rs  = addContactStmt.getGeneratedKeys();
+                    rs.next();
+                    contactId = rs.getInt(1);
+                    
                 }
                 finally {
                     if (addContactStmt != null) {
@@ -58,9 +64,11 @@ public class MysqlContactRepository implements ContactRepository {
             DalException addContactException = new DalException(ex);
             throw addContactException;
         }
+        
+        return contactId;
     }
 
-    // Fixed deleteContactById()
+    
     @Override
     public void deleteContactById(int id) throws DalException{
         Connection con = null;
@@ -222,7 +230,8 @@ public class MysqlContactRepository implements ContactRepository {
     }
     
     @Override
-    public void addEmail (Email e)  throws DalException{
+    public int addEmail (Email e)  throws DalException{
+        int addedEmailId;
         Connection con = null;
         PreparedStatement emailPstmt = null;
         
@@ -237,10 +246,13 @@ public class MysqlContactRepository implements ContactRepository {
                     emailPstmt.setString(1, e.getAddress());
                     
                     emailPstmt.setInt(2, e.getCategory().getByteValue());
-                    //Contact id
+                    
                     emailPstmt.setInt(3, e.getfContactId());
                     emailPstmt.execute();
-                                        
+                    
+                    ResultSet rs = emailPstmt.getGeneratedKeys();
+                    rs.next();
+                    addedEmailId = rs.getInt(1);
                 }
                 finally {
                                  
@@ -259,6 +271,8 @@ public class MysqlContactRepository implements ContactRepository {
             DalException addEmailException = new DalException(ex);
             throw addEmailException;
         }
+        
+        return addedEmailId;
     }
     
 
