@@ -106,5 +106,5 @@ public class Email {
      */
     public void setfContactId(int fContactId) {
         this.fContactId = fContactId;
-    }
+    }    
 }
