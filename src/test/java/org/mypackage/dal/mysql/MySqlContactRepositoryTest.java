@@ -3,10 +3,12 @@ package org.mypackage.dal.mysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mypackage.dal.DalException;
 import org.mypackage.dal.sql.SqlConnectionProvider;
 import org.mypackage.model.Contact;
 
@@ -25,29 +27,15 @@ public class MySqlContactRepositoryTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException, ClassNotFoundException  {
         Connection connection = null;
 
-        PreparedStatement createDatabaseStmt = null;
         PreparedStatement createContactTableStmt = null;
 
         try {
-            try {
                 connection = this.connectionProvider.createConnection();
-                connection.setAutoCommit(false);
-                try {
-
-//                   try {
-//                       createDatabaseStmt = connection.prepareStatement("create database mvcproject;");
-//                       createDatabaseStmt.execute();
-//                   }
-//                   finally {
-//                       if(createDatabaseStmt!=null) {
-//                           createDatabaseStmt.close();
-//                       }
-//                   }
-//                   
-                    try {
+                
+                 try {
                         createContactTableStmt = connection.prepareStatement("CREATE TABLE Contact ("
                                 + "Id INT primary key auto_increment, "
                                 + "FullName VARCHAR(45), "
@@ -60,34 +48,27 @@ public class MySqlContactRepositoryTest {
                             createContactTableStmt.close();
                         }
                     }
-                } finally {
-                    connection.setAutoCommit(true);
-                }
 
             } finally {
                 if (connection != null) {
                     connection.close();
                 }
             }
-        } catch (Exception ex) {
-        }
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws ClassNotFoundException, SQLException{
         Connection connection = null;
 
         PreparedStatement dropDatabaseStmt = null;
 
         try {
 
-            try {
-
                 connection = this.connectionProvider.createConnection();
-                connection.setAutoCommit(false);
 
                 try {
-                    dropDatabaseStmt = connection.prepareStatement("drop database mvcproject;");
+                    dropDatabaseStmt = connection.prepareStatement("DROP TABLE Contact;");
+                    dropDatabaseStmt.execute();
                 } finally {
                     if (dropDatabaseStmt != null) {
                         dropDatabaseStmt.close();
@@ -98,13 +79,21 @@ public class MySqlContactRepositoryTest {
                     connection.close();
                 }
             }
-        } catch (Exception ex) {
-        }
     }
 
     @Test
-    public void testConnection() throws Exception {
-        assertNotNull(connectionProvider.createConnection());
+    public void testConnection() throws ClassNotFoundException, SQLException {
+        Connection connection = null;
+        
+        try {
+            connection = connectionProvider.createConnection();
+            assertNotNull(connection);
+        }
+        finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Test
@@ -136,7 +125,7 @@ public class MySqlContactRepositoryTest {
         assertEquals(1, count);
     }
 
-    private int getMaxContactId() throws Exception {
+    private int getMaxContactId() throws SQLException, ClassNotFoundException {
         Connection connection = null;
         PreparedStatement getMaxContactIdStmt = null;
         int maxContactId;
@@ -144,7 +133,7 @@ public class MySqlContactRepositoryTest {
         try {
             connection = this.connectionProvider.createConnection();
             try {
-                getMaxContactIdStmt = connection.prepareStatement("select max(Id) from Contact");
+                getMaxContactIdStmt = connection.prepareStatement("SELECT MAX(Id) FROM Contact");
                 ResultSet rs = getMaxContactIdStmt.executeQuery();
 
                 rs.next();
@@ -164,7 +153,7 @@ public class MySqlContactRepositoryTest {
         return maxContactId;
     }
 
-    private int getContactCount() throws Exception {
+    private int getContactCount() throws SQLException, ClassNotFoundException {
         Connection connection = null;
         PreparedStatement getContactCountStmt = null;
         int contactCount;
@@ -172,7 +161,7 @@ public class MySqlContactRepositoryTest {
         try {
             connection = this.connectionProvider.createConnection();
             try {
-                getContactCountStmt = connection.prepareStatement("select count(*) from Contact");
+                getContactCountStmt = connection.prepareStatement("SELECT COUNT(*) FROM Contact");
                 ResultSet rs = getContactCountStmt.executeQuery();
 
                 rs.next();
