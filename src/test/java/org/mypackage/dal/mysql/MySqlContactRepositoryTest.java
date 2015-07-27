@@ -148,6 +148,9 @@ public class MySqlContactRepositoryTest {
         assertEquals(c.getFullName(), c2.getFullName());
         assertEquals(c.getNickname(), c2.getNickname());
         assertEquals(c.getNotes(), c2.getNotes());
+        
+        
+
     }
 
     @Test
