@@ -10,9 +10,6 @@ import org.mypackage.dal.sql.SqlConnectionProvider;
  * @author dev-dp
  */
 
-
-// DONE
-
 public class H2SqlConnectionProvider implements SqlConnectionProvider {
     
     private static final String H2DB_DRIVER = "org.h2.Driver";
