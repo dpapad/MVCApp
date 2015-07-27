@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
@@ -168,30 +171,66 @@ public class MySqlContactRepositoryTest {
     
     @Test
     public void testAddEmail() throws Exception {
-        
+                
+        //Create a contact
         Contact c = new Contact();
         c.setFullName("asdf");
         c.setNickname("asdf");
         c.setNotes("asdf");
         this.contactRepository.addContact(c);
         
-        Email e = new Email();
-        e.setAddress("mail1@test.com");
-        e.setCategory(Email.Category.WORK);
-        e.setfContactId(1);
+    
+        // Manually inreamented list of emails
+        List<TestEmail> myEmailList = new ArrayList<>();
+        
+        //Create a new email for the contact above
+        TestEmail emailDummy = new TestEmail();
+        emailDummy.setAddress("mail1@test.com");
+        emailDummy.setCategory(Email.Category.WORK);
+        emailDummy.setfContactId(1);
+        
+        myEmailList.add(emailDummy);
+        this.contactRepository.addEmail(emailDummy);
+        
+        // Create a second dummy email for testing
+        TestEmail emailDummy2 = new TestEmail();
+        emailDummy2.setAddress("mailasdf@test.com");
+        emailDummy2.setCategory(Email.Category.WORK);
+        emailDummy2.setfContactId(1);
+        
+        myEmailList.add(emailDummy2);
+        int emailId = this.contactRepository.addEmail(emailDummy2);
         
         
-        int emailId = this.contactRepository.addEmail(e);
         int maxEmailId = this.getMaxEmailId();
         
         assertEquals(emailId, maxEmailId);
         
-        List<Email> emailList = this.contactRepository.getAllEmailsByContactId(1);
-        Email e2 = emailList.get(0);
+                
         
-        assertEquals(e.getAddress(), e2.getAddress());
-        assertEquals(e.getCategory(), e2.getCategory());
-        assertEquals(e.getfContactId(), e2.getfContactId());        
+        List<Email> retrievedEmailList = this.contactRepository.getAllEmailsByContactId(1);
+        
+        assertEquals(myEmailList.size(), retrievedEmailList.size());
+        
+        // Sort email lists
+        sortEmailsById(myEmailList);
+        sortEmailsById(retrievedEmailList);
+        
+        assertEquals(myEmailList.size(), retrievedEmailList.size());
+              
+        Email emailForComparison1, emailForComparison2;
+        int i = 1;
+        
+        while (i < myEmailList.size()) {
+            emailForComparison1 = myEmailList.get(i);
+            emailForComparison2 = retrievedEmailList.get(i);
+            
+            assertEquals(emailForComparison1.getAddress(), emailForComparison2.getAddress());
+            assertEquals(emailForComparison1.getCategory(), emailForComparison2.getCategory());
+            assertEquals(emailForComparison1.getfContactId(), emailForComparison2.getfContactId());
+            i++;
+        }
+          
     }
     
     @Test
@@ -325,4 +364,30 @@ public class MySqlContactRepositoryTest {
         
         return emailCount;
     }
+    
+    private void sortEmailsById(List emailList) {
+        Collections.sort(emailList, new EmailComparator());
+        //Collections.sort(emailList);        
+    }    
+    
+    class EmailComparator implements Comparator<Email> {        
+        @Override
+        public int compare(Email e1, Email e2) {
+            return e1.getId() - e2.getId();
+        }
+    }
+    
+    class TestEmail extends Email implements Comparable<Email> {
+        public TestEmail(){
+            super();
+        }
+        
+        @Override
+        public int compareTo(Email e1) {
+            return this.getId() - e1.getId();
+        }
+    }
+   
+    
+    
 }
