@@ -19,7 +19,7 @@
 
 
                 <label>Address<span class="small">Enter Email Address</span></label>
-                <input type="text" name="address" id="address" />
+                <input type="email" name="address" id="address"  required/>
 
                 <label>Category</label>
                 <select name="category" id="category">
