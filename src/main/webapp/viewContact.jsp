@@ -49,7 +49,6 @@
                         <tr>                    
                             <td><c:out value="${email.address}"/></td>
                             <td><c:out value="${email.category.name()}"/></td>
-                            <td><c:out value="${email.fContactId}"/></td>
                             <td>
                                 <div>
                                     <a href="<c:url value="/deleteEmail?emailId=${email.id}&contId=${email.fContactId}"/>">Delete</a>                                  
