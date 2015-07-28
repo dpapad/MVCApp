@@ -250,6 +250,29 @@ public class MySqlContactRepositoryTest {
         
         assertEquals(1, count);
     }
+    
+    @Test
+    public void testAddDuplicateEmail() throws DalException {
+        boolean exists;
+        
+        Contact c = new Contact();
+        c.setFullName("asdf");
+        c.setNickname("asdf");
+        c.setNotes("asdf");
+        this.contactRepository.addContact(c);
+        
+        Email e = new Email();
+        e.setAddress("mail@test.com");
+        e.setCategory(Email.Category.PERSONAL);
+        e.setfContactId(1);        
+        this.contactRepository.addEmail(e);
+                                    
+        exists = this.contactRepository.checkIfEmailExists(e);
+        
+        assertEquals(true, exists);
+
+    
+    }
 
     private int getMaxContactId() throws SQLException, ClassNotFoundException {
         Connection connection = null;
