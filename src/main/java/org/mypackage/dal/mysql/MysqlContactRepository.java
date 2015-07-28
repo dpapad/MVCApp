@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.mypackage.dal.ContactRepository;
@@ -35,7 +36,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    addContactStmt = con.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)");
+                    addContactStmt = con.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     addContactStmt.setString(1, c.getFullName());
                     addContactStmt.setString(2, c.getNickname());
                     addContactStmt.setString(3, c.getNotes());
@@ -232,7 +233,7 @@ public class MysqlContactRepository implements ContactRepository {
                 con = this.connectionProvider.createConnection();
 
                 try {
-                    emailPstmt = con.prepareStatement("INSERT INTO Emails(Address, Category, fContactId) VALUES(?,?,?)");
+                    emailPstmt = con.prepareStatement("INSERT INTO Emails(Address, Category, fContactId) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
                     emailPstmt.setString(1, e.getAddress());
 
