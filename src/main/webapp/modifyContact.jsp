@@ -23,7 +23,7 @@
                 <label><input type="hidden" name="contactId" id="contactId" value="${contact.id}"/><span class="small"></span></label>                    
                 
                 <label>Full Name<span class="small">Enter full name</span></label>
-                <input type="text" name="fullname" id="fullname" value="${contact.fullName}"/>
+                <input type="text" name="fullname" id="fullname" value="${contact.fullName}" required/>
                 
                 <label>Nickname<span class="small">Enter nickname</span></label>
                 <input type="text" name="nickname" id="nickname" value="${contact.nickname}"/>
