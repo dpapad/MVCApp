@@ -22,11 +22,12 @@ public class NewContactServlet extends HttpServlet {
     private ContactRepository contactRepository;
     
     public NewContactServlet() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
     
-    public NewContactServlet(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
+    
+    public NewContactServlet(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
     
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
@@ -43,12 +44,14 @@ public class NewContactServlet extends HttpServlet {
         cont.setNotes(request.getParameter("notes"));
     
         try {
-            this.contactRepository.addContact(cont);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/";
-            response.sendRedirect(redirectUrl);           
-        } catch (DalException ex) {
+            int c = this.contactRepository.addContact(cont);
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + c;
+            response.sendRedirect(redirectUrl);
             
+        } catch (DalException ex) {    
+            throw new RuntimeException(ex.getMessage());
         }
+                  
     }
 
     
