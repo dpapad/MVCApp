@@ -52,7 +52,7 @@ public class NewEmailServlet extends HttpServlet {
                 this.contactRepository.addEmail(email);
                 String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getfContactId();
                 response.sendRedirect(redirectUrl); 
-            }
+            }                                      
             else {
                 response.sendRedirect("false.jsp");
             }

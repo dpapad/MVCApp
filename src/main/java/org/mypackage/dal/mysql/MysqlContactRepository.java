@@ -333,6 +333,7 @@ public class MysqlContactRepository implements ContactRepository {
         }
     }
 
+    //Fixed
     @Override
     public boolean checkIfEmailExists(Email email) {
         Connection connection = null;
