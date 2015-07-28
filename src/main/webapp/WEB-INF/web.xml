@@ -13,6 +13,10 @@
         <servlet-class>org.mypackage.controller.ContactsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>NewContactServlet</servlet-name>
+        <servlet-class>org.mypackage.controller.NewContactServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ModifyContactServlet</servlet-name>
         <servlet-class>org.mypackage.controller.ModifyContactServlet</servlet-class>
     </servlet>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>ContactsServlet</servlet-name>
         <url-pattern>/contacts/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewContactServlet</servlet-name>
+        <url-pattern>/newContact</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ModifyContactServlet</servlet-name>
