@@ -24,7 +24,7 @@
                 <p>To add new Contact enter following information</p>
 
                 <label>Full Name<span class="small">Enter Full Name</span></label>
-                <input type="text" name="fullname" id="fullname" />
+                <input type="text" name="fullname" id="fullname" required/>
 
                 <label>Nickname<span class="small">Enter Nickname</span></label>
                 <input type="text" name="nickname" id="nickname" />

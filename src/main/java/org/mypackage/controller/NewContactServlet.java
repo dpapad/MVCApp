@@ -31,7 +31,7 @@ public class NewContactServlet extends HttpServlet {
     
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("newContact.jsp").forward(request, response);
+        request.getRequestDispatcher("/newContact.jsp").forward(request, response);
     }
     
     
@@ -44,7 +44,7 @@ public class NewContactServlet extends HttpServlet {
     
         try {
             this.contactRepository.addContact(cont);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/";
             response.sendRedirect(redirectUrl);           
         } catch (DalException ex) {
             
