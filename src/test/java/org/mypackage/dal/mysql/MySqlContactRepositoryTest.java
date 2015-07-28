@@ -181,10 +181,10 @@ public class MySqlContactRepositoryTest {
         
     
         // Manually inreamented list of emails
-        List<TestEmail> myEmailList = new ArrayList<>();
+        List<Email> myEmailList = new ArrayList<>();
         
         //Create a new email for the contact above
-        TestEmail emailDummy = new TestEmail();
+        Email emailDummy = new Email();
         emailDummy.setAddress("mail1@test.com");
         emailDummy.setCategory(Email.Category.WORK);
         emailDummy.setfContactId(1);
@@ -193,7 +193,7 @@ public class MySqlContactRepositoryTest {
         this.contactRepository.addEmail(emailDummy);
         
         // Create a second dummy email for testing
-        TestEmail emailDummy2 = new TestEmail();
+        Email emailDummy2 = new Email();
         emailDummy2.setAddress("mailasdf@test.com");
         emailDummy2.setCategory(Email.Category.WORK);
         emailDummy2.setfContactId(1);
@@ -377,16 +377,7 @@ public class MySqlContactRepositoryTest {
         }
     }
     
-    class TestEmail extends Email implements Comparable<Email> {
-        public TestEmail(){
-            super();
-        }
-        
-        @Override
-        public int compareTo(Email e1) {
-            return this.getId() - e1.getId();
-        }
-    }
+
    
     
     
