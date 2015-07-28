@@ -48,10 +48,14 @@ public class NewEmailServlet extends HttpServlet {
         email.setfContactId(contid);
         
         try {
-            
-            this.contactRepository.addEmail(email);
-            String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getfContactId();
-            response.sendRedirect(redirectUrl);
+            if (!(this.contactRepository.checkIfEmailExists(email))) {
+                this.contactRepository.addEmail(email);
+                String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getfContactId();
+                response.sendRedirect(redirectUrl); 
+            }
+            else {
+                response.sendRedirect("false.jsp");
+            }
         } catch (DalException ex) {
             
         }
