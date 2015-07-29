@@ -14,7 +14,7 @@ import org.mypackage.model.Contact;
  *
  * @author dev-dp
  */
-public class ModifyContactController {
+public class ModifyContactController implements IModifyContactController {
     
     private ContactRepository contactRepository;
     
@@ -26,6 +26,7 @@ public class ModifyContactController {
         this.contactRepository = repositoryFactory.createContactRepository();
     }
     
+    @Override
     public Contact modifyContact(String contactId, String fullname, String nickname, String notes) {
         Contact contact = new Contact();
         contact.setId(Integer.parseInt(contactId));
@@ -40,6 +41,7 @@ public class ModifyContactController {
         return contact;
     }
     
+    @Override
     public Contact retrieveContact(String contactId) {
         
         Contact contact = new Contact();

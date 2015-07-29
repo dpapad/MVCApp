@@ -13,7 +13,7 @@ import org.mypackage.model.Email;
  *
  * @author dev-dp
  */
-public class NewEmailController {
+public class NewEmailController implements INewEmailController {
     
     private ContactRepository contactRepository;
     
@@ -25,6 +25,7 @@ public class NewEmailController {
         this.contactRepository = repositoryFactory.createContactRepository();
     }
     
+    @Override
     public int addNewEmail(String address, String categoryValue, String contactId){
         Email email = new Email();
         

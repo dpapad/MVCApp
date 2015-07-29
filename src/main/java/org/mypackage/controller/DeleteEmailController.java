@@ -13,7 +13,7 @@ import org.mypackage.dal.RepositoryFactory;
  *
  * @author dev-dp
  */
-public class DeleteEmailController {
+public class DeleteEmailController implements IDeleteEmailController {
     
     private ContactRepository contactRepository;
     
@@ -25,6 +25,7 @@ public class DeleteEmailController {
         this.contactRepository = repositoryFactory.createContactRepository();
     }
     
+    @Override
     public int deleteEmail(String eId, String cId) {
         
         try {

@@ -16,7 +16,7 @@ import org.mypackage.model.Email;
  *
  * @author dev-dp
  */
-public class ContactsController {
+public class ContactsController implements IContactController {
     
     private ContactRepository contactRepository;
     
@@ -28,6 +28,7 @@ public class ContactsController {
         this.contactRepository = repositoryFactory.createContactRepository();
     }
     
+    @Override
     public List<Contact> retrieveAllContacts() {
         List<Contact> list = null;
         try {
@@ -38,6 +39,7 @@ public class ContactsController {
         return list;
     }
     
+    @Override
     public Contact getContact(String id) {
         Contact contact = null;
         try {
@@ -52,6 +54,7 @@ public class ContactsController {
         return contact;
     }
     
+    @Override
     public List<Email> retrieveAllEmails(String id) {
         List<Email> list = null;
         try {

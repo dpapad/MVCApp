@@ -13,7 +13,7 @@ import org.mypackage.model.Contact;
  *
  * @author dev-dp
  */
-public class NewContactController {
+public class NewContactController implements INewContactController {
     
     private ContactRepository contactRepository;
     
@@ -25,6 +25,7 @@ public class NewContactController {
         this.contactRepository = repositoryFactory.createContactRepository();
     }
     
+    @Override
     public int addNewContact(String fullName, String nickname, String notes){
         int contactId = 0;
         
