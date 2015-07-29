@@ -16,8 +16,10 @@
             <form id="form" name="form"  method="post" action="addEmail">
                 <h1>Email</h1>
                 <p>To add a new Email enter following information</p>
-
-
+                <br/>
+                <br/>
+                <div style="color: #FF0000;">${errorMessage}</div>
+                
                 <label>Address<span class="small">Enter Email Address</span></label>
                 <input type="email" name="address" id="address" required/>
 

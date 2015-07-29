@@ -19,6 +19,7 @@ import org.mypackage.model.Email;
 @WebServlet(name = "NewEmailServlet", urlPatterns = {"/newEmail"})
 public class NewEmailServlet extends HttpServlet {
     
+    
     private ContactRepository contactRepository;
     
     public NewEmailServlet() {
@@ -53,8 +54,10 @@ public class NewEmailServlet extends HttpServlet {
                 String redirectUrl = this.getServletContext().getContextPath()  +"/contacts/" + email.getfContactId();
                 response.sendRedirect(redirectUrl); 
             }                                      
-            else {
-                response.sendRedirect("false.jsp");
+            else {                
+                request.getSession().setAttribute("errorMessage", "This address already exists. Please enter a new one.");
+              
+                response.sendRedirect(request.getHeader("Referer"));                
             }
         } catch (DalException ex) {
             
