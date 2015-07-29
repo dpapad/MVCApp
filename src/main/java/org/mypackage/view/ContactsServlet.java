@@ -19,15 +19,7 @@ import org.mypackage.model.Email;
  */
 public final class ContactsServlet extends HttpServlet {
 
-    private ContactRepository contactRepository;
-
-    public ContactsServlet() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
-    }
-
-    public ContactsServlet(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+   
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
