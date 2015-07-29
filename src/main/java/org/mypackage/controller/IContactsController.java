@@ -13,7 +13,7 @@ import org.mypackage.model.Email;
  *
  * @author dev-dp
  */
-public interface IContactController {
+public interface IContactsController {
 
     Contact getContact(String id);
 
