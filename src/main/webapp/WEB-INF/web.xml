@@ -10,27 +10,27 @@
     </filter-mapping>
     <servlet>
         <servlet-name>ContactsServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.ContactsServlet</servlet-class>
+        <servlet-class>org.mypackage.view.ContactsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewContactServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.NewContactServlet</servlet-class>
+        <servlet-class>org.mypackage.view.NewContactServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ModifyContactServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.ModifyContactServlet</servlet-class>
+        <servlet-class>org.mypackage.view.ModifyContactServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteContactServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.DeleteContactServlet</servlet-class>
+        <servlet-class>org.mypackage.view.DeleteContactServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewEmailServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.NewEmailServlet</servlet-class>
+        <servlet-class>org.mypackage.view.NewEmailServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteEmailServlet</servlet-name>
-        <servlet-class>org.mypackage.controller.DeleteEmailServlet</servlet-class>
+        <servlet-class>org.mypackage.view.DeleteEmailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ContactsServlet</servlet-name>
