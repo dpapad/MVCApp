@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.controller.ContactsController;
+import org.mypackage.controller.IContactsController;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
 
@@ -16,11 +17,15 @@ import org.mypackage.model.Email;
  */
 public final class ContactsServlet extends HttpServlet {
 
+   private IContactsController contactsController;
    
+   public ContactsServlet(){
+       this.contactsController = new ContactsController();
+   }
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ContactsController contactsController = new ContactsController();
+        //ContactsController contactsController = new ContactsController();
         
         String contactId = (String) request.getAttribute("contactId");
         
