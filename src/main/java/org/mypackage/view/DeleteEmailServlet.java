@@ -6,43 +6,31 @@
 package org.mypackage.view;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.application.ApplicationDependencies;
-import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.DalException;
+import org.mypackage.controller.DeleteEmailController;
 
 /**
  *
  * @author dev-dp
  */
 public class DeleteEmailServlet extends HttpServlet {
-
-    private ContactRepository contactRepository;
-    
-    public DeleteEmailServlet() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
-    }
-    
-    public DeleteEmailServlet(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int emailId = Integer.parseInt(request.getParameter("emailId"));
-        int contId = Integer.parseInt(request.getParameter("contId"));
-        try {
-            
-            this.contactRepository.deleteEmailById(emailId);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
-            response.sendRedirect(redirectUrl);
-        } catch  (DalException ex) {
-            
-        }
+        
+        DeleteEmailController deleteEmailController = new DeleteEmailController();
+        
+        String emailId = request.getParameter("emailId");
+        String contactId = request.getParameter("contId");
+        
+        int contId = deleteEmailController.deleteEmail(emailId, contactId);
+
+        String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
+        response.sendRedirect(redirectUrl);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
