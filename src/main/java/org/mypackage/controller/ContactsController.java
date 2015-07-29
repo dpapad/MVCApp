@@ -1,0 +1,68 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.mypackage.controller;
+
+import java.util.List;
+import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.dal.ContactRepository;
+import org.mypackage.dal.RepositoryFactory;
+import org.mypackage.model.Contact;
+import org.mypackage.model.Email;
+
+/**
+ *
+ * @author dev-dp
+ */
+public class ContactsController {
+    
+    private ContactRepository contactRepository;
+    
+    public ContactsController() {
+        this(ApplicationDependencies.REPOSITORY_FACTORY);
+    }
+    
+    public ContactsController(RepositoryFactory repositoryFactory) {
+        this.contactRepository = repositoryFactory.createContactRepository();
+    }
+    
+    public List<Contact> retrieveAllContacts() {
+        List<Contact> list = null;
+        try {
+            list = this.contactRepository.getAllContacts();
+        } catch (Exception e) {
+        }
+        
+        return list;
+    }
+    
+    public Contact getContact(String id) {
+        Contact contact = null;
+        try {
+            int contactId = Integer.parseInt(id);
+            try {
+                contact = this.contactRepository.getContactById(contactId);
+            } catch (Exception e) {
+            }
+        } catch (Exception e) {
+        }
+        
+        return contact;
+    }
+    
+    public List<Email> retrieveAllEmails(String id) {
+        List<Email> list = null;
+        try {
+            int contactId = Integer.parseInt(id);
+            try {
+                list = this.contactRepository.getAllEmailsByContactId(contactId);
+            } catch (Exception e) {
+            }
+        } catch (Exception e) {
+        }
+        
+        return list;
+    }
+}
