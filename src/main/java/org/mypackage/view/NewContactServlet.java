@@ -6,11 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.application.ApplicationDependencies;
-import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
-import org.mypackage.model.Contact;
+import org.mypackage.controller.NewContactController;
 
 /**
  *
@@ -19,16 +15,6 @@ import org.mypackage.model.Contact;
 @WebServlet(name = "NewContactServlet", urlPatterns = {"/newContact"})
 public class NewContactServlet extends HttpServlet {
 
-    private ContactRepository contactRepository;
-    
-    public NewContactServlet() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
-    }
-    
-    
-    public NewContactServlet(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
     
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,20 +24,18 @@ public class NewContactServlet extends HttpServlet {
     
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Contact cont = new Contact();
-        cont.setFullName(request.getParameter("fullname"));
-        cont.setNickname(request.getParameter("nickname"));
-        cont.setNotes(request.getParameter("notes"));
+
+        NewContactController newContactController = new NewContactController();
+        
+        String fullName = request.getParameter("fullname");
+        String nickname = request.getParameter("nickname");
+        String notes = request.getParameter("notes");
     
-        try {
-            int c = this.contactRepository.addContact(cont);
+            int c = newContactController.addNewContact(fullName, nickname, notes);
+        
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + c;
             response.sendRedirect(redirectUrl);
-            
-        } catch (DalException ex) {    
-            throw new RuntimeException(ex.getMessage());
-        }
-                  
+                            
     }
 
     
