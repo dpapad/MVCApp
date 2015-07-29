@@ -5,9 +5,11 @@
  */
 package org.mypackage.controller;
 
+import java.text.ParseException;
 import java.util.List;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.dal.ContactRepository;
+import org.mypackage.dal.DalException;
 import org.mypackage.dal.RepositoryFactory;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
@@ -16,7 +18,7 @@ import org.mypackage.model.Email;
  *
  * @author dev-dp
  */
-public class ContactsController implements IContactController {
+public class ContactsController implements IContactsController {
     
     private ContactRepository contactRepository;
     
@@ -44,11 +46,14 @@ public class ContactsController implements IContactController {
         Contact contact = null;
         try {
             int contactId = Integer.parseInt(id);
-            try {
-                contact = this.contactRepository.getContactById(contactId);
-            } catch (Exception e) {
-            }
-        } catch (Exception e) {
+            contact = this.contactRepository.getContactById(contactId);
+            
+        } 
+        catch (NumberFormatException e) {
+            
+        }
+        catch (DalException ex) {
+            
         }
         
         return contact;
