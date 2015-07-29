@@ -6,9 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.application.ApplicationDependencies;
-import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.DalException;
+import org.mypackage.controller.ModifyContactController;
 import org.mypackage.model.Contact;
 
 
@@ -19,49 +17,36 @@ import org.mypackage.model.Contact;
 @WebServlet(name = "ModifyContactServlet", urlPatterns = {"/modifyContact"})
 public class ModifyContactServlet extends HttpServlet {
 
-    private ContactRepository contactRepository;
-
-    public ModifyContactServlet() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
-    }
-
-    public ModifyContactServlet(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+    public ModifyContactController modifyContactController = new ModifyContactController();
     
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Contact contact = new Contact();
-        contact.setId(Integer.parseInt(request.getParameter("contactId")));
-        contact.setFullName(request.getParameter("fullname"));
-        contact.setNickname(request.getParameter("nickname"));
-        contact.setNotes(request.getParameter("notes"));
         
+        
+        
+        String contactId = request.getParameter("contactId");
+        String fullName = request.getParameter("fullname");
+        String nickname = request.getParameter("nickname");
+        String note = request.getParameter("notes");
+        
+        Contact contact = modifyContactController.modifyContact(contactId, fullName, nickname, note);
+
         request.setAttribute("contact", contact);
         
-        try {
-            this.contactRepository.updateContact(contact);
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getId();
-            response.sendRedirect(redirectUrl);           
-        } catch (DalException ex) {
-            
-        }
+        String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getId();
+        response.sendRedirect(redirectUrl);           
+
     }
     
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException { 
-        Contact contact = new Contact();
-        Integer id = Integer.parseInt(request.getParameter("contactId"));
+         
+        String id = request.getParameter("contactId");
         
-        try {
-            contact = contactRepository.getContactById(id);
-        } catch (DalException ex) {
-            
-        }      
-                
+        Contact contact = modifyContactController.retrieveContact(id);
+        
         request.setAttribute("contact", contact);
-
-        
+       
         request.getRequestDispatcher("/modifyContact.jsp").forward(request, response);
     }
 
