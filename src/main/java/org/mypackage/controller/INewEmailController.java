@@ -5,12 +5,14 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.dal.DalException;
+
 /**
  *
  * @author dev-dp
  */
 public interface INewEmailController {
 
-    int addNewEmail(String address, String categoryValue, String contactId);
-    
+    int addNewEmail(String address, String categoryValue, String contactId) throws NumberFormatException, DalException;
+
 }

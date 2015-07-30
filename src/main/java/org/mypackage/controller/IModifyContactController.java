@@ -5,6 +5,7 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 
 /**
@@ -13,8 +14,8 @@ import org.mypackage.model.Contact;
  */
 public interface IModifyContactController {
 
-    Contact modifyContact(String contactId, String fullname, String nickname, String notes);
+    Contact modifyContact(String contactId, String fullname, String nickname, String notes) throws DalException;
 
-    Contact retrieveContact(String contactId);
-    
+    Contact retrieveContact(String contactId) throws DalException;
+
 }

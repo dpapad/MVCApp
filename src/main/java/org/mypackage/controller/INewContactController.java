@@ -5,12 +5,14 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.dal.DalException;
+
 /**
  *
  * @author dev-dp
  */
 public interface INewContactController {
 
-    int addNewContact(String fullName, String nickname, String notes);
-    
+    int addNewContact(String fullName, String nickname, String notes) throws DalException;
+
 }

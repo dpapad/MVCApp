@@ -6,6 +6,7 @@
 package org.mypackage.controller;
 
 import java.util.List;
+import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
 
@@ -15,10 +16,10 @@ import org.mypackage.model.Email;
  */
 public interface IContactsController {
 
-    Contact getContact(String id);
+    Contact getContact(String id) throws NumberFormatException, DalException;
 
-    List<Contact> retrieveAllContacts();
+    List<Contact> retrieveAllContacts() throws DalException;
 
-    List<Email> retrieveAllEmails(String id);
-    
+    List<Email> retrieveAllEmails(String id) throws NumberFormatException, DalException;
+
 }

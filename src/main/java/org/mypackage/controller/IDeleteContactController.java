@@ -5,12 +5,14 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.dal.DalException;
+
 /**
  *
  * @author dev-dp
  */
 public interface IDeleteContactController {
 
-    void deleteContact(String contactId);
-    
+    void deleteContact(String contactId) throws NumberFormatException, DalException;
+
 }
