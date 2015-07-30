@@ -14,7 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.controller.impl.DeleteEmailControllerImpl;
+import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.dal.DalException;
 
 /**
@@ -23,10 +24,18 @@ import org.mypackage.dal.DalException;
  */
 public class DeleteEmailServlet extends HttpServlet {
 
+    private DeleteEmailController deleteEmailController;
+
+    public DeleteEmailServlet() {
+        this(ApplicationDependencies.CONTROLLER_FACTORY.createDeleteEmailController());
+    }
+
+    public DeleteEmailServlet(DeleteEmailController deleteEmailController) {
+        this.deleteEmailController = deleteEmailController;
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        DeleteEmailControllerImpl deleteEmailController = new DeleteEmailControllerImpl();
 
         String emailId = request.getParameter("emailId");
         String contactId = request.getParameter("contId");

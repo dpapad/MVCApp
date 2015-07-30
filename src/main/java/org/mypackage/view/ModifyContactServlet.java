@@ -10,7 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.controller.impl.ModifyContactControllerImpl;
+import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.controller.ModifyContactController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 
@@ -21,7 +22,15 @@ import org.mypackage.model.Contact;
 @WebServlet(name = "ModifyContactServlet", urlPatterns = {"/modifyContact"})
 public class ModifyContactServlet extends HttpServlet {
 
-    public ModifyContactControllerImpl modifyContactController = new ModifyContactControllerImpl();
+    private ModifyContactController modifyContactController;
+
+    public ModifyContactServlet() {
+        this(ApplicationDependencies.CONTROLLER_FACTORY.createModifyContactController());
+    }
+
+    public ModifyContactServlet(ModifyContactController modifyContactController) {
+        this.modifyContactController = modifyContactController;
+    }
 
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

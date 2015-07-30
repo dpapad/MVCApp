@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.controller.impl.ContactsControllerImpl;
+import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
@@ -25,7 +25,12 @@ public final class ContactsServlet extends HttpServlet {
     private ContactsController contactsController;
 
     public ContactsServlet() {
-        this.contactsController = new ContactsControllerImpl();
+        this(ApplicationDependencies.CONTROLLER_FACTORY.createContactsController());
+    }
+    
+    
+    public ContactsServlet(ContactsController contactsController) {
+        this.contactsController = contactsController;
     }
 
     @Override
