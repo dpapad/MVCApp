@@ -6,31 +6,45 @@
 package org.mypackage.view;
 
 import java.io.IOException;
+import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
+import static javax.servlet.RequestDispatcher.ERROR_MESSAGE;
+import static javax.servlet.RequestDispatcher.ERROR_REQUEST_URI;
+import static javax.servlet.RequestDispatcher.ERROR_SERVLET_NAME;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.controller.DeleteEmailController;
+import org.mypackage.dal.DalException;
 
 /**
  *
  * @author dev-dp
  */
 public class DeleteEmailServlet extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         DeleteEmailController deleteEmailController = new DeleteEmailController();
-        
+
         String emailId = request.getParameter("emailId");
         String contactId = request.getParameter("contId");
-        
-        int contId = deleteEmailController.deleteEmail(emailId, contactId);
+        try {
 
-        String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
-        response.sendRedirect(redirectUrl);
+            int contId = deleteEmailController.deleteEmail(emailId, contactId);
 
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
+            response.sendRedirect(redirectUrl);
+
+        } catch (NumberFormatException | DalException ex) {
+            request.setAttribute("exception", ERROR_EXCEPTION);
+            request.setAttribute("servlet", ERROR_SERVLET_NAME);
+            request.setAttribute("requestUri", ERROR_REQUEST_URI);
+            request.setAttribute("errorMessage", ERROR_MESSAGE);
+
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
