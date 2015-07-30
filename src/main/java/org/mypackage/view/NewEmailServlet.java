@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.model.Email;
-import org.mypackage.controller.NewEmailController;
+import org.mypackage.controller.impl.NewEmailControllerImpl;
 import org.mypackage.dal.DalException;
 
 /**
@@ -31,7 +31,7 @@ public class NewEmailServlet extends HttpServlet {
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        NewEmailController emailController = new NewEmailController();
+        NewEmailControllerImpl emailController = new NewEmailControllerImpl();
 
         String address = request.getParameter("address");
         String categoryValue = request.getParameter("category");

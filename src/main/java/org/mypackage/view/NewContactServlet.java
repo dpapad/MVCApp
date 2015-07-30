@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.controller.NewContactController;
+import org.mypackage.controller.impl.NewContactControllerImpl;
 import org.mypackage.dal.DalException;
 
 /**
@@ -28,7 +28,7 @@ public class NewContactServlet extends HttpServlet {
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        NewContactController newContactController = new NewContactController();
+        NewContactControllerImpl newContactController = new NewContactControllerImpl();
 
         String fullName = request.getParameter("fullname");
         String nickname = request.getParameter("nickname");

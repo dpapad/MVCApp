@@ -10,8 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.mypackage.controller.impl.ContactsControllerImpl;
 import org.mypackage.controller.ContactsController;
-import org.mypackage.controller.IContactsController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
@@ -22,15 +22,15 @@ import org.mypackage.model.Email;
  */
 public final class ContactsServlet extends HttpServlet {
 
-    private IContactsController contactsController;
+    private ContactsController contactsController;
 
     public ContactsServlet() {
-        this.contactsController = new ContactsController();
+        this.contactsController = new ContactsControllerImpl();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //ContactsController contactsController = new ContactsController();
+        //ContactsController contactsController = new ContactsControllerImpl();
 
         String contactId = (String) request.getAttribute("contactId");
         try {

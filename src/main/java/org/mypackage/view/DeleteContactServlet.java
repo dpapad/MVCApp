@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mypackage.controller.DeleteContactController;
+import org.mypackage.controller.impl.DeleteContactControllerImpl;
 import org.mypackage.dal.DalException;
 
 /**
@@ -23,7 +23,7 @@ public class DeleteContactServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        DeleteContactController deleteContactController = new DeleteContactController();
+        DeleteContactControllerImpl deleteContactController = new DeleteContactControllerImpl();
         try {
             deleteContactController.deleteContact(request.getParameter("contactId"));
 
