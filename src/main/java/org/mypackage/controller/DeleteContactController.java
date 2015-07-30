@@ -5,31 +5,14 @@
  */
 package org.mypackage.controller;
 
-import org.mypackage.application.ApplicationDependencies;
-import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
 
 /**
  *
  * @author dev-dp
  */
-public class DeleteContactController implements IDeleteContactController {
+public interface DeleteContactController {
 
-    private ContactRepository contactRepository;
+    void deleteContact(String contactId) throws NumberFormatException, DalException;
 
-    public DeleteContactController() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
-    }
-
-    public DeleteContactController(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
-    }
-
-    @Override
-    public void deleteContact(String contactId) throws NumberFormatException, DalException {
-        int id = Integer.parseInt(contactId);
-        this.contactRepository.deleteContactById(id);
-
-    }
 }

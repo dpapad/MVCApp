@@ -5,49 +5,17 @@
  */
 package org.mypackage.controller;
 
-import org.mypackage.application.ApplicationDependencies;
-import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
 import org.mypackage.model.Contact;
 
 /**
  *
  * @author dev-dp
  */
-public class ModifyContactController implements IModifyContactController {
+public interface ModifyContactController {
 
-    private ContactRepository contactRepository;
+    Contact modifyContact(String contactId, String fullname, String nickname, String notes) throws DalException;
 
-    public ModifyContactController() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
-    }
-
-    public ModifyContactController(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
-    }
-
-    @Override
-    public Contact modifyContact(String contactId, String fullname, String nickname, String notes) throws DalException {
-        Contact contact = new Contact();
-        contact.setId(Integer.parseInt(contactId));
-        contact.setFullName(fullname);
-        contact.setNickname(nickname);
-        contact.setNotes(notes);
-
-        this.contactRepository.updateContact(contact);
-
-        return contact;
-    }
-
-    @Override
-    public Contact retrieveContact(String contactId) throws DalException, NumberFormatException {
-
-        Contact contact = new Contact();
-        int id = Integer.parseInt(contactId);
-        contact = contactRepository.getContactById(id);
-
-        return contact;
-    }
+    Contact retrieveContact(String contactId) throws DalException;
 
 }
