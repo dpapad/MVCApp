@@ -9,7 +9,6 @@ import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
 import org.mypackage.model.Email;
 
 /**
@@ -21,11 +20,11 @@ public class NewEmailControllerImpl implements NewEmailController {
     private ContactRepository contactRepository;
 
     public NewEmailControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
 
-    public NewEmailControllerImpl(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
+    public NewEmailControllerImpl(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 
     @Override

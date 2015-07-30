@@ -10,7 +10,6 @@ import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
 
@@ -23,11 +22,11 @@ public class ContactsControllerImpl implements ContactsController {
     private ContactRepository contactRepository;
 
     public ContactsControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
 
-    public ContactsControllerImpl(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
+    public ContactsControllerImpl(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 
     @Override

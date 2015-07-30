@@ -9,7 +9,6 @@ import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
 
 /**
  *
@@ -20,11 +19,11 @@ public class DeleteEmailControllerImpl implements DeleteEmailController {
     private ContactRepository contactRepository;
 
     public DeleteEmailControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
 
-    public DeleteEmailControllerImpl(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
+    public DeleteEmailControllerImpl(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 
     @Override

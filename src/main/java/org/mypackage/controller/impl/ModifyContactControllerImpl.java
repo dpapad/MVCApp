@@ -9,7 +9,6 @@ import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.controller.ModifyContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.RepositoryFactory;
 import org.mypackage.model.Contact;
 
 /**
@@ -21,11 +20,11 @@ public class ModifyContactControllerImpl implements ModifyContactController {
     private ContactRepository contactRepository;
 
     public ModifyContactControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY);
+        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
 
-    public ModifyContactControllerImpl(RepositoryFactory repositoryFactory) {
-        this.contactRepository = repositoryFactory.createContactRepository();
+    public ModifyContactControllerImpl(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 
     @Override
