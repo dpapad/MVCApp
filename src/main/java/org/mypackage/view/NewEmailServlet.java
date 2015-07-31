@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.model.Email;
-import org.mypackage.controller.impl.NewEmailControllerImpl;
 import org.mypackage.dal.DalException;
 
 /**
@@ -59,13 +59,16 @@ public class NewEmailServlet extends HttpServlet {
                 response.sendRedirect(request.getHeader("Referer"));
             }
 
-        } catch (NumberFormatException | DalException ex) {
-            request.setAttribute("exception", ERROR_EXCEPTION);
-            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-            request.setAttribute("errorMessage", ERROR_MESSAGE);
-
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch (DalException ex) {
+            throw new ServletException("A database error occured", ex);
+//            request.setAttribute("exception", ERROR_EXCEPTION);
+//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
+//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
+//            request.setAttribute("errorMessage", ERROR_MESSAGE);
+//
+//            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch (MalformedIdentifierException ex) {
+            throw new ServletException("A database error occured", ex);
         }
 
     }

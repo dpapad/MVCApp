@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ModifyContactController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
@@ -68,13 +69,16 @@ public class ModifyContactServlet extends HttpServlet {
 
             request.getRequestDispatcher("/modifyContact.jsp").forward(request, response);
 
-        } catch (DalException | NumberFormatException ex) {
-            request.setAttribute("exception", ERROR_EXCEPTION);
-            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-            request.setAttribute("errorMessage", ERROR_MESSAGE);
-
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch (DalException ex) {
+            throw new ServletException("A database error occured", ex);
+//            request.setAttribute("exception", ERROR_EXCEPTION);
+//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
+//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
+//            request.setAttribute("errorMessage", ERROR_MESSAGE);
+//
+//            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch (MalformedIdentifierException ex) {
+            throw new ServletException("A database error occured", ex);
         }
 
     }

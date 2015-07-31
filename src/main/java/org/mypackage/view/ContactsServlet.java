@@ -2,15 +2,12 @@ package org.mypackage.view;
 
 import java.io.IOException;
 import java.util.List;
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
-import static javax.servlet.RequestDispatcher.ERROR_MESSAGE;
-import static javax.servlet.RequestDispatcher.ERROR_REQUEST_URI;
-import static javax.servlet.RequestDispatcher.ERROR_SERVLET_NAME;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
@@ -27,15 +24,13 @@ public final class ContactsServlet extends HttpServlet {
     public ContactsServlet() {
         this(ApplicationDependencies.CONTROLLER_FACTORY.createContactsController());
     }
-    
-    
+
     public ContactsServlet(ContactsController contactsController) {
         this.contactsController = contactsController;
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //ContactsController contactsController = new ContactsControllerImpl();
 
         String contactId = (String) request.getAttribute("contactId");
         try {
@@ -53,13 +48,14 @@ public final class ContactsServlet extends HttpServlet {
                 request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
             }
         } catch (DalException ex) {
-            request.setAttribute("exception", ERROR_EXCEPTION);
-            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-            request.setAttribute("errorMessage", ERROR_MESSAGE);
-
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+//            request.setAttribute("exception", ERROR_EXCEPTION);
+//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
+//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
+//            request.setAttribute("errorMessage", ERROR_MESSAGE);
+//
+//            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch (MalformedIdentifierException ex1) {
+            throw new ServletException("Wrong input", ex1);
         }
     }
-
 }
