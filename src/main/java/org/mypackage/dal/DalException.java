@@ -5,7 +5,7 @@ package org.mypackage.dal;
  * @author dpa
  */
 public class DalException extends Exception {
-    
+
     private String message;
     private Throwable cause;
 
@@ -27,5 +27,5 @@ public class DalException extends Exception {
         super(cause);
         this.cause = cause;
     }
-    
+
 }
