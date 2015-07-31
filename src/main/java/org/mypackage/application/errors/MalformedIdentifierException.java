@@ -10,7 +10,7 @@ package org.mypackage.application.errors;
  * @author dev-dp
  */
 public class MalformedIdentifierException extends Exception {
-    
+
     private final String identifier;
 
     public MalformedIdentifierException(String identifier) {

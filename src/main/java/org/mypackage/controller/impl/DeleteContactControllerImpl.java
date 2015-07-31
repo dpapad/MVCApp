@@ -6,6 +6,7 @@
 package org.mypackage.controller.impl;
 
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
@@ -27,7 +28,7 @@ public class DeleteContactControllerImpl implements DeleteContactController {
     }
 
     @Override
-    public void deleteContact(String contactId) throws NumberFormatException, DalException {
+    public void deleteContact(String contactId) throws MalformedIdentifierException, DalException {
         int id = Integer.parseInt(contactId);
         this.contactRepository.deleteContactById(id);
 

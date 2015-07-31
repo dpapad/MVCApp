@@ -6,6 +6,7 @@
 package org.mypackage.controller;
 
 import java.util.List;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
@@ -16,10 +17,10 @@ import org.mypackage.model.Email;
  */
 public interface ContactsController {
 
-    Contact getContact(String id) throws NumberFormatException, DalException;
+    Contact getContact(String id) throws MalformedIdentifierException, DalException;
 
     List<Contact> retrieveAllContacts() throws DalException;
 
-    List<Email> retrieveAllEmails(String id) throws NumberFormatException, DalException;
+    List<Email> retrieveAllEmails(String id) throws MalformedIdentifierException, DalException;
 
 }

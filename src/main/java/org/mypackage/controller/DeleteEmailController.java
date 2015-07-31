@@ -5,6 +5,7 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.dal.DalException;
 
 /**
@@ -13,6 +14,6 @@ import org.mypackage.dal.DalException;
  */
 public interface DeleteEmailController {
 
-    int deleteEmail(String eId, String cId) throws NumberFormatException, DalException;
+    int deleteEmail(String eId, String cId) throws MalformedIdentifierException, DalException;
 
 }

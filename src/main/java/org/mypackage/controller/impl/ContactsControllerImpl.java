@@ -7,6 +7,7 @@ package org.mypackage.controller.impl;
 
 import java.util.List;
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
@@ -39,17 +40,24 @@ public class ContactsControllerImpl implements ContactsController {
     }
 
     @Override
-    public Contact getContact(String id) throws NumberFormatException, DalException {
+    public Contact getContact(String id) throws MalformedIdentifierException, DalException {
         Contact contact = null;
 
-        int contactId = Integer.parseInt(id);
+        int contactId;
+
+        try {
+            contactId = Integer.parseInt(id);
+        } catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(id, ex);
+        }
+
         contact = this.contactRepository.getContactById(contactId);
 
         return contact;
     }
 
     @Override
-    public List<Email> retrieveAllEmails(String id) throws NumberFormatException, DalException {
+    public List<Email> retrieveAllEmails(String id) throws MalformedIdentifierException, DalException {
         List<Email> list = null;
 
         int contactId = Integer.parseInt(id);

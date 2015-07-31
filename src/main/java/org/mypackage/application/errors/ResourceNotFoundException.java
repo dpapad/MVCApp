@@ -10,9 +10,9 @@ package org.mypackage.application.errors;
  * @author dev-dp
  */
 public class ResourceNotFoundException extends Exception {
-    
+
     private final Object resourceId;
-    
+
     public ResourceNotFoundException(Object resourceId) {
         this.resourceId = resourceId;
     }
@@ -20,5 +20,5 @@ public class ResourceNotFoundException extends Exception {
     public Object getResourceId() {
         return resourceId;
     }
-    
+
 }

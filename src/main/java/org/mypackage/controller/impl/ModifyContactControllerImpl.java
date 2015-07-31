@@ -6,6 +6,7 @@
 package org.mypackage.controller.impl;
 
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ModifyContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
@@ -41,7 +42,7 @@ public class ModifyContactControllerImpl implements ModifyContactController {
     }
 
     @Override
-    public Contact retrieveContact(String contactId) throws DalException, NumberFormatException {
+    public Contact retrieveContact(String contactId) throws DalException, MalformedIdentifierException {
 
         Contact contact = new Contact();
         int id = Integer.parseInt(contactId);

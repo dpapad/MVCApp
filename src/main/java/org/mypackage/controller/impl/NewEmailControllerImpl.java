@@ -6,6 +6,7 @@
 package org.mypackage.controller.impl;
 
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
@@ -28,7 +29,7 @@ public class NewEmailControllerImpl implements NewEmailController {
     }
 
     @Override
-    public int addNewEmail(String address, String categoryValue, String contactId) throws NumberFormatException, DalException {
+    public int addNewEmail(String address, String categoryValue, String contactId) throws MalformedIdentifierException, DalException {
         Email email = new Email();
 
         // check logic for address format to be added

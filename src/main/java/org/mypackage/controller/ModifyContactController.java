@@ -5,6 +5,7 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 
@@ -16,6 +17,6 @@ public interface ModifyContactController {
 
     Contact modifyContact(String contactId, String fullname, String nickname, String notes) throws DalException;
 
-    Contact retrieveContact(String contactId) throws DalException;
+    Contact retrieveContact(String contactId) throws DalException, MalformedIdentifierException;
 
 }
