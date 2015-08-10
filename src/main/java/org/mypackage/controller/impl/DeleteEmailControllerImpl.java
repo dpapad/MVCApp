@@ -30,10 +30,9 @@ public class DeleteEmailControllerImpl implements DeleteEmailController {
     @Override
     public int deleteEmail(String eId, String cId) throws MalformedIdentifierException, DalException {
         int emailId = Integer.parseInt(eId);
-        this.contactRepository.deleteEmailById(emailId);
-
-        int contactId = Integer.parseInt(cId);
-        return contactId;
+        int rowsAffected = this.contactRepository.deleteEmailById(emailId);
+        
+        return rowsAffected;
     }
 
 }

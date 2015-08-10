@@ -6,10 +6,6 @@
 package org.mypackage.view;
 
 import java.io.IOException;
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
-import static javax.servlet.RequestDispatcher.ERROR_MESSAGE;
-import static javax.servlet.RequestDispatcher.ERROR_REQUEST_URI;
-import static javax.servlet.RequestDispatcher.ERROR_SERVLET_NAME;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,19 +38,13 @@ public class DeleteEmailServlet extends HttpServlet {
         String contactId = request.getParameter("contId");
         try {
 
-            int contId = deleteEmailController.deleteEmail(emailId, contactId);
+            this.deleteEmailController.deleteEmail(emailId, contactId);
 
-            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contactId;
             response.sendRedirect(redirectUrl);
 
         } catch (DalException ex) {
             throw new ServletException("A database error occured", ex);
-//            request.setAttribute("exception", ERROR_EXCEPTION);
-//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-//            request.setAttribute("errorMessage", ERROR_MESSAGE);
-//
-//            request.getRequestDispatcher("/error.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
             throw new ServletException("A database error occured", ex);
         }

@@ -1,10 +1,6 @@
 package org.mypackage.view;
 
 import java.io.IOException;
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
-import static javax.servlet.RequestDispatcher.ERROR_MESSAGE;
-import static javax.servlet.RequestDispatcher.ERROR_REQUEST_URI;
-import static javax.servlet.RequestDispatcher.ERROR_SERVLET_NAME;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -61,12 +57,6 @@ public class NewEmailServlet extends HttpServlet {
 
         } catch (DalException ex) {
             throw new ServletException("A database error occured", ex);
-//            request.setAttribute("exception", ERROR_EXCEPTION);
-//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-//            request.setAttribute("errorMessage", ERROR_MESSAGE);
-//
-//            request.getRequestDispatcher("/error.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
             throw new ServletException("A database error occured", ex);
         }

@@ -48,12 +48,7 @@ public class ModifyContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getId();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
-            request.setAttribute("exception", ERROR_EXCEPTION);
-            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-            request.setAttribute("errorMessage", ERROR_MESSAGE);
-
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            throw new ServletException("A database error occured.", ex);
         }
 
     }
@@ -71,12 +66,6 @@ public class ModifyContactServlet extends HttpServlet {
 
         } catch (DalException ex) {
             throw new ServletException("A database error occured", ex);
-//            request.setAttribute("exception", ERROR_EXCEPTION);
-//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-//            request.setAttribute("errorMessage", ERROR_MESSAGE);
-//
-//            request.getRequestDispatcher("/error.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
             throw new ServletException("A database error occured", ex);
         }

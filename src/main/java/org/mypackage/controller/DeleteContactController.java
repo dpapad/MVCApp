@@ -14,6 +14,6 @@ import org.mypackage.dal.DalException;
  */
 public interface DeleteContactController {
 
-    void deleteContact(String contactId) throws MalformedIdentifierException, DalException;
+    int deleteContact(String contactId) throws MalformedIdentifierException, DalException;
 
 }

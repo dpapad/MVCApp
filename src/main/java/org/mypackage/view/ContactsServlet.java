@@ -48,14 +48,9 @@ public final class ContactsServlet extends HttpServlet {
                 request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
             }
         } catch (DalException ex) {
-//            request.setAttribute("exception", ERROR_EXCEPTION);
-//            request.setAttribute("servlet", ERROR_SERVLET_NAME);
-//            request.setAttribute("requestUri", ERROR_REQUEST_URI);
-//            request.setAttribute("errorMessage", ERROR_MESSAGE);
-//
-//            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            throw new ServletException("There was an internal database error.", ex);
         } catch (MalformedIdentifierException ex1) {
-            throw new ServletException("Wrong input", ex1);
+            throw new ServletException("There was an error conserning the id.", ex1);
         }
     }
 }
