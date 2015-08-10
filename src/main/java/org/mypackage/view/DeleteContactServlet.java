@@ -19,18 +19,18 @@ import org.mypackage.dal.DalException;
 public class DeleteContactServlet extends HttpServlet {
 
     private DeleteContactController deleteContactController;
-    
-    public DeleteContactServlet(){
+
+    public DeleteContactServlet() {
         this(ApplicationDependencies.CONTROLLER_FACTORY.createDeleteContactController());
     }
-    public DeleteContactServlet(DeleteContactController deleteController){
+
+    public DeleteContactServlet(DeleteContactController deleteController) {
         this.deleteContactController = deleteController;
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        
         try {
             deleteContactController.deleteContact(request.getParameter("contactId"));
 

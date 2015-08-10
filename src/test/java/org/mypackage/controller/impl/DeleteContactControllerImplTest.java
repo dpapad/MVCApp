@@ -13,29 +13,29 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.FakeContactsRepository;
+import org.mypackage.dal.FakeContactRepository;
 
 /**
  *
  * @author dev-dp
  */
 public class DeleteContactControllerImplTest {
-    
+
     public DeleteContactControllerImplTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -46,15 +46,15 @@ public class DeleteContactControllerImplTest {
     @Test
     public void testDeleteContact() throws Exception {
         System.out.println("DeleteContact");
-        ContactRepository fakeRepository = new FakeContactsRepository();
+        ContactRepository fakeRepository = new FakeContactRepository();
         DeleteContactController controller = new DeleteContactControllerImpl(fakeRepository);
-        
+
         String contactId = "1";
-        
+
         int affectedRows = controller.deleteContact(contactId);
-        
-        assertEquals(6,affectedRows);
-        
+
+        assertEquals(6, affectedRows);
+
     }
-    
+
 }

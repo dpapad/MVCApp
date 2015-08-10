@@ -14,10 +14,10 @@ public class Contact {
     private String nickname;
     private String notes;
 
-    public Contact() {    
+    public Contact() {
         List<Email> emailList = new ArrayList<Email>();
     }
-    
+
     public Contact(int id, String fullName, String nickname, String notes) {
         this.id = id;
         this.fullName = fullName;
@@ -31,7 +31,7 @@ public class Contact {
     public int getId() {
         return id;
     }
-    
+
     /**
      * @param id the id to set
      */

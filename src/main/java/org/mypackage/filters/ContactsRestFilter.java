@@ -18,14 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 public class ContactsRestFilter implements Filter {
 
     private static final Pattern REST_PATTERN;
-    
+
     static {
         REST_PATTERN = Pattern.compile("/contacts(?:/([^/]+))?/?$");
     }
-    
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        
+
     }
 
     @Override
@@ -33,22 +33,21 @@ public class ContactsRestFilter implements Filter {
         if (!(request instanceof HttpServletRequest)) {
             return;
         }
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Matcher m = REST_PATTERN.matcher(httpRequest.getRequestURI());
-        
+
         if (m.find()) {
             String contactId = m.group(1);
             request.setAttribute("contactId", contactId);
         }
-        
+
         chain.doFilter(request, response);
     }
 
     @Override
     public void destroy() {
-        
+
     }
-    
-    
+
 }

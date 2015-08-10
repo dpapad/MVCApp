@@ -13,29 +13,29 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.FakeContactsRepository;
+import org.mypackage.dal.FakeContactRepository;
 
 /**
  *
  * @author dev-dp
  */
 public class DeleteEmailControllerImplTest {
-    
+
     public DeleteEmailControllerImplTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -46,19 +46,18 @@ public class DeleteEmailControllerImplTest {
     @Test
     public void testDeleteEmail() throws Exception {
         System.out.println("deleteEmail");
-        
-        ContactRepository fakeRepository = new FakeContactsRepository();
-        
+
+        ContactRepository fakeRepository = new FakeContactRepository();
+
         DeleteEmailController controller = new DeleteEmailControllerImpl(fakeRepository);
-        
+
         String eId = "1";
-        String cId="1";
-        
-        
+        String cId = "1";
+
         int expectedResult = 4;
         int result = controller.deleteEmail(eId, cId);
         assertEquals(expectedResult, result);
-        
+
     }
-    
+
 }

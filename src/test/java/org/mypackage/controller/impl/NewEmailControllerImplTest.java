@@ -13,30 +13,29 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.FakeContactsRepository;
-import org.mypackage.model.Email;
+import org.mypackage.dal.FakeContactRepository;
 
 /**
  *
  * @author dev-dp
  */
 public class NewEmailControllerImplTest {
-    
+
     public NewEmailControllerImplTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -47,21 +46,17 @@ public class NewEmailControllerImplTest {
     @Test
     public void testAddNewEmail() throws Exception {
         System.out.println("addNewEmail");
-        
-        ContactRepository fakeRepository = new FakeContactsRepository();
+
+        ContactRepository fakeRepository = new FakeContactRepository();
         NewEmailController controller = new NewEmailControllerImpl(fakeRepository);
-        
-        
+
         String address = "testemail@email.test";
         String categoryValue = "1";
         String contactId = "1";
-        
-        
-        
-       
+
         int result = controller.addNewEmail(address, categoryValue, contactId);
         assertEquals(1, result);
-        
+
     }
-    
+
 }

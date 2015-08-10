@@ -13,5 +13,5 @@ public class MySqlRepositoryFactory implements RepositoryFactory {
     public ContactRepository createContactRepository() {
         return new MysqlContactRepository(new MySqlConnectionProvider());
     }
-    
+
 }

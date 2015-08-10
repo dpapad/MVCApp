@@ -23,7 +23,7 @@ import org.mypackage.controller.impl.NewEmailControllerImpl;
  *
  * @author dev-dp
  */
-public class ServletControllerFactory implements ControllerFactory{
+public class ServletControllerFactory implements ControllerFactory {
 
     @Override
     public ContactsController createContactsController() {
@@ -54,5 +54,5 @@ public class ServletControllerFactory implements ControllerFactory{
     public NewEmailController createNewEmailController() {
         return new NewEmailControllerImpl();
     }
-    
+
 }

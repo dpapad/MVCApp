@@ -5,45 +5,44 @@ package org.mypackage.model;
  * @author dpa
  */
 public class Email {
-    
-    
+
     public static enum Category {
-        
-        PERSONAL((byte)1), 
-        WORK((byte)2);
-        
+
+        PERSONAL((byte) 1),
+        WORK((byte) 2);
+
         private final byte byteValue;
-        
+
         private Category(byte value) {
             this.byteValue = value;
         }
-        
+
         public byte getByteValue() {
             return this.byteValue;
         }
-        
+
         public static Category forValue(byte value) {
             for (Category c : Category.values()) {
                 if (value == c.getByteValue()) {
                     return c;
                 }
             }
-            
+
             throw new IllegalArgumentException();
         }
     }
-    
+
     private int id;
-    
+
     private String address;
-    
+
     private Category category;
-    
+
     private int fContactId;
-    
+
     public Email() {
     }
-    
+
     public Email(int id, String address, Category category, int contactId) {
         this.id = id;
         this.address = address;
@@ -87,12 +86,11 @@ public class Email {
     }
 
     /**
-     * @param category 
+     * @param category
      */
     public void setCategory(Category category) {
         this.category = category;
     }
-    
 
     /**
      * @return the fContactId
@@ -106,5 +104,5 @@ public class Email {
      */
     public void setfContactId(int fContactId) {
         this.fContactId = fContactId;
-    }    
+    }
 }

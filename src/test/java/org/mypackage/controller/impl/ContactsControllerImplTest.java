@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.FakeContactsRepository;
+import org.mypackage.dal.FakeContactRepository;
 import org.mypackage.model.Contact;
 
 /**
@@ -21,22 +21,22 @@ import org.mypackage.model.Contact;
  * @author dev-dp
  */
 public class ContactsControllerImplTest {
-    
+
     public ContactsControllerImplTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -46,13 +46,13 @@ public class ContactsControllerImplTest {
      */
     @Test
     public void testRetrieveAllContacts() throws Exception {
-        
-        ContactRepository fakeRepository = new FakeContactsRepository();
-        
+
+        ContactRepository fakeRepository = new FakeContactRepository();
+
         ContactsController controller = new ContactsControllerImpl(fakeRepository);
-              
+
         int numberOfContacts = controller.retrieveAllContacts().size();
-        
+
         assertEquals(3, numberOfContacts);
     }
 
@@ -61,14 +61,14 @@ public class ContactsControllerImplTest {
      */
     @Test
     public void testGetContact() throws Exception {
-        ContactRepository fakeRepository = new FakeContactsRepository();
-        
+        ContactRepository fakeRepository = new FakeContactRepository();
+
         ContactsController controller = new ContactsControllerImpl(fakeRepository);
-        
+
         String id = "1";
-        
+
         Contact contact = controller.getContact(id);
-        
+
         assertEquals("Joe Doe", contact.getFullName());
     }
 
@@ -77,13 +77,13 @@ public class ContactsControllerImplTest {
      */
     @Test
     public void testRetrieveAllEmails() throws Exception {
-        ContactRepository fakeRepository = new FakeContactsRepository();
-        
+        ContactRepository fakeRepository = new FakeContactRepository();
+
         ContactsController controller = new ContactsControllerImpl(fakeRepository);
-        
+
         int numberOfEmails = controller.retrieveAllEmails("1").size();
-        
+
         assertEquals(5, numberOfEmails);
     }
-    
+
 }

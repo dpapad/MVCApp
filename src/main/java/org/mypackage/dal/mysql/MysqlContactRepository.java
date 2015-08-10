@@ -252,14 +252,12 @@ public class MysqlContactRepository implements ContactRepository {
                     ResultSet rs = emailPstmt.getGeneratedKeys();
                     rs.next();
                     addedEmailId = rs.getInt(1);
-                } 
-                finally {
+                } finally {
                     if (emailPstmt != null) {
                         emailPstmt.close();
                     }
                 }
-            } 
-            finally {
+            } finally {
                 if (con != null) {
                     con.close();
                 }
@@ -349,7 +347,7 @@ public class MysqlContactRepository implements ContactRepository {
         Connection connection = null;
         PreparedStatement checkIfEmailExistsStmt = null;
         boolean result = false;
-        
+
         try {
             try {
                 connection = this.connectionProvider.createConnection();
@@ -360,7 +358,7 @@ public class MysqlContactRepository implements ContactRepository {
 
                     ResultSet rs = checkIfEmailExistsStmt.executeQuery();
                     rs.next();
-                        
+
                     result = (rs.getInt(1) == 1);
                     return result;
                 } finally {
@@ -368,15 +366,13 @@ public class MysqlContactRepository implements ContactRepository {
                         checkIfEmailExistsStmt.close();
                     }
                 }
-            } 
-            finally {
+            } finally {
                 if (connection != null) {
                     connection.close();
                 }
             }
 
-        } 
-        catch (Exception ex) {
+        } catch (Exception ex) {
         }
         return result;
     }

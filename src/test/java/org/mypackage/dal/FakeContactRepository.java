@@ -14,37 +14,37 @@ import org.mypackage.model.Email;
  *
  * @author dev-dp
  */
-public class FakeContactsRepository implements ContactRepository{
+public class FakeContactRepository implements ContactRepository {
 
     @Override
     public int addContact(Contact c) throws DalException {
-        
+
         return 10;
     }
 
     @Override
     public int deleteContactById(int i) throws DalException {
-        int affectedRows = 6;       
-        
+        int affectedRows = 6;
+
         return affectedRows;
     }
 
     @Override
-    public int updateContact(Contact c) throws DalException {        
+    public int updateContact(Contact c) throws DalException {
         int affectedRows = 1;
-                
+
         return affectedRows;
     }
 
     @Override
     public Contact getContactById(int id) throws DalException {
-        
+
         Contact contact = new Contact();
         contact.setId(id);
         contact.setFullName("Joe Doe");
         contact.setNickname("jo");
         contact.setNotes("fake contact");
-        
+
         return contact;
     }
 
@@ -61,7 +61,7 @@ public class FakeContactsRepository implements ContactRepository{
         contact.setId(3);
         contact.setFullName("Jim Doe");
         list.add(contact);
-        
+
         return list;
     }
 
@@ -71,7 +71,7 @@ public class FakeContactsRepository implements ContactRepository{
         if (e != null) {
             contactId = e.getfContactId();
         }
-        
+
         return contactId;
     }
 
@@ -81,7 +81,7 @@ public class FakeContactsRepository implements ContactRepository{
         int emailId;
         Email email = new Email();
         for (int i = 0; i < 5; i++) {
-            emailId = i+1;
+            emailId = i + 1;
             email.setfContactId(id);
             email.setId(emailId);
             list.add(email);
@@ -92,18 +92,17 @@ public class FakeContactsRepository implements ContactRepository{
     @Override
     public int deleteEmailById(int id) throws DalException {
         List<Email> list = getAllEmailsByContactId(id);
-        
+
         list.remove(id);
-    
+
         return list.size();
     }
-    
-    /**
-     * 
-     * @param e
-     * @return true if email="email@test.com" 
-     */
 
+    /**
+     *
+     * @param e
+     * @return true if email="email@test.com"
+     */
     @Override
     public boolean checkIfEmailExists(Email e) {
         boolean result = false;
@@ -112,5 +111,5 @@ public class FakeContactsRepository implements ContactRepository{
         }
         return result;
     }
-    
+
 }

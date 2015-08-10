@@ -9,12 +9,8 @@ import org.mypackage.dal.sql.SqlConnectionProvider;
  *
  * @author dev-dp
  */
-
-
-// DONE
-
 public class H2SqlConnectionProvider implements SqlConnectionProvider {
-    
+
     private static final String H2DB_DRIVER = "org.h2.Driver";
     private static final String H2DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private static final String H2DB_USERNAME = "";
@@ -23,9 +19,8 @@ public class H2SqlConnectionProvider implements SqlConnectionProvider {
     @Override
     public Connection createConnection() throws ClassNotFoundException, SQLException {
         Class.forName(H2DB_DRIVER);
-        
+
         return DriverManager.getConnection(H2DB_CONNECTION, H2DB_USERNAME, H2DB_PASSWORD);
     }
-    
-    
+
 }
