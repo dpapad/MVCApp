@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mypackage.view;
+package org.mypackage.controller.impl;
 
 import org.mypackage.controller.ContactsController;
 import org.mypackage.controller.ControllerFactory;
@@ -12,18 +12,12 @@ import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.controller.ModifyContactController;
 import org.mypackage.controller.NewContactController;
 import org.mypackage.controller.NewEmailController;
-import org.mypackage.controller.impl.ContactsControllerImpl;
-import org.mypackage.controller.impl.DeleteContactControllerImpl;
-import org.mypackage.controller.impl.DeleteEmailControllerImpl;
-import org.mypackage.controller.impl.ModifyContactControllerImpl;
-import org.mypackage.controller.impl.NewContactControllerImpl;
-import org.mypackage.controller.impl.NewEmailControllerImpl;
 
 /**
  *
  * @author dev-dp
  */
-public class ServletControllerFactory implements ControllerFactory {
+public class ControllerFactoryImpl implements ControllerFactory {
 
     @Override
     public ContactsController createContactsController() {

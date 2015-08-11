@@ -3,7 +3,7 @@ package org.mypackage.application;
 import org.mypackage.controller.ControllerFactory;
 import org.mypackage.dal.RepositoryFactory;
 import org.mypackage.dal.mysql.MySqlRepositoryFactory;
-import org.mypackage.view.ServletControllerFactory;
+import org.mypackage.controller.impl.ControllerFactoryImpl;
 
 /**
  *
@@ -18,7 +18,7 @@ public final class ApplicationDependencies {
     }
     
     static {
-        CONTROLLER_FACTORY = new ServletControllerFactory();
+        CONTROLLER_FACTORY = new ControllerFactoryImpl();
     }   
     
     private ApplicationDependencies() { }
