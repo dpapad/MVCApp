@@ -35,7 +35,12 @@ public class NewEmailControllerImpl implements NewEmailController {
         // check logic for address format to be added
         email.setAddress(address);
         email.setCategory(Email.Category.forValue(Byte.parseByte(categoryValue)));
-        email.setfContactId(Integer.parseInt(contactId));
+        try {
+            email.setfContactId(Integer.parseInt(contactId));
+        } catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(contactId, ex);
+        }
+        
 
         int passedContactId;
 
