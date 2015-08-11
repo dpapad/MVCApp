@@ -66,10 +66,8 @@ public class MysqlContactRepository implements ContactRepository {
     }
 
     @Override
-    public int deleteContactById(int id) throws DalException {
-        int rowsAffected;
-        int emailRowsAffected = 0;
-        int contactRowsAffected = 0;
+    public void deleteContactById(int id) throws DalException {
+        
         Connection con = null;
         PreparedStatement deleteContactStmt = null, deleteMailsStmt = null;
         try {
@@ -81,7 +79,7 @@ public class MysqlContactRepository implements ContactRepository {
                     try {
                         deleteMailsStmt = con.prepareStatement("DELETE FROM Emails WHERE fContactId = ?");
                         deleteMailsStmt.setInt(1, id);
-                        emailRowsAffected = deleteMailsStmt.executeUpdate();
+                        deleteMailsStmt.execute();
                     } finally {
                         if (deleteMailsStmt != null) {
                             deleteMailsStmt.close();
@@ -91,7 +89,7 @@ public class MysqlContactRepository implements ContactRepository {
                     try {
                         deleteContactStmt = con.prepareStatement("DELETE FROM Contact WHERE Id = ?");
                         deleteContactStmt.setInt(1, id);
-                        contactRowsAffected = deleteContactStmt.executeUpdate();
+                        deleteContactStmt.execute();
                     } finally {
                         if (deleteContactStmt != null) {
                             deleteContactStmt.close();
@@ -115,13 +113,10 @@ public class MysqlContactRepository implements ContactRepository {
             DalException deleteContactByIdException = new DalException(ex);
             throw deleteContactByIdException;
         }
-        rowsAffected = emailRowsAffected + contactRowsAffected;
-        return rowsAffected;
     }
 
     @Override
-    public Contact updateContact(Contact c) throws DalException {
-        int rowsAffected = 0;
+    public void updateContact(Contact c) throws DalException {
         Connection con = null;
         PreparedStatement udpateContactStmt = null;
         try {
@@ -133,7 +128,7 @@ public class MysqlContactRepository implements ContactRepository {
                     udpateContactStmt.setString(2, c.getNickname());
                     udpateContactStmt.setString(3, c.getNotes());
                     udpateContactStmt.setInt(4, c.getId());
-                    rowsAffected = udpateContactStmt.executeUpdate();
+                    udpateContactStmt.execute();
                 } finally {
                     if (udpateContactStmt != null) {
                         udpateContactStmt.close();
@@ -148,7 +143,6 @@ public class MysqlContactRepository implements ContactRepository {
             DalException updateContactException = new DalException(ex);
             throw updateContactException;
         }
-        return c;
     }
 
     @Override
@@ -312,8 +306,7 @@ public class MysqlContactRepository implements ContactRepository {
     }
 
     @Override
-    public int deleteEmailById(int id) {
-        int rowsAffected = 0;
+    public void deleteEmailById(int id) {
         Connection con = null;
         PreparedStatement deleteEmailStmt = null;
         try {
@@ -323,7 +316,7 @@ public class MysqlContactRepository implements ContactRepository {
                 try {
                     deleteEmailStmt = con.prepareStatement("DELETE FROM Emails WHERE Id = ?");
                     deleteEmailStmt.setInt(1, id);
-                    rowsAffected = deleteEmailStmt.executeUpdate();
+                    deleteEmailStmt.execute();
                 } finally {
                     if (deleteEmailStmt != null) {
                         deleteEmailStmt.close();
@@ -338,7 +331,6 @@ public class MysqlContactRepository implements ContactRepository {
             DalException deleteEmailException = new DalException(ex);
             //throw deleteEmailException;
         }
-        return rowsAffected;
     }
 
     //Fixed

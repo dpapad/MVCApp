@@ -16,12 +16,12 @@ public class AbstractContactRepositoryStub implements ContactRepository {
     }
 
     @Override
-    public int deleteContactById(int i) throws DalException {
+    public void deleteContactById(int i) throws DalException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Contact updateContact(Contact c) throws DalException {
+    public void updateContact(Contact c) throws DalException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -46,7 +46,7 @@ public class AbstractContactRepositoryStub implements ContactRepository {
     }
 
     @Override
-    public int deleteEmailById(int id) throws DalException {
+    public void deleteEmailById(int id) throws DalException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
