@@ -45,6 +45,8 @@ public class ModifyContactServlet extends HttpServlet {
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
             throw new ServletException("A database error occured.", ex);
+        } catch (MalformedIdentifierException ex) {
+            throw new ServletException("An error occured", ex);
         }
 
     }
