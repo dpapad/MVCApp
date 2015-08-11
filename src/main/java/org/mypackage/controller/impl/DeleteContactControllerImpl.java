@@ -28,7 +28,7 @@ public class DeleteContactControllerImpl implements DeleteContactController {
     }
 
     @Override
-    public int deleteContact(String contactId) throws MalformedIdentifierException, DalException {
+    public void deleteContact(String contactId) throws MalformedIdentifierException, DalException {
         int id;
         
         try {
@@ -38,7 +38,7 @@ public class DeleteContactControllerImpl implements DeleteContactController {
             throw new MalformedIdentifierException(contactId, ex);
         }
         
-        int rowsAffected = this.contactRepository.deleteContactById(id);
-        return rowsAffected;
+        this.contactRepository.deleteContactById(id);
+        
     }
 }
