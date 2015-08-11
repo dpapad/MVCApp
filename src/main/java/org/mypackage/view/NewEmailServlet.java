@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.DuplicateEmailException;
+import org.mypackage.application.errors.MalformedCategoryException;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.model.Email;
@@ -59,6 +61,10 @@ public class NewEmailServlet extends HttpServlet {
             throw new ServletException("A database error occured", ex);
         } catch (MalformedIdentifierException ex) {
             throw new ServletException("A database error occured", ex);
+        } catch (MalformedCategoryException ex) {
+            throw new ServletException("Internal error", ex);
+        } catch (DuplicateEmailException ex) {
+            
         }
 
     }

@@ -5,6 +5,8 @@
  */
 package org.mypackage.controller;
 
+import org.mypackage.application.errors.DuplicateEmailException;
+import org.mypackage.application.errors.MalformedCategoryException;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.dal.DalException;
 
@@ -14,6 +16,7 @@ import org.mypackage.dal.DalException;
  */
 public interface NewEmailController {
 
-    int addNewEmail(String address, String categoryValue, String contactId) throws MalformedIdentifierException, DalException;
+    int addNewEmail(String address, String categoryValue, String contactId) 
+            throws MalformedIdentifierException, DalException, MalformedCategoryException, DuplicateEmailException;
 
 }

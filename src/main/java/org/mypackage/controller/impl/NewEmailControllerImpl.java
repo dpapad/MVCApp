@@ -6,6 +6,8 @@
 package org.mypackage.controller.impl;
 
 import org.mypackage.application.ApplicationDependencies;
+import org.mypackage.application.errors.DuplicateEmailException;
+import org.mypackage.application.errors.MalformedCategoryException;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.dal.ContactRepository;
@@ -29,12 +31,19 @@ public class NewEmailControllerImpl implements NewEmailController {
     }
 
     @Override
-    public int addNewEmail(String address, String categoryValue, String contactId) throws MalformedIdentifierException, DalException {
+    public int addNewEmail(String address, String categoryValue, String contactId) 
+            throws MalformedIdentifierException, DalException, MalformedCategoryException, DuplicateEmailException {
         Email email = new Email();
-
-        // check logic for address format to be added
+        Byte category;
         email.setAddress(address);
-        email.setCategory(Email.Category.forValue(Byte.parseByte(categoryValue)));
+        
+        try {
+            category = Byte.parseByte(categoryValue);
+            email.setCategory(Email.Category.forValue(category));
+        } catch (NumberFormatException ex) {
+            throw new MalformedCategoryException(categoryValue, ex);
+        }        
+        
         try {
             email.setfContactId(Integer.parseInt(contactId));
         } catch (NumberFormatException ex) {
@@ -48,7 +57,7 @@ public class NewEmailControllerImpl implements NewEmailController {
             this.contactRepository.addEmail(email);
             passedContactId = email.getfContactId();
         } else {
-            passedContactId = -10;
+            throw new DuplicateEmailException(email.getAddress());
         }
 
         return passedContactId;
