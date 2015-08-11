@@ -21,7 +21,7 @@ public class AbstractContactRepositoryStub implements ContactRepository {
     }
 
     @Override
-    public int updateContact(Contact c) throws DalException {
+    public Contact updateContact(Contact c) throws DalException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

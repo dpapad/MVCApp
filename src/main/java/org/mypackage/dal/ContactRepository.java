@@ -14,7 +14,7 @@ public interface ContactRepository {
 
     int deleteContactById(int i) throws DalException;
 
-    int updateContact(Contact c) throws DalException;
+    Contact updateContact(Contact c) throws DalException;
 
     Contact getContactById(int id) throws DalException;
 

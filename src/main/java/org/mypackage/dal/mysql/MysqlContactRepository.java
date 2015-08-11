@@ -120,7 +120,7 @@ public class MysqlContactRepository implements ContactRepository {
     }
 
     @Override
-    public int updateContact(Contact c) throws DalException {
+    public Contact updateContact(Contact c) throws DalException {
         int rowsAffected = 0;
         Connection con = null;
         PreparedStatement udpateContactStmt = null;
@@ -148,7 +148,7 @@ public class MysqlContactRepository implements ContactRepository {
             DalException updateContactException = new DalException(ex);
             throw updateContactException;
         }
-        return rowsAffected;
+        return c;
     }
 
     @Override
