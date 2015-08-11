@@ -11,9 +11,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewContactController;
+import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.FakeContactRepository;
+import org.mypackage.dal.DalException;
+import org.mypackage.model.Contact;
 
 /**
  *
@@ -42,23 +45,46 @@ public class NewContactControllerImplTest {
 
     /**
      * Test of addNewContact method, of class NewContactControllerImpl.
+     * 
+     * @throws DalException
+     * @throws MalformedIdentifierException
      */
     @Test
-    public void testAddNewContact() throws Exception {
-        System.out.println("addNewContact");
-        ContactRepository fakeRepository = new FakeContactRepository();
-        NewContactController controller = new NewContactControllerImpl(fakeRepository);
+    public void testAddNewContact() throws DalException, MalformedIdentifierException {
+        Contact contact = new Contact(1, "John", "Doe", "asdf");
+        final int expectedContactId = contact.getId();
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
 
-        String fullName = "TestContact Add";
-        String nickname = "addContact";
-        String notes = "test for NewContactController";
+            @Override
+            public int addContact(Contact c) throws DalException {
+                return expectedContactId;
+            }            
+        };
+        
+        NewContactController controller = new NewContactControllerImpl(contactRepositoryStub);
+        
+        int actualContactId = controller.addNewContact("Test", "Contact", "test for NewContactController");
 
-        int result = controller.addNewContact(fullName, nickname, notes);
+        assertEquals(expectedContactId, actualContactId);
+    }
+    
+    /**
+     * Test of addNewContact method, of class NewContactControllerImpl.
+     * 
+     * @throws DalException
+     * 
+     */
+    @Test(expected = DalException.class)
+    public void testFailToAddNewContactBecauseOfDalError() throws DalException{
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
 
-        int expectedResult = 10;
-
-        assertEquals(expectedResult, result);
-
+            @Override
+            public int addContact(Contact c) throws DalException {
+                throw new DalException();
+            }        
+        };
+        NewContactController controller = new NewContactControllerImpl(contactRepositoryStub);
+        controller.addNewContact("Joe", "Doe", null);
     }
 
 }
