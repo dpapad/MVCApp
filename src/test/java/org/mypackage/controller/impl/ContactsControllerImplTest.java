@@ -18,8 +18,8 @@ import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.FakeContactRepository;
 import org.mypackage.model.Contact;
+import org.mypackage.model.Email;
 
 /**
  *
@@ -48,7 +48,7 @@ public class ContactsControllerImplTest {
 
     /**
      * Test of retrieveAllContacts method, of class ContactsControllerImpl.
-     * 
+     *
      * @throws DalException
      */
     @Test
@@ -61,22 +61,22 @@ public class ContactsControllerImplTest {
             public List<Contact> getAllContacts() throws DalException {
                 return expectedContacts;
             }
-            
+
         };
         ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
         List<Contact> actualContacts = controller.retrieveAllContacts();
         assertEquals(expectedContacts, actualContacts);
     }
-    
+
     @Test(expected = DalException.class)
     public void testFailToRetrieveAllContactsBecauseOfDalError() throws DalException {
-        ContactRepository contactRepositoryStub = new FakeContactRepository() {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public List<Contact> getAllContacts() throws DalException {
                 throw new DalException();
             }
-            
+
         };
         ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
         controller.retrieveAllContacts();
@@ -84,7 +84,7 @@ public class ContactsControllerImplTest {
 
     /**
      * Test of getContact method, of class ContactsControllerImpl.
-     * 
+     *
      * @throws DalException
      * @throws MalformedIdentifierException
      */
@@ -97,16 +97,17 @@ public class ContactsControllerImplTest {
             public Contact getContactById(int id) throws DalException {
                 return expectedContact;
             }
-            
+
         };
         ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
         Contact actualContact = controller.getContact(Integer.toString(expectedContact.getId()));
         assertEquals(expectedContact, actualContact);
     }
-    
+
     @Test(expected = MalformedIdentifierException.class)
     public void testFailToGetContactBecauseOfMalformedId() throws MalformedIdentifierException, DalException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() { };
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        };
         ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
         final String id = "1s";
         controller.getContact(id);
@@ -114,16 +115,61 @@ public class ContactsControllerImplTest {
 
     /**
      * Test of retrieveAllEmails method, of class ContactsControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
      */
     @Test
-    public void testRetrieveAllEmails() throws Exception {
-        ContactRepository fakeRepository = new FakeContactRepository();
+    public void testRetrieveAllEmails() throws DalException, MalformedIdentifierException {
+        final List<Email> expectedEmails = new ArrayList<>();
+        expectedEmails.add(new Email(1, null, Email.Category.PERSONAL, 1));
 
-        ContactsController controller = new ContactsControllerImpl(fakeRepository);
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
-        int numberOfEmails = controller.retrieveAllEmails("1").size();
+            @Override
+            public List<Email> getAllEmailsByContactId(int id) throws DalException {
+                return expectedEmails;
+            }
+        };
+        ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
 
-        assertEquals(5, numberOfEmails);
+        List<Email> actualEmails = controller.retrieveAllEmails(Integer.toString(expectedEmails.get(0).getfContactId()));
+
+        assertEquals(expectedEmails, actualEmails);
+    }
+
+    /**
+     * Test of retrieveAllEmails method, of class ContactsControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     */
+    @Test(expected = MalformedIdentifierException.class)
+    public void testFailToRetreiveAllEmailsBecauseOfMalformedContactId() throws MalformedIdentifierException, DalException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        };
+        ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
+
+        controller.retrieveAllEmails("1a");
+    }
+
+    /**
+     * Test of retrieveAllEmails method, of class ContactsControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     */
+    @Test(expected = DalException.class)
+    public void testFailToRetreiveAllEmailsBecauseOfDalError() throws DalException, MalformedIdentifierException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+            @Override
+            public List<Email> getAllEmailsByContactId(int id) throws DalException {
+                throw new DalException();
+            }
+        };
+
+        ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
+        controller.retrieveAllEmails("1");
     }
 
 }

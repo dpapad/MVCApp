@@ -60,7 +60,13 @@ public class ContactsControllerImpl implements ContactsController {
     public List<Email> retrieveAllEmails(String id) throws MalformedIdentifierException, DalException {
         List<Email> list = null;
 
-        int contactId = Integer.parseInt(id);
+        int contactId;
+        
+        try {
+           contactId = Integer.parseInt(id); 
+        } catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(id, ex);
+        }
 
         list = this.contactRepository.getAllEmailsByContactId(contactId);
 
