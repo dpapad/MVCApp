@@ -13,9 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
+import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.FakeContactRepository;
 
 /**
  *
@@ -44,27 +44,60 @@ public class DeleteContactControllerImplTest {
 
     /**
      * Test of deleteContact method, of class DeleteContactControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
      */
     @Test
-    public void testDeleteContact() throws Exception {
-        System.out.println("DeleteContact");
-        ContactRepository fakeRepository = new FakeContactRepository();
-        DeleteContactController controller = new DeleteContactControllerImpl(fakeRepository);
+    public void testDeleteContact() throws DalException, MalformedIdentifierException {
+        final int expectedAffectedRows = 6;
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
-        String contactId = "1";
+            @Override
+            public int deleteContactById(int i) throws DalException {
+                return expectedAffectedRows;
+            }
+        };
 
-        int affectedRows = controller.deleteContact(contactId);
+        DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
 
-        assertEquals(6, affectedRows);
+        int actualAffectedRows = controller.deleteContact("1");
 
+        assertEquals(expectedAffectedRows, actualAffectedRows);
     }
-    
+
+    /**
+     * Test of deleteContact method, of class DeleteContactControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     */
     @Test(expected = MalformedIdentifierException.class)
-    public void testFailDeleteBecauseOfMalformedId() throws MalformedIdentifierException, DalException {
-        ContactRepository fakeRepository = new FakeContactRepository();
-        DeleteContactController controller = new DeleteContactControllerImpl(fakeRepository);
+    public void testFailDeleteContactBecauseOfMalformedId() throws MalformedIdentifierException, DalException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub();
+        DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
         String contactId = "1s";
         controller.deleteContact(contactId);
+    }
+    
+    /**
+     * Test of deleteContact method, of class DeleteContactControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     */
+    @Test(expected = DalException.class)
+    public void testFailDeleteContactBecauseOfDalError() throws MalformedIdentifierException, DalException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+
+            @Override
+            public int deleteContactById(int i) throws DalException {
+                throw new DalException();
+            }            
+        };
+        
+        DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
+        controller.deleteContact("1");
     }
 
 }
