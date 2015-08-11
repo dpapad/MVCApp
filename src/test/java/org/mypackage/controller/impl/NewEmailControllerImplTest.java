@@ -11,9 +11,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewEmailController;
+import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
-import org.mypackage.dal.FakeContactRepository;
+import org.mypackage.dal.DalException;
+import org.mypackage.model.Email;
 
 /**
  *
@@ -42,21 +45,71 @@ public class NewEmailControllerImplTest {
 
     /**
      * Test of addNewEmail method, of class NewEmailControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
      */
     @Test
-    public void testAddNewEmail() throws Exception {
-        System.out.println("addNewEmail");
+    public void testAddNewEmail() throws DalException, MalformedIdentifierException {
 
-        ContactRepository fakeRepository = new FakeContactRepository();
-        NewEmailController controller = new NewEmailControllerImpl(fakeRepository);
+        Email email = new Email(1, "test@mail.com", Email.Category.PERSONAL, 1);
+        final int expectedContactId = email.getfContactId();
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
-        String address = "testemail@email.test";
-        String categoryValue = "1";
-        String contactId = "1";
+            @Override
+            public int addEmail(Email e) throws DalException {
+                return expectedContactId;
+            }
 
-        int result = controller.addNewEmail(address, categoryValue, contactId);
-        assertEquals(1, result);
+            @Override
+            public boolean checkIfEmailExists(Email e) {
+                return false;
+            }
+
+        };
+        NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
+
+        int actualContactId = controller.addNewEmail("test@mail.com", "1", "1");
+        assertEquals(expectedContactId, actualContactId);
 
     }
 
+    /**
+     * Test of addNewEmail method, of class NewEmailControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     */
+    @Test(expected = MalformedIdentifierException.class)
+    public void testFailToAddNewEmailBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        };
+        NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
+        controller.addNewEmail("test@mail.com", "1", "asdf");
+    }
+
+    /**
+     * Test of addNewEmail method, of class NewEmailControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     */
+    @Test(expected = DalException.class)
+    public void testFailToAddNewEmailBecauseOfDalError() throws DalException, MalformedIdentifierException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+
+            @Override
+            public int addEmail(Email e) throws DalException {
+                throw new DalException();
+            }
+
+            @Override
+            public boolean checkIfEmailExists(Email e) {
+                return false;
+            }
+
+        };
+        NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
+        controller.addNewEmail("test@mail.com", "1", "1");
+    }
 }
