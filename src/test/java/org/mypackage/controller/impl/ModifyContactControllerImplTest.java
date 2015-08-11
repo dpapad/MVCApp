@@ -57,8 +57,8 @@ public class ModifyContactControllerImplTest {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
-            public Contact updateContact(Contact c) throws DalException {
-                return expectedContact;
+            public void updateContact(Contact c) throws DalException {
+                //return expectedContact;
             }
         };
 
@@ -98,7 +98,7 @@ public class ModifyContactControllerImplTest {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
 
             @Override
-            public Contact updateContact(Contact c) throws DalException {
+            public void updateContact(Contact c) throws DalException {
                 throw new DalException();
             }           
         };

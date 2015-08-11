@@ -5,6 +5,8 @@
  */
 package org.mypackage.controller.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -16,6 +18,7 @@ import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
+import org.mypackage.model.Contact;
 
 /**
  *
@@ -50,20 +53,22 @@ public class DeleteContactControllerImplTest {
      */
     @Test
     public void testDeleteContact() throws DalException, MalformedIdentifierException {
-        final int expectedAffectedRows = 6;
+        final int expectedNumberOfContacts = 0;
+        final List<Contact> contactsList = new ArrayList<>();
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
-
             @Override
-            public int deleteContactById(int i) throws DalException {
-                return expectedAffectedRows;
+            public void deleteContactById(int i) throws DalException {
+                contactsList.remove(0);
             }
         };
 
         DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
+        contactsList.add(new Contact(1, null, null, null));
+        
+        controller.deleteContact("1");
+        int actualNumberOfContacts = contactsList.size();
 
-        int actualAffectedRows = controller.deleteContact("1");
-
-        assertEquals(expectedAffectedRows, actualAffectedRows);
+        assertEquals(expectedNumberOfContacts, actualNumberOfContacts);
     }
 
     /**
@@ -91,7 +96,7 @@ public class DeleteContactControllerImplTest {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
-            public int deleteContactById(int i) throws DalException {
+            public void deleteContactById(int i) throws DalException {
                 throw new DalException();
             }            
         };

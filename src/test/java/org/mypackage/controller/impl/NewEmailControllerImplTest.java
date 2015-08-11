@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mypackage.application.errors.DuplicateEmailException;
+import org.mypackage.application.errors.MalformedCategoryException;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewEmailController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
@@ -48,9 +50,11 @@ public class NewEmailControllerImplTest {
      *
      * @throws DalException
      * @throws MalformedIdentifierException
+     * @throws MalformedCategoryException
+     * @throws DuplicateEmailException
      */
     @Test
-    public void testAddNewEmail() throws DalException, MalformedIdentifierException {
+    public void testAddNewEmail() throws DalException, MalformedIdentifierException, MalformedCategoryException, DuplicateEmailException {
 
         Email email = new Email(1, "test@mail.com", Email.Category.PERSONAL, 1);
         final int expectedContactId = email.getfContactId();
@@ -79,9 +83,11 @@ public class NewEmailControllerImplTest {
      *
      * @throws DalException
      * @throws MalformedIdentifierException
+     * @throws MalformedCategoryException
+     * @throws DuplicateEmailException
      */
     @Test(expected = MalformedIdentifierException.class)
-    public void testFailToAddNewEmailBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
+    public void testFailToAddNewEmailBecauseOfMalformedId() throws DalException, MalformedIdentifierException, MalformedCategoryException, DuplicateEmailException {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
         };
         NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
@@ -93,9 +99,11 @@ public class NewEmailControllerImplTest {
      *
      * @throws DalException
      * @throws MalformedIdentifierException
+     * @throws MalformedCategoryException
+     * @throws DuplicateEmailException
      */
     @Test(expected = DalException.class)
-    public void testFailToAddNewEmailBecauseOfDalError() throws DalException, MalformedIdentifierException {
+    public void testFailToAddNewEmailBecauseOfDalError() throws DalException, MalformedIdentifierException, MalformedCategoryException, DuplicateEmailException {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
@@ -112,4 +120,34 @@ public class NewEmailControllerImplTest {
         NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
         controller.addNewEmail("test@mail.com", "1", "1");
     }
+
+    /**
+     * Test of addNewEmail method, of class NewEmailControllerImpl.
+     *
+     * @throws DalException
+     * @throws MalformedIdentifierException
+     * @throws MalformedCategoryException
+     * @throws DuplicateEmailException
+     */
+    @Test(expected = MalformedCategoryException.class)
+    public void testFailToAddNewEmailBecauseOfMalformedCategory() throws DalException, MalformedIdentifierException, MalformedCategoryException, DuplicateEmailException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){};
+        NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
+        
+        controller.addNewEmail("test@mail.com", "asdf", "1");
+    }
+    
+    @Test(expected = DuplicateEmailException.class) 
+    public void testFailToAddNewEmailBecauseItAlreadyExists() throws DalException, MalformedIdentifierException, MalformedCategoryException, DuplicateEmailException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
+
+            @Override
+            public boolean checkIfEmailExists(Email e) {
+                return true;
+            }
+        };
+        NewEmailController controller = new NewEmailControllerImpl(contactRepositoryStub);
+        controller.addNewEmail("testmail@asdf.com", "1", "1");        
+    }
+
 }

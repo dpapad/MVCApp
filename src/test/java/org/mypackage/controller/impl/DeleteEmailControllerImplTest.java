@@ -54,24 +54,25 @@ public class DeleteEmailControllerImplTest {
     @Test
     public void testDeleteEmail() throws DalException, MalformedIdentifierException {
 
-        final List<Email> emailsList = new ArrayList<>();
-        emailsList.add(new Email(1, null, Email.Category.PERSONAL, 1));
-        emailsList.remove(0);
-        final int expectedRowsAffected = emailsList.size();
+        int expectedNumberOfEmails = 0;
+        final List<Email> emailList = new ArrayList<>();
 
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
-            public int deleteEmailById(int id) throws DalException {
-                return expectedRowsAffected;
+            public void deleteEmailById(int id) throws DalException {
+                emailList.remove(0);
             }
         };
 
         DeleteEmailController controller = new DeleteEmailControllerImpl(contactRepositoryStub);
 
-        int actualRowsAffected = controller.deleteEmail("1");
+       emailList.add(new Email(1, "test@mail.asdf", Email.Category.PERSONAL, 1));
+        
+        controller.deleteEmail("1");
+        int actualNumberOfEmails = emailList.size();
 
-        assertEquals(expectedRowsAffected, actualRowsAffected);
+        assertEquals(expectedNumberOfEmails, actualNumberOfEmails);
     }
 
     /**
@@ -99,7 +100,7 @@ public class DeleteEmailControllerImplTest {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
 
             @Override
-            public int deleteEmailById(int id) throws DalException {
+            public void deleteEmailById(int id) throws DalException {
                 throw new DalException();
             }            
         };
