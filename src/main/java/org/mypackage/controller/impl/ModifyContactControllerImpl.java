@@ -29,9 +29,13 @@ public class ModifyContactControllerImpl implements ModifyContactController {
     }
 
     @Override
-    public Contact modifyContact(String contactId, String fullname, String nickname, String notes) throws DalException {
+    public Contact modifyContact(String contactId, String fullname, String nickname, String notes) throws DalException, MalformedIdentifierException {
         Contact contact = new Contact();
-        contact.setId(Integer.parseInt(contactId));
+        try {
+            contact.setId(Integer.parseInt(contactId));
+        } catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(contactId, ex);
+        }
         contact.setFullName(fullname);
         contact.setNickname(nickname);
         contact.setNotes(notes);
@@ -45,9 +49,14 @@ public class ModifyContactControllerImpl implements ModifyContactController {
     public Contact retrieveContact(String contactId) throws DalException, MalformedIdentifierException {
 
         Contact contact = new Contact();
-        int id = Integer.parseInt(contactId);
-        contact = contactRepository.getContactById(id);
+        int id;
 
+        try {
+            id = Integer.parseInt(contactId);
+            contact = contactRepository.getContactById(id);
+        } catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(contactId, ex);
+        }
         return contact;
     }
 
