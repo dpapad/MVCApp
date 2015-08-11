@@ -29,7 +29,15 @@ public class DeleteContactControllerImpl implements DeleteContactController {
 
     @Override
     public int deleteContact(String contactId) throws MalformedIdentifierException, DalException {
-        int id = Integer.parseInt(contactId);
+        int id;
+        
+        try {
+            id = Integer.parseInt(contactId);
+        }
+        catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(contactId, ex);
+        }
+        
         int rowsAffected = this.contactRepository.deleteContactById(id);
         return rowsAffected;
     }

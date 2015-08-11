@@ -11,8 +11,10 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.ContactRepository;
+import org.mypackage.dal.DalException;
 import org.mypackage.dal.FakeContactRepository;
 
 /**
@@ -55,6 +57,14 @@ public class DeleteContactControllerImplTest {
 
         assertEquals(6, affectedRows);
 
+    }
+    
+    @Test(expected = MalformedIdentifierException.class)
+    public void testFailDeleteBecauseOfMalformedId() throws MalformedIdentifierException, DalException {
+        ContactRepository fakeRepository = new FakeContactRepository();
+        DeleteContactController controller = new DeleteContactControllerImpl(fakeRepository);
+        String contactId = "1s";
+        controller.deleteContact(contactId);
     }
 
 }
