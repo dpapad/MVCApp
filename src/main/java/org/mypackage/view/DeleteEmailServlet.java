@@ -38,7 +38,7 @@ public class DeleteEmailServlet extends HttpServlet {
         String contactId = request.getParameter("contId");
         try {
 
-            this.deleteEmailController.deleteEmail(emailId, contactId);
+            this.deleteEmailController.deleteEmail(emailId);
 
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contactId;
             response.sendRedirect(redirectUrl);

@@ -14,6 +14,6 @@ import org.mypackage.dal.DalException;
  */
 public interface DeleteEmailController {
 
-    int deleteEmail(String eId, String cId) throws MalformedIdentifierException, DalException;
+    int deleteEmail(String eId) throws MalformedIdentifierException, DalException;
 
 }

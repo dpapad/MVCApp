@@ -28,8 +28,13 @@ public class DeleteEmailControllerImpl implements DeleteEmailController {
     }
 
     @Override
-    public int deleteEmail(String eId, String cId) throws MalformedIdentifierException, DalException {
-        int emailId = Integer.parseInt(eId);
+    public int deleteEmail(String eId) throws MalformedIdentifierException, DalException {
+        int emailId;
+        try {
+            emailId = Integer.parseInt(eId);
+        } catch (NumberFormatException ex) {
+            throw new MalformedIdentifierException(eId, ex);
+        }
         int rowsAffected = this.contactRepository.deleteEmailById(emailId);
 
         return rowsAffected;
