@@ -49,10 +49,23 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>3.4.1</version>
-            <scope></scope>
+            <scope>compile</scope>
         </dependency>
         
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <db.driver>com.mysql.jdbc.Driver</db.driver>
+                <db.url>jdbc:mysql://localhost:3306/mvcproject</db.url>
+                <db.username>root</db.username>
+                <db.password>adminadmin</db.password>
+                <db.changelogfile>db.changelog-master.xml</db.changelogfile>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -107,7 +120,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
+                    <propertyFile>liquibase.properties</propertyFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -119,6 +132,8 @@
             </plugin>
             
         </plugins>
+        
     </build>
+    
 
 </project>
