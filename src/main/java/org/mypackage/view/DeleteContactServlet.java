@@ -37,9 +37,13 @@ public class DeleteContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("errorMessage", "An internal database error occured. Please try again.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
     }
 

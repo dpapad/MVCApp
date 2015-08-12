@@ -47,24 +47,25 @@ public class NewEmailServlet extends HttpServlet {
 
         try {
             int contId = newEmailController.addNewEmail(address, categoryValue, contactId);
-
-            if (contId > 0) {
-                request.getSession().removeAttribute("errorMessage");
-                String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
-                response.sendRedirect(redirectUrl);
-            } else {
-                request.getSession().setAttribute("errorMessage", "This address already exists. Please enter a new one.");
-                response.sendRedirect(request.getHeader("Referer"));
-            }
+            request.getSession().removeAttribute("errorMessage");
+            String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contId;
+            response.sendRedirect(redirectUrl);
 
         } catch (DalException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("errorMessage", "An internal database error occured. Please try again.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         } catch (MalformedCategoryException ex) {
-            throw new ServletException("Internal error", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_CONFLICT);
+            request.setAttribute("errorMessage", "An internal conflict concerning the category of the email occured. Please try again.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         } catch (DuplicateEmailException ex) {
-            
+            request.getSession().setAttribute("errorMessage", "This address already exists. Please enter a new one.");
+            response.sendRedirect(request.getHeader("Referer"));
         }
 
     }

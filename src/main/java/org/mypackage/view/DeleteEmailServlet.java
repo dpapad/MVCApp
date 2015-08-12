@@ -44,9 +44,13 @@ public class DeleteEmailServlet extends HttpServlet {
             response.sendRedirect(redirectUrl);
 
         } catch (DalException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("errorMessage", "There was a an internal database error.");
+            request.getRequestDispatcher("errorPage.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
     }
 

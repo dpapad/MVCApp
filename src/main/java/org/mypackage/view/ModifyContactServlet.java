@@ -44,9 +44,11 @@ public class ModifyContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getId();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
-            throw new ServletException("A database error occured.", ex);
+            request.setAttribute("errorMessage", "There was a an internal database error.");
+            request.getRequestDispatcher("errorPage.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
-            throw new ServletException("An error occured", ex);
+            request.setAttribute("errorMessage", "An error occured because of a malformed id. Please use only numeric values."
+                    + "/nid that caused the error: " + request.getParameter("contactId"));
         }
 
     }
@@ -63,9 +65,13 @@ public class ModifyContactServlet extends HttpServlet {
             request.getRequestDispatcher("/modifyContact.jsp").forward(request, response);
 
         } catch (DalException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("errorMessage", "There was a an internal database error.");
+            request.getRequestDispatcher("errorPage.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
 
     }

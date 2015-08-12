@@ -45,8 +45,9 @@ public class NewContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + c;
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
-
-            throw new ServletException("A database error occured", ex);
+            request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("errorMessage", "There was a an internal database error.");
+            request.getRequestDispatcher("errorPage.jsp").forward(request, response);
         }
 
     }
