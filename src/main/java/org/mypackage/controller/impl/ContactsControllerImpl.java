@@ -52,7 +52,12 @@ public class ContactsControllerImpl implements ContactsController {
             throw new MalformedIdentifierException(id, ex);
         }
 
-        contact = this.contactRepository.getContactById(contactId);
+        try {
+            contact = this.contactRepository.getContactById(contactId);
+        } catch (UnsupportedOperationException ex) {
+            throw new ResourceNotFoundException((Object)id);
+        }
+        
 
         return contact;
     }

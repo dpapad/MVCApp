@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mypackage.application.errors.MalformedIdentifierException;
+import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
@@ -87,9 +88,10 @@ public class ContactsControllerImplTest {
      *
      * @throws DalException
      * @throws MalformedIdentifierException
+     * @throws ResourceNotFoundException
      */
     @Test
-    public void testGetContact() throws MalformedIdentifierException, DalException {
+    public void testGetContact() throws MalformedIdentifierException, DalException, ResourceNotFoundException {
         final Contact expectedContact = new Contact(1, "John Doe", null, null);
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
@@ -105,12 +107,20 @@ public class ContactsControllerImplTest {
     }
 
     @Test(expected = MalformedIdentifierException.class)
-    public void testFailToGetContactBecauseOfMalformedId() throws MalformedIdentifierException, DalException {
+    public void testFailToGetContactBecauseOfMalformedId() throws MalformedIdentifierException, DalException, ResourceNotFoundException {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
         };
         ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
         final String id = "1s";
         controller.getContact(id);
+    }
+    
+    @Test(expected = ResourceNotFoundException.class)
+    public void testFailToGetContactBecauceItDoesNotExist() throws MalformedIdentifierException, DalException, ResourceNotFoundException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){};
+        ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
+        final Contact contact = null;
+        controller.getContact("1");
     }
 
     /**
