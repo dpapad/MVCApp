@@ -14,14 +14,7 @@
     </head>
     <body>
         <%@include file="jsp_includes/global_menu.jsp" %>
-        <h1>${header}</h1>
-        <strong>Status Code:  ${statusCode}</strong>
-        <strong>Requested URI:  ${requestUri}</strong>
-
-        <ul>
-            <li>Servlet Name:  ${servletName}</li>
-            <li>Exception Name:  ${exceptionName}</li>
-            <li>Exception Message:  ${exceptionMessage}</li>
-        </ul>
+        <h1>${errorMessage}</h1>
+        <h2>Error Code: ${errorCode}</h2>
     </body>
 </html>
