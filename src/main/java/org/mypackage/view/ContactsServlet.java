@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
+import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
@@ -40,10 +41,14 @@ public final class ContactsServlet extends HttpServlet {
                 request.getRequestDispatcher("/contacts.jsp").forward(request, response);
             } else {
                 Contact contact = contactsController.getContact(contactId);
-                request.setAttribute("contact", contact);
-                List<Email> list = contactsController.retrieveAllEmails(contactId);
-                request.setAttribute("emailList", list);
-                request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
+                if (contact != null) {
+                    request.setAttribute("contact", contact);
+                    List<Email> list = contactsController.retrieveAllEmails(contactId);
+                    request.setAttribute("emailList", list);
+                    request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
+                } else {
+                    throw new ResourceNotFoundException((Object)contactId);
+                }
             }
         } catch (DalException ex) {
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -52,6 +57,10 @@ public final class ContactsServlet extends HttpServlet {
         } catch (MalformedIdentifierException ex) {
             request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
             request.setAttribute("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+        } catch (ResourceNotFoundException ex) {
+            request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+            request.setAttribute("errorMessage", "Requested contact does not exist.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
     }
