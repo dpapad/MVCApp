@@ -8,6 +8,7 @@ package org.mypackage.controller.impl;
 import java.util.List;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
+import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
@@ -40,7 +41,7 @@ public class ContactsControllerImpl implements ContactsController {
     }
 
     @Override
-    public Contact getContact(String id) throws MalformedIdentifierException, DalException {
+    public Contact getContact(String id) throws MalformedIdentifierException, DalException, ResourceNotFoundException {
         Contact contact = null;
 
         int contactId;

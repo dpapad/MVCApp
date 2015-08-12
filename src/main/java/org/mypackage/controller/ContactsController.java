@@ -7,6 +7,7 @@ package org.mypackage.controller;
 
 import java.util.List;
 import org.mypackage.application.errors.MalformedIdentifierException;
+import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
@@ -17,7 +18,7 @@ import org.mypackage.model.Email;
  */
 public interface ContactsController {
 
-    Contact getContact(String id) throws MalformedIdentifierException, DalException;
+    Contact getContact(String id) throws MalformedIdentifierException, DalException, ResourceNotFoundException;
 
     List<Contact> retrieveAllContacts() throws DalException;
 
