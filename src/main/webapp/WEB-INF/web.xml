@@ -9,31 +9,6 @@
         <url-pattern>/contacts/*</url-pattern>
     </filter-mapping>
     
-
-    <!--    <error-page>
-        <exception-type>org.mypackage.application.errors.MalformedIdentifierException</exception-type>
-        <location>/appException</location>
-    </error-page>
-    <error-page>
-        <exception-type>org.mypackage.dal.DalException</exception-type>
-        <location>/appException</location>
-    </error-page>
-    <error-page>
-        <exception-type>org.mypackage.application.errors.ResourceNotFoundException</exception-type>
-        <location>/appException</location>
-    </error-page>
-    <error-page>
-        <exception-type>javax.servlet.ServletException</exception-type >
-        <location>/appException</location>
-    </error-page>
-    <error-page>
-        <exception-type>java.io.IOException</exception-type >
-        <location>/appException</location>
-    </error-page>-->
-    
-    <!--     Generic approach -->
-    
-    
     <servlet>
         <servlet-name>ContactsServlet</servlet-name>
         <servlet-class>org.mypackage.view.ContactsServlet</servlet-class>
@@ -90,12 +65,6 @@
         <servlet-name>AppExceptionHandler</servlet-name>
         <url-pattern>/appException</url-pattern>
     </servlet-mapping>
-    
-    
-    <error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/appException</location>
-    </error-page>
     
     <session-config>
         <session-timeout>
