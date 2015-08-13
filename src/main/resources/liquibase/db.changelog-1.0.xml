@@ -28,9 +28,11 @@
                 <constraints nullable="true" unique="true"/>
             </column>
             <column name="Category" type="tinyint(4)" autoIncrement="false">
-                <constraints primaryKey="false" nullable="true"/>
+                <constraints nullable="true"/>
             </column>
             <column name="fContactId" type="int(11)">
+<!--                <constraints foreignKeyName="Emails_ibfk_1"
+                    references="Contact(Id)"/> -->
             </column>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="fContactId"
