@@ -52,13 +52,10 @@ public class ContactsControllerImpl implements ContactsController {
             throw new MalformedIdentifierException(id, ex);
         }
 
-        try {
-            contact = this.contactRepository.getContactById(contactId);
-        } catch (UnsupportedOperationException ex) {
-            throw new ResourceNotFoundException((Object)id);
+        contact = this.contactRepository.getContactById(contactId);
+        if (contact == null) {
+            throw new ResourceNotFoundException((Object) id);
         }
-        
-
         return contact;
     }
 
@@ -67,9 +64,9 @@ public class ContactsControllerImpl implements ContactsController {
         List<Email> list = null;
 
         int contactId;
-        
+
         try {
-           contactId = Integer.parseInt(id); 
+            contactId = Integer.parseInt(id);
         } catch (NumberFormatException ex) {
             throw new MalformedIdentifierException(id, ex);
         }
