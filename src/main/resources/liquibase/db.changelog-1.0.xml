@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd"> 
     <changeSet author="dev-dp" id="changelog-1.0">
-    
+        
         <createTable tableName="Contact">
             <column name="Id" type="int(11)" autoIncreament='true'>
                 <constraints nullable="false" primaryKey="true"/>
