@@ -56,7 +56,7 @@
     
     <profiles>
         <profile>
-            <id>test</id>
+            <id>production</id>
             <properties>
                 <db.driver>com.mysql.jdbc.Driver</db.driver>
                 <db.url>jdbc:mysql://localhost:3306/mvcproject</db.url>
@@ -64,10 +64,20 @@
                 <db.password>adminadmin</db.password>
                 <db.changelogfile>db.changelog-master.xml</db.changelogfile>
             </properties>
+        </profile>    
+        <profile>
+            <id>test</id>
+            <properties>
+                <db.driver>org.h2.Driver</db.driver>
+                <db.url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</db.url>
+                <db.username></db.username>
+                <db.password></db.password>
+                <db.changelogfile>db.changelog-master.xml</db.changelogfile>
+            </properties>
         </profile>
     </profiles>
 
-    <build>
+    <build>        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -113,26 +123,31 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            
+            </plugin>            
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <propertyFile>liquibase.properties</propertyFile>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                    <propertyFile>/src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
                 <executions>
                     <execution>
+                        <!--                        <phase>process-resources</phase>-->
                         <goals>
                             <goal>update</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            
+            </plugin>            
         </plugins>
-        
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
     
 
