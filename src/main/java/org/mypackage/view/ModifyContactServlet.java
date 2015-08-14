@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ModifyContactController;
@@ -18,7 +19,7 @@ import org.mypackage.model.Contact;
  */
 @WebServlet(name = "ModifyContactServlet", urlPatterns = {"/modifyContact"})
 public class ModifyContactServlet extends HttpServlet {
-
+    private final static Logger logger = Logger.getLogger(ModifyContactServlet.class);
     private ModifyContactController modifyContactController;
 
     public ModifyContactServlet() {
@@ -44,6 +45,7 @@ public class ModifyContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts/" + contact.getId();
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
+            logger.error("A database error occured while trying to update contact with ID = "+ contactId, ex);
             request.setAttribute("errorMessage", "There was a an internal database error.");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);
         } catch (MalformedIdentifierException ex) {
@@ -65,6 +67,7 @@ public class ModifyContactServlet extends HttpServlet {
             request.getRequestDispatcher("/modifyContact.jsp").forward(request, response);
 
         } catch (DalException ex) {
+            logger.error("A database error occured while trying to retrieve contact with ID = " + id, ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "There was a an internal database error.");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);

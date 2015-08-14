@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.DuplicateEmailException;
 import org.mypackage.application.errors.MalformedCategoryException;
@@ -20,7 +21,7 @@ import org.mypackage.dal.DalException;
  */
 @WebServlet(name = "NewEmailServlet", urlPatterns = {"/newEmail"})
 public class NewEmailServlet extends HttpServlet {
-
+    private final static Logger logger = Logger.getLogger(NewEmailServlet.class);
     private NewEmailController newEmailController;
 
     public NewEmailServlet() {
@@ -36,8 +37,7 @@ public class NewEmailServlet extends HttpServlet {
         request.setAttribute("mailCategories", Email.Category.values());
         request.getRequestDispatcher("/newEmail.jsp").forward(request, response);
     }
-
-    //Fixed    
+ 
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -52,6 +52,11 @@ public class NewEmailServlet extends HttpServlet {
             response.sendRedirect(redirectUrl);
 
         } catch (DalException ex) {
+            logger.error("(DalException exception thrown) \nAn error occured while trying to add a new email for contact with ID = " + contactId
+                    + "Email object parameters: " 
+                    + "/nAddress: " + address
+                    + "/nCategory value (enum): " + categoryValue
+                    + "/nfContactId: " + contactId, ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "An internal database error occured. Please try again.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);

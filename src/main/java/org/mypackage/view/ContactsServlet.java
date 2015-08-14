@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.application.errors.ResourceNotFoundException;
@@ -20,6 +21,9 @@ import org.mypackage.model.Email;
  */
 public final class ContactsServlet extends HttpServlet {
 
+    // Create a logger for error logging
+    private final static Logger logger = Logger.getLogger(ContactsServlet.class);
+    
     private ContactsController contactsController;
 
     public ContactsServlet() {
@@ -51,6 +55,7 @@ public final class ContactsServlet extends HttpServlet {
                 }
             }
         } catch (DalException ex) {
+            logger.error("A database error occured and DalException exception was thrown", ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "There was a an internal database error.");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);

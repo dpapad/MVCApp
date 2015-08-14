@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
@@ -18,6 +19,7 @@ import org.mypackage.dal.DalException;
 @WebServlet(name = "DeleteContactServlet", urlPatterns = {"/deleteContact"})
 public class DeleteContactServlet extends HttpServlet {
 
+    private final static Logger logger = Logger.getLogger(DeleteContactServlet.class);
     private DeleteContactController deleteContactController;
 
     public DeleteContactServlet() {
@@ -37,6 +39,7 @@ public class DeleteContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
+            logger.error("A database error occured and DalException exception was thrown", ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "An internal database error occured. Please try again.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);

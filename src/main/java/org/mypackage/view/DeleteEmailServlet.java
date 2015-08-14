@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteEmailController;
@@ -21,6 +22,7 @@ import org.mypackage.dal.DalException;
  */
 public class DeleteEmailServlet extends HttpServlet {
 
+    private final static Logger logger = Logger.getLogger(DeleteEmailServlet.class);
     private DeleteEmailController deleteEmailController;
 
     public DeleteEmailServlet() {
@@ -44,6 +46,7 @@ public class DeleteEmailServlet extends HttpServlet {
             response.sendRedirect(redirectUrl);
 
         } catch (DalException ex) {
+            logger.error("A database error occured while trying to delete contact with ID = " + contactId, ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "There was a an internal database error.");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);
