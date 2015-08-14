@@ -12,7 +12,10 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <log.home>home/dev-dp/Projects/mvcapplogs.log</log.home>
+        
     </properties>
+    
     
     <dependencies>
         
@@ -54,15 +57,19 @@
         
     </dependencies>
     
+        
+    
     <profiles>
         <profile>
             <id>production</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <db.driver>com.mysql.jdbc.Driver</db.driver>
                 <db.url>jdbc:mysql://localhost:3306/mvcproject</db.url>
                 <db.username>root</db.username>
                 <db.password>adminadmin</db.password>
-                <db.changelogfile>db.changelog-master.xml</db.changelogfile>
             </properties>
         </profile>    
         <profile>
@@ -72,7 +79,6 @@
                 <db.url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</db.url>
                 <db.username></db.username>
                 <db.password></db.password>
-                <db.changelogfile>db.changelog-master.xml</db.changelogfile>
             </properties>
         </profile>
     </profiles>
@@ -124,23 +130,30 @@
                     </execution>
                 </executions>
             </plugin>            
-            <plugin>
+<!--            <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <propertyFile>/src/main/resources/liquibase.properties</propertyFile>
+                    <dropFirst>true</dropFirst>
+                    <driver>${db.driver}</driver>
+                    <url>${db.url}</url>
+                    <username>${db.username}</username>
+                    <password>${db.password}</password>
+                    <changeLogFile>${db.changelogfile}</changeLogFile>
+                    
                 </configuration>
                 <executions>
                     <execution>
-                        <!--                        <phase>process-resources</phase>-->
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>update</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>            
+            </plugin>            -->
         </plugins>
         <resources>
             <resource>

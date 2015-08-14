@@ -7,17 +7,18 @@
     <changeSet author="dev-dp" id="changelog-1.0">
         
         <createTable tableName="Contact">
-            <column name="Id" type="int(11)" autoIncreament='true'>
+            <column name="Id" type="int(11)" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="FullName" type="varchar(45)" autoIncreament='false'>
+            <column name="FullName" type="varchar(45)" autoIncrement='false'>
                 <constraints nullable="true" primaryKey="false"/>
-                <column name="Nickname" type="varchar(45)" autoIncreament='false'>
-                    <constraints nullable="true" primaryKey="false"/>
-                </column>
-                <column name="Notes" type="varchar(45)" autoIncreament='false'>
-                    <constraints nullable="true" primaryKey="false"/>
-                </column>
+            </column>
+            <column name="Nickname" type="varchar(45)" autoIncrement='false'>
+                <constraints nullable="true" primaryKey="false"/>
+            </column>
+            <column name="Notes" type="varchar(45)" autoIncrement='false'>
+                <constraints nullable="true" primaryKey="false"/>
+            </column>
         </createTable>
         
         <createTable tableName="Emails">
@@ -30,9 +31,7 @@
             <column name="Category" type="tinyint(4)" autoIncrement="false">
                 <constraints nullable="true"/>
             </column>
-            <column name="fContactId" type="int(11)">
-<!--                <constraints foreignKeyName="Emails_ibfk_1"
-                    references="Contact(Id)"/> -->
+            <column name="fContactId" type="int(11)"> 
             </column>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="fContactId"

@@ -5,5 +5,44 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="db.changelog-1.0.xml"/>  
+    <include file="src/main/resources/liquibase/db.changelog-1.0.xml"/>  
+<!--    <changeSet author="dev-dp" id="changelog-1.0">
+        
+        <createTable tableName="Contact">
+            <column name="Id" type="int(11)" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="FullName" type="varchar(45)" autoIncrement='false'>
+                <constraints nullable="true" primaryKey="false"/>
+            </column>
+            <column name="Nickname" type="varchar(45)" autoIncrement='false'>
+                <constraints nullable="true" primaryKey="false"/>
+            </column>
+            <column name="Notes" type="varchar(45)" autoIncrement='false'>
+                <constraints nullable="true" primaryKey="false"/>
+            </column>
+        </createTable>
+        
+        <createTable tableName="Emails">
+            <column name="Id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="Address" type="varchar(50)">
+                <constraints nullable="true" unique="true"/>
+            </column>
+            <column name="Category" type="tinyint(4)" autoIncrement="false">
+                <constraints nullable="true"/>
+            </column>
+            <column name="fContactId" type="int(11)">
+                                <constraints foreignKeyName="Emails_ibfk_1"
+                references="Contact(Id)"/> 
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="fContactId"
+                                 baseTableName="Emails"
+                                 constraintName="Emails_ibfk_1"
+                                 referencedColumnNames="Id"
+                                 referencedTableName="Contact"/>-->
+
+<!--    </changeSet>-->
 </databaseChangeLog>
