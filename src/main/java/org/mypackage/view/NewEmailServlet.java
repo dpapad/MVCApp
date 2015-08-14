@@ -52,7 +52,7 @@ public class NewEmailServlet extends HttpServlet {
             response.sendRedirect(redirectUrl);
 
         } catch (DalException ex) {
-            logger.error("(DalException exception thrown) \nAn error occured while trying to add a new email for contact with ID = " + contactId
+            logger.error("An error occured while trying to add a new email for contact with ID = " + contactId
                     + "Email object parameters: " 
                     + "/nAddress: " + address
                     + "/nCategory value (enum): " + categoryValue

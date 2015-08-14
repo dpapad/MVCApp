@@ -23,7 +23,7 @@ public final class ContactsServlet extends HttpServlet {
 
     // Create a logger for error logging
     private final static Logger logger = Logger.getLogger(ContactsServlet.class);
-    
+
     private ContactsController contactsController;
 
     public ContactsServlet() {
@@ -51,11 +51,11 @@ public final class ContactsServlet extends HttpServlet {
                     request.setAttribute("emailList", list);
                     request.getRequestDispatcher("/viewContact.jsp").forward(request, response);
                 } else {
-                    throw new ResourceNotFoundException((Object)contactId);
+                    throw new ResourceNotFoundException((Object) contactId);
                 }
             }
         } catch (DalException ex) {
-            logger.error("A database error occured and DalException exception was thrown", ex);
+            logger.error("A database error occured.", ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "There was a an internal database error.");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);

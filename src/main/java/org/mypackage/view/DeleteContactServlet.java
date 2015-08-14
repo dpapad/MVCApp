@@ -39,7 +39,7 @@ public class DeleteContactServlet extends HttpServlet {
             String redirectUrl = this.getServletContext().getContextPath() + "/contacts";
             response.sendRedirect(redirectUrl);
         } catch (DalException ex) {
-            logger.error("A database error occured and DalException exception was thrown", ex);
+            logger.error("A database error occured.", ex);
             request.setAttribute("errorCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             request.setAttribute("errorMessage", "An internal database error occured. Please try again.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
