@@ -61,8 +61,7 @@
         </dependency>
         
     </dependencies>
-    
-        
+ 
     
     <profiles>
         <profile>
@@ -88,7 +87,13 @@
         </profile>
     </profiles>
 
-    <build>        
+    <build>            
+        <resources>
+            <resource>
+                <directory>./src/main/resources/</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -135,20 +140,16 @@
                     </execution>
                 </executions>
             </plugin>            
-<!--            <plugin>
+            <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <propertyFileWillOverride>true</propertyFileWillOverride>
-                    <propertyFile>/src/main/resources/liquibase.properties</propertyFile>
-                    <dropFirst>true</dropFirst>
-                    <driver>${db.driver}</driver>
-                    <url>${db.url}</url>
-                    <username>${db.username}</username>
-                    <password>${db.password}</password>
-                    <changeLogFile>${db.changelogfile}</changeLogFile>
                     
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                    <propertyFile>target/classes/liquibase/liquibase.properties</propertyFile>
+                    <dropFirst>true</dropFirst>
+                  
                 </configuration>
                 <executions>
                     <execution>
@@ -158,14 +159,8 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>            -->
+            </plugin>            
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
     
 
