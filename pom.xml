@@ -13,11 +13,16 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log.home>home/dev-dp/Projects/mvcapplogs.log</log.home>
-        
+        <db.changelogfile>src/main/resources/liquibase/db.changelog-master.xml</db.changelogfile>
     </properties>
     
-    
     <dependencies>
+        
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
         
         <dependency>
             <groupId>javax</groupId>
