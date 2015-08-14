@@ -115,7 +115,7 @@ public class ContactsControllerImplTest {
         controller.getContact(id);
     }
     
-    @Test(expected = ResourceNotFoundException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testFailToGetContactBecauceItDoesNotExist() throws MalformedIdentifierException, DalException, ResourceNotFoundException {
         ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){};
         ContactsController controller = new ContactsControllerImpl(contactRepositoryStub);
