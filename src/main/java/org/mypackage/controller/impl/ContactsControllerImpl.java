@@ -34,16 +34,13 @@ public class ContactsControllerImpl implements ContactsController {
     @Override
     public List<Contact> retrieveAllContacts() throws DalException {
         List<Contact> list = null;
-
         list = this.contactRepository.getAllContacts();
-
         return list;
     }
 
     @Override
     public Contact getContact(String id) throws MalformedIdentifierException, DalException, ResourceNotFoundException {
         Contact contact = null;
-
         int contactId;
 
         try {
@@ -62,7 +59,6 @@ public class ContactsControllerImpl implements ContactsController {
     @Override
     public List<Email> retrieveAllEmails(String id) throws MalformedIdentifierException, DalException {
         List<Email> list = null;
-
         int contactId;
 
         try {
@@ -70,7 +66,6 @@ public class ContactsControllerImpl implements ContactsController {
         } catch (NumberFormatException ex) {
             throw new MalformedIdentifierException(id, ex);
         }
-
         list = this.contactRepository.getAllEmailsByContactId(contactId);
 
         return list;
