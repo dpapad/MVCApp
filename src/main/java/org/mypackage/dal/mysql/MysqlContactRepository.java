@@ -1,6 +1,5 @@
 package org.mypackage.dal.mysql;
 
-import org.mypackage.dal.sql.SqlConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,365 +7,255 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dpa
  */
+/**
+ * implements ContactRepository
+ */
+@Component
 public class MysqlContactRepository implements ContactRepository {
 
-    private final SqlConnectionProvider connectionProvider;
-
-    public MysqlContactRepository(SqlConnectionProvider connectionProvider) {
-        this.connectionProvider = connectionProvider;
-    }
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
-    public int addContact(Contact c) throws DalException {
-        Connection con = null;
-        PreparedStatement addContactStmt = null;
+    public int addContact(final Contact contact) throws DalException {
         int contactId;
+        // Key to hold id value
+        KeyHolder idKey = new GeneratedKeyHolder();
 
         try {
-            try {
-                con = this.connectionProvider.createConnection();
+            jdbcTemplate.update(new PreparedStatementCreator() {
 
-                try {
-                    addContactStmt = con.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    addContactStmt.setString(1, c.getFullName());
-                    addContactStmt.setString(2, c.getNickname());
-                    addContactStmt.setString(3, c.getNotes());
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 
-                    addContactStmt.execute();
-
-                    ResultSet rs = addContactStmt.getGeneratedKeys();
-                    rs.next();
-                    contactId = rs.getInt(1);
-
-                } finally {
-                    if (addContactStmt != null) {
-                        addContactStmt.close();
-                    }
+                    PreparedStatement addContactStmt = connection.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)");
+                    addContactStmt.setString(1, contact.getFullName());
+                    addContactStmt.setString(2, contact.getNickname());
+                    addContactStmt.setString(3, contact.getNotes());
+                    return addContactStmt;
                 }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException addContactException = new DalException(ex);
-            throw addContactException;
+            }, idKey);
+
+            contactId = idKey.getKey().intValue();
+
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
-
         return contactId;
     }
 
     @Override
-    public void deleteContactById(int id) throws DalException {
-        
-        Connection con = null;
-        PreparedStatement deleteContactStmt = null, deleteMailsStmt = null;
+    @Transactional
+    public void deleteContactById(final int id) throws DalException {
+
         try {
-            try {
-                con = this.connectionProvider.createConnection();
-                con.setAutoCommit(false);
+            // Delete the emails first
+            jdbcTemplate.update(new PreparedStatementCreator() {
 
-                try {
-                    try {
-                        deleteMailsStmt = con.prepareStatement("DELETE FROM Emails WHERE fContactId = ?");
-                        deleteMailsStmt.setInt(1, id);
-                        deleteMailsStmt.execute();
-                    } finally {
-                        if (deleteMailsStmt != null) {
-                            deleteMailsStmt.close();
-                        }
-                    }
-
-                    try {
-                        deleteContactStmt = con.prepareStatement("DELETE FROM Contact WHERE Id = ?");
-                        deleteContactStmt.setInt(1, id);
-                        deleteContactStmt.execute();
-                    } finally {
-                        if (deleteContactStmt != null) {
-                            deleteContactStmt.close();
-                        }
-                    }
-
-                    con.commit();
-                } catch (SQLException ex) {
-                    con.rollback();
-                    throw ex;
-                } finally {
-                    con.setAutoCommit(true);
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement deleteAllEmailsByContactIdPreparedStatement = connection.prepareStatement("DELETE FROM Emails WHERE fContactId = ?");
+                    deleteAllEmailsByContactIdPreparedStatement.setInt(1, id);
+                    return deleteAllEmailsByContactIdPreparedStatement;
                 }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
+            });
+            // Then, delete the contact
+            jdbcTemplate.update(new PreparedStatementCreator() {
 
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException deleteContactByIdException = new DalException(ex);
-            throw deleteContactByIdException;
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement deleteContactPreparedStatement = connection.prepareStatement("DELETE FROM Contact WHERE Id = ?");
+                    deleteContactPreparedStatement.setInt(1, id);
+                    return deleteContactPreparedStatement;
+                }
+            });
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
     }
 
     @Override
-    public void updateContact(Contact c) throws DalException {
-        Connection con = null;
-        PreparedStatement udpateContactStmt = null;
+    public void updateContact(final Contact contact) throws DalException {
         try {
-            try {
-                con = this.connectionProvider.createConnection();
-                try {
-                    udpateContactStmt = con.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
-                    udpateContactStmt.setString(1, c.getFullName());
-                    udpateContactStmt.setString(2, c.getNickname());
-                    udpateContactStmt.setString(3, c.getNotes());
-                    udpateContactStmt.setInt(4, c.getId());
-                    udpateContactStmt.execute();
-                } finally {
-                    if (udpateContactStmt != null) {
-                        udpateContactStmt.close();
-                    }
+            jdbcTemplate.update(new PreparedStatementCreator() {
+
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=?, WHERE Id=?");
+                    updateContactStatement.setString(1, contact.getFullName());
+                    updateContactStatement.setString(2, contact.getNickname());
+                    updateContactStatement.setString(3, contact.getNotes());
+                    updateContactStatement.setInt(4, contact.getId());
+
+                    return updateContactStatement;
                 }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException updateContactException = new DalException(ex);
-            throw updateContactException;
+            });
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
     }
 
     @Override
-    public Contact getContactById(int id) throws DalException {
-        Contact contact = null;
-        Connection con = null;
-        PreparedStatement getContactStmt = null;
+    public Contact getContactById(final int id) throws DalException {
+        Contact retrievedContact = null;
         try {
-            try {
-                con = this.connectionProvider.createConnection();
-                try {
-                    getContactStmt = con.prepareStatement("SELECT * FROM Contact WHERE Id= ?");
-                    getContactStmt.setInt(1, id);
-                    ResultSet rs = getContactStmt.executeQuery();
-                    if (rs.next()) {
-                        contact = new Contact();
-                        contact.setId(rs.getInt(1));
-                        contact.setFullName(rs.getString(2));
-                        contact.setNickname(rs.getString(3));
-                        contact.setNotes(rs.getString(4));
-                    }
-
-                } finally {
-                    if (getContactStmt != null) {
-                        getContactStmt.close();
-                    }
-                }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException getContactByIdException = new DalException(ex);
-            throw getContactByIdException;
+            retrievedContact = jdbcTemplate.queryForObject("SELECT * FROM Contact WHERE Id=?",
+                    new Object[]{id},
+                    new ContactMapper());
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
-
-        return contact;
+        return retrievedContact;
     }
 
     @Override
     public List<Contact> getAllContacts() throws DalException {
-        List<Contact> list = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement getAllContactsStmt = null;
-
+        List<Contact> listOfContacts = new ArrayList<>();
         try {
-            try {
-                con = this.connectionProvider.createConnection();
-                try {
-                    getAllContactsStmt = con.prepareStatement("SELECT * FROM Contact ORDER BY Id");
-                    ResultSet rs = getAllContactsStmt.executeQuery();
-                    while (rs.next()) {
-                        Contact contact = new Contact();
-                        contact.setId(rs.getInt(1));
-                        contact.setFullName(rs.getString(2));
-                        contact.setNickname(rs.getString(3));
-                        contact.setNotes(rs.getString(4));
-                        list.add(contact);
-                    }
-                } finally {
-                    if (getAllContactsStmt != null) {
-                        getAllContactsStmt.close();
-                    }
-                }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
+            listOfContacts = jdbcTemplate.query(new PreparedStatementCreator() {
 
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException getAllContactsException = new DalException(ex);
-            throw getAllContactsException;
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement getAllContactsPreparedStatement = connection.prepareStatement("SELECT * FROM Contact ORDER BY Id");
+                    return getAllContactsPreparedStatement;
+                }
+            }, new ContactMapper());
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
-
-        return list;
+        return listOfContacts;
     }
 
     @Override
-    public int addEmail(Email e) throws DalException {
+    public int addEmail(final Email email) throws DalException {
         int addedEmailId;
-        Connection con = null;
-        PreparedStatement emailPstmt = null;
-
+        KeyHolder idKey = new GeneratedKeyHolder();
         try {
-            try {
-                con = this.connectionProvider.createConnection();
+            jdbcTemplate.update(new PreparedStatementCreator() {
 
-                try {
-                    emailPstmt = con.prepareStatement("INSERT INTO Emails(Address, Category, fContactId) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement addEmailPreparedStatement = connection.prepareStatement("INSERT INTO Emails (Address, Category, fContactId) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    addEmailPreparedStatement.setString(1, email.getAddress());
+                    addEmailPreparedStatement.setByte(2, email.getCategory().getByteValue());
+                    addEmailPreparedStatement.setInt(3, email.getfContactId());
 
-                    emailPstmt.setString(1, e.getAddress());
-
-                    emailPstmt.setInt(2, e.getCategory().getByteValue());
-
-                    emailPstmt.setInt(3, e.getfContactId());
-                    emailPstmt.execute();
-
-                    ResultSet rs = emailPstmt.getGeneratedKeys();
-                    rs.next();
-                    addedEmailId = rs.getInt(1);
-                } finally {
-                    if (emailPstmt != null) {
-                        emailPstmt.close();
-                    }
+                    return addEmailPreparedStatement;
                 }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException addEmailException = new DalException(ex);
-            throw addEmailException;
+            }, idKey);
+
+            addedEmailId = idKey.getKey().intValue();
+
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
-
         return addedEmailId;
     }
 
     @Override
-    public List<Email> getAllEmailsByContactId(int id) throws DalException {
-        List<Email> list = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement getAllEmailsByContactIdStmt = null;
-
+    public List<Email> getAllEmailsByContactId(final int id) throws DalException {
+        List<Email> listOfEmails = new ArrayList<>();
         try {
-            try {
-                con = this.connectionProvider.createConnection();
-                try {
-                    getAllEmailsByContactIdStmt = con.prepareStatement("SELECT * FROM Emails WHERE fContactId= ?");
-                    getAllEmailsByContactIdStmt.setInt(1, id);
-                    ResultSet rs = getAllEmailsByContactIdStmt.executeQuery();
-                    while (rs.next()) {
-                        Email email = new Email();
-                        email.setId(rs.getInt(1));
-                        email.setAddress(rs.getString(2));
-                        byte categoryValue = rs.getByte(3);
-                        email.setCategory(Email.Category.forValue(categoryValue));
-                        email.setfContactId(rs.getInt(4));
-                        list.add(email);
-                    }
-                } finally {
-                    if (getAllEmailsByContactIdStmt != null) {
-                        getAllEmailsByContactIdStmt.close();
-                    }
-                }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
+            listOfEmails = jdbcTemplate.query(new PreparedStatementCreator() {
 
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException getAllEmailsByContactError = new DalException(ex);
-            throw getAllEmailsByContactError;
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement getAllEmailsByContactIdPreparedStatement = connection.prepareStatement("SELECT * FROM Emails WHERE fContactId=?");
+                    getAllEmailsByContactIdPreparedStatement.setInt(1, id);
+                    return getAllEmailsByContactIdPreparedStatement;
+                }
+            }, new EmailMapper());
+        } catch (DataAccessException ex) {
+            System.out.println(ex.getMessage());
+            throw new DalException();
         }
 
-        return list;
+        return listOfEmails;
     }
 
     @Override
-    public void deleteEmailById(int id) {
-        Connection con = null;
-        PreparedStatement deleteEmailStmt = null;
+    public void deleteEmailById(final int id) throws DalException {
         try {
-            try {
-                con = this.connectionProvider.createConnection();
+            jdbcTemplate.update(new PreparedStatementCreator() {
 
-                try {
-                    deleteEmailStmt = con.prepareStatement("DELETE FROM Emails WHERE Id = ?");
-                    deleteEmailStmt.setInt(1, id);
-                    deleteEmailStmt.execute();
-                } finally {
-                    if (deleteEmailStmt != null) {
-                        deleteEmailStmt.close();
-                    }
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement deleteEmailByIdPreparedStatement = connection.prepareStatement("DELETE FROM Emails WHERE Id=?");
+                    deleteEmailByIdPreparedStatement.setInt(1, id);
+
+                    return deleteEmailByIdPreparedStatement;
                 }
-            } finally {
-                if (con != null) {
-                    con.close();
-                }
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            DalException deleteEmailException = new DalException(ex);
-            //throw deleteEmailException;
+            });
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
     }
 
-    //Fixed
     @Override
-    public boolean checkIfEmailExists(Email email) {
-        Connection connection = null;
-        PreparedStatement checkIfEmailExistsStmt = null;
-        boolean result = false;
+    public boolean checkIfEmailExists(Email email) throws DalException {
+        boolean emailExists = false;
 
         try {
-            try {
-                connection = this.connectionProvider.createConnection();
-
-                try {
-                    checkIfEmailExistsStmt = connection.prepareStatement("SELECT EXISTS(SELECT * FROM Emails WHERE Address=?);");
-                    checkIfEmailExistsStmt.setString(1, email.getAddress());
-
-                    ResultSet rs = checkIfEmailExistsStmt.executeQuery();
-                    rs.next();
-
-                    result = (rs.getInt(1) == 1);
-                    return result;
-                } finally {
-                    if (checkIfEmailExistsStmt != null) {
-                        checkIfEmailExistsStmt.close();
-                    }
-                }
-            } finally {
-                if (connection != null) {
-                    connection.close();
-                }
-            }
-
-        } catch (Exception ex) {
+            int retrievedRows = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Emails WHERE Address=?", Integer.class, email.getAddress());
+            emailExists = (retrievedRows == 1);
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
         }
-        return result;
+        return emailExists;
+
     }
 
+    private static final class ContactMapper implements RowMapper<Contact> {
+
+        @Override
+        public Contact mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Contact contact = new Contact();
+            contact.setFullName(rs.getString("FullName"));
+            contact.setNickname(rs.getString("Nickname"));
+            contact.setNotes(rs.getString("Notes"));
+
+            return contact;
+        }
+    }
+
+    private static final class EmailMapper implements RowMapper<Email> {
+
+        @Override
+        public Email mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Email email = new Email();
+            email.setId(rs.getInt(1));
+            email.setAddress(rs.getString(2));
+            byte categoryValue = rs.getByte(3);
+            email.setCategory(Email.Category.forValue(categoryValue));
+            email.setfContactId(rs.getInt(4));
+
+            return email;
+        }
+    }
+
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 }
