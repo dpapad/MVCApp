@@ -12,122 +12,70 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
-import org.mypackage.dal.sql.SqlConnectionProvider;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author dev-dp
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring-config.xml")
+
 public class MySqlContactRepositoryTest {
 
-    private SqlConnectionProvider connectionProvider;
-    private MysqlContactRepository contactRepository;
-
-    public MySqlContactRepositoryTest() {
-        this.connectionProvider = new H2SqlConnectionProvider();
-        this.contactRepository = new MysqlContactRepository(this.connectionProvider);
-    }
+    @Autowired
+    private JdbcTemplate testJdbcTemplate;
+    @Autowired
+    private ContactRepository testContactRepository;
 
     @Before
     public void setUp() throws SQLException, ClassNotFoundException {
-        Connection connection = null;
+        testJdbcTemplate.execute("CREATE TABLE Contact ("
+                + "Id INT PRIMARY KEY AUTO_INCREMENT, "
+                + "FullName VARCHAR(45), "
+                + "Nickname VARCHAR(45), "
+                + "Notes VARCHAR(45) "
+                + ");");
 
-        PreparedStatement createContactTableStmt = null;
-        PreparedStatement createEmailsTableStmt = null;
-
-        try {
-            connection = this.connectionProvider.createConnection();
-
-            try {
-                createContactTableStmt = connection.prepareStatement("CREATE TABLE Contact ("
-                        + "Id INT PRIMARY KEY AUTO_INCREMENT, "
-                        + "FullName VARCHAR(45), "
-                        + "Nickname VARCHAR(45), "
-                        + "Notes VARCHAR(45) "
-                        + ");");
-                createContactTableStmt.execute();
-            } finally {
-                if (createContactTableStmt != null) {
-                    createContactTableStmt.close();
-                }
-            }
-
-            try {
-                createEmailsTableStmt = connection.prepareStatement("CREATE TABLE Emails ("
-                        + "Id INT PRIMARY KEY AUTO_INCREMENT, "
-                        + "Address VARCHAR(150) UNIQUE, "
-                        + "Category TINYINT, "
-                        + "fContactId INT, "
-                        + "FOREIGN KEY (fContactId) "
-                        + "REFERENCES Contact (Id) "
-                        + "ON UPDATE CASCADE); ");
-                createEmailsTableStmt.execute();
-            } finally {
-                if (createEmailsTableStmt != null) {
-                    createEmailsTableStmt.close();
-                }
-            }
-
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        testJdbcTemplate.execute("CREATE TABLE Emails ("
+                + "Id INT PRIMARY KEY AUTO_INCREMENT, "
+                + "Address VARCHAR(150) UNIQUE, "
+                + "Category TINYINT, "
+                + "fContactId INT, "
+                + "FOREIGN KEY (fContactId) "
+                + "REFERENCES Contact (Id) "
+                + "ON UPDATE CASCADE); ");
     }
 
     @After
     public void tearDown() throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-
-        PreparedStatement dropEmailsTableStmt = null;
-        PreparedStatement dropContactTableStmt = null;
-
-        try {
-
-            connection = this.connectionProvider.createConnection();
-
-            try {
-                dropEmailsTableStmt = connection.prepareStatement("DROP TABLE Emails;");
-                dropEmailsTableStmt.execute();
-
-            } finally {
-                if (dropEmailsTableStmt != null) {
-                    dropEmailsTableStmt.close();
-                }
-            }
-
-            try {
-                dropContactTableStmt = connection.prepareStatement("DROP TABLE Contact;");
-                dropContactTableStmt.execute();
-            } finally {
-                if (dropContactTableStmt != null) {
-                    dropContactTableStmt.close();
-                }
-            }
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        testJdbcTemplate.execute("DROP TABLE Emails;");
+        testJdbcTemplate.execute("DROP TABLE Contact;");
     }
 
-    @Test
-    public void testConnection() throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-
-        try {
-            connection = connectionProvider.createConnection();
-            assertNotNull(connection);
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-    }
-
+//    @Test
+//    public void testConnection() throws ClassNotFoundException, SQLException {
+//        Connection connection = null;
+//
+//        try {
+//            connection = connectionProvider.createConnection();
+//            assertNotNull(connection);
+//        } finally {
+//            if (connection != null) {
+//                connection.close();
+//            }
+//        }
+//    }
     @Test
     public void testAddContact() throws Exception {
 
@@ -135,12 +83,12 @@ public class MySqlContactRepositoryTest {
         c.setFullName("xxx");
         c.setNickname("xxx");
         c.setNotes("xxx");
-        int contactId = this.contactRepository.addContact(c);
+        int contactId = this.testContactRepository.addContact(c);
         int maxContactId = this.getMaxContactId();
 
         assertEquals(contactId, maxContactId);
 
-        Contact c2 = this.contactRepository.getContactById(contactId);
+        Contact c2 = this.testContactRepository.getContactById(contactId);
 
         assertEquals(c.getFullName(), c2.getFullName());
         assertEquals(c.getNickname(), c2.getNickname());
@@ -154,22 +102,22 @@ public class MySqlContactRepositoryTest {
         c.setFullName("yyy");
         c.setNickname("yyy");
         c.setNotes("yyy");
-        this.contactRepository.addContact(c);
-        int count = this.getContactCount();
+        int expectedResult = this.testContactRepository.addContact(c);
+        int actualResult = this.getContactCount();
 
-        assertEquals(1, count);
+        assertEquals(expectedResult, actualResult);
 
     }
 
     @Test
-    public void testAddEmail() throws Exception {
+    public void testAddEmail() throws DalException {
 
         //Create a contact
         Contact c = new Contact();
         c.setFullName("asdf");
         c.setNickname("asdf");
         c.setNotes("asdf");
-        this.contactRepository.addContact(c);
+        int id = this.testContactRepository.addContact(c);
 
         // Manually inreamented list of emails
         List<Email> myEmailList = new ArrayList<>();
@@ -178,25 +126,25 @@ public class MySqlContactRepositoryTest {
         Email emailDummy = new Email();
         emailDummy.setAddress("mail1@test.com");
         emailDummy.setCategory(Email.Category.WORK);
-        emailDummy.setfContactId(1);
+        emailDummy.setfContactId(id);
 
         myEmailList.add(emailDummy);
-        this.contactRepository.addEmail(emailDummy);
+        this.testContactRepository.addEmail(emailDummy);
 
         // Create a second dummy email for testing
         Email emailDummy2 = new Email();
         emailDummy2.setAddress("mailasdf@test.com");
         emailDummy2.setCategory(Email.Category.WORK);
-        emailDummy2.setfContactId(1);
+        emailDummy2.setfContactId(id);
 
         myEmailList.add(emailDummy2);
-        int emailId = this.contactRepository.addEmail(emailDummy2);
+        int expectedResult = this.testContactRepository.addEmail(emailDummy2);
 
-        int maxEmailId = this.getMaxEmailId();
+        int actualResult = this.getMaxEmailId();
 
-        assertEquals(emailId, maxEmailId);
+        assertEquals(expectedResult, actualResult);
 
-        List<Email> retrievedEmailList = this.contactRepository.getAllEmailsByContactId(1);
+        List<Email> retrievedEmailList = this.testContactRepository.getAllEmailsByContactId(id);
 
         assertEquals(myEmailList.size(), retrievedEmailList.size());
 
@@ -227,16 +175,16 @@ public class MySqlContactRepositoryTest {
         c.setFullName("asdf");
         c.setNickname("asdf");
         c.setNotes("asdf");
-        this.contactRepository.addContact(c);
+        this.testContactRepository.addContact(c);
 
         Email e = new Email();
         e.setAddress("mail2@test.com");
         e.setCategory(Email.Category.PERSONAL);
         e.setfContactId(1);
-        this.contactRepository.addEmail(e);
-        int count = this.getEmailCount();
+        int expectedResult = this.testContactRepository.addEmail(e);
+        int actualResult = this.getEmailCount();
 
-        assertEquals(1, count);
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
@@ -247,133 +195,51 @@ public class MySqlContactRepositoryTest {
         c.setFullName("asdf");
         c.setNickname("asdf");
         c.setNotes("asdf");
-        this.contactRepository.addContact(c);
+        this.testContactRepository.addContact(c);
 
         Email e = new Email();
         e.setAddress("mail@test.com");
         e.setCategory(Email.Category.PERSONAL);
         e.setfContactId(1);
-        this.contactRepository.addEmail(e);
+        this.testContactRepository.addEmail(e);
 
-        exists = this.contactRepository.checkIfEmailExists(e);
+        exists = this.testContactRepository.checkIfEmailExists(e);
 
         assertEquals(true, exists);
 
     }
 
-    private int getMaxContactId() throws SQLException, ClassNotFoundException {
-        Connection connection = null;
-        PreparedStatement getMaxContactIdStmt = null;
-        int maxContactId;
+    private int getMaxContactId() throws DataAccessException {
 
-        try {
-            connection = this.connectionProvider.createConnection();
-            try {
-                getMaxContactIdStmt = connection.prepareStatement("SELECT MAX(Id) FROM Contact");
-                ResultSet rs = getMaxContactIdStmt.executeQuery();
+        Integer maxContactId;
 
-                rs.next();
+        maxContactId = testJdbcTemplate.queryForObject("SELECT MAX(Id) FROM Contact;", Integer.class);
 
-                maxContactId = rs.getInt(1);
+        return maxContactId.intValue();
 
-            } finally {
-                if (getMaxContactIdStmt != null) {
-                    getMaxContactIdStmt.close();
-                }
-            }
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-        return maxContactId;
     }
 
-    private int getContactCount() throws SQLException, ClassNotFoundException {
-        Connection connection = null;
-        PreparedStatement getContactCountStmt = null;
-        int contactCount;
-
-        try {
-            connection = this.connectionProvider.createConnection();
-            try {
-                getContactCountStmt = connection.prepareStatement("SELECT COUNT(*) FROM Contact");
-                ResultSet rs = getContactCountStmt.executeQuery();
-
-                rs.next();
-                contactCount = rs.getInt(1);
-
-            } finally {
-                if (getContactCountStmt != null) {
-                    getContactCountStmt.close();
-                }
-            }
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-
-        return contactCount;
+    private int getContactCount() throws DataAccessException {
+        Integer contactCount;
+        contactCount = testJdbcTemplate.queryForObject("SELECT COUNT(*) FROM Contact;", Integer.class);
+        return contactCount.intValue();
     }
 
-    private int getMaxEmailId() throws SQLException, ClassNotFoundException {
-        Connection connection = null;
-        PreparedStatement getMaxEmailIdStmt = null;
-        int maxEmailId;
+    private int getMaxEmailId() throws DataAccessException {
 
-        try {
-            connection = this.connectionProvider.createConnection();
-            try {
-                getMaxEmailIdStmt = connection.prepareStatement("SELECT MAX(Id) FROM Emails;");
-                ResultSet rs = getMaxEmailIdStmt.executeQuery();
-
-                rs.next();
-                maxEmailId = rs.getInt(1);
-            } finally {
-                if (getMaxEmailIdStmt != null) {
-                    getMaxEmailIdStmt.close();
-                }
-            }
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-
-        return maxEmailId;
+        Integer maxEmailId;
+        maxEmailId = testJdbcTemplate.queryForObject("SELECT MAX(Id) FROM Emails;", Integer.class);
+        return maxEmailId.intValue();
     }
 
-    private int getEmailCount() throws SQLException, ClassNotFoundException {
-        int emailCount;
-        Connection connection = null;
-        PreparedStatement getEmailCountStmt = null;
-
-        try {
-            connection = this.connectionProvider.createConnection();
-
-            try {
-                getEmailCountStmt = connection.prepareStatement("SELECT COUNT(*) FROM Emails;");
-                ResultSet rs = getEmailCountStmt.executeQuery();
-                rs.next();
-                emailCount = rs.getInt(1);
-            } finally {
-                if (getEmailCountStmt != null) {
-                    getEmailCountStmt.close();
-                }
-            }
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-
-        return emailCount;
+    private int getEmailCount() throws DataAccessException {
+        Integer emailCount;
+        emailCount = testJdbcTemplate.queryForObject("SELECT COUNT(*) FROM Emails;", Integer.class);
+        return emailCount.intValue();
     }
 
     private void sortEmailsById(List emailList) {
         Collections.sort(emailList, new EmailComparator());
-        //Collections.sort(emailList);        
     }
 
     class EmailComparator implements Comparator<Email> {
@@ -382,6 +248,22 @@ public class MySqlContactRepositoryTest {
         public int compare(Email e1, Email e2) {
             return e1.getId() - e2.getId();
         }
+    }
+
+    public JdbcTemplate getTestJdbcTemplate() {
+        return testJdbcTemplate;
+    }
+
+    public void setTestJdbcTemplate(JdbcTemplate testJdbcTemplate) {
+        this.testJdbcTemplate = testJdbcTemplate;
+    }
+
+    public ContactRepository getTestContactRepository() {
+        return testContactRepository;
+    }
+
+    public void setTestContactRepository(ContactRepository testContactRepository) {
+        this.testContactRepository = testContactRepository;
     }
 
 }
