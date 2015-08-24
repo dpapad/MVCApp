@@ -17,12 +17,16 @@ import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author dev-dp
  */
 public class NewContactControllerImplTest {
+    
+    @Autowired
+    private AbstractContactRepositoryStub contactRepositoryStub;
 
     public NewContactControllerImplTest() {
     }
@@ -53,7 +57,7 @@ public class NewContactControllerImplTest {
     public void testAddNewContact() throws DalException, MalformedIdentifierException {
         Contact contact = new Contact(1, "John", "Doe", "asdf");
         final int expectedContactId = contact.getId();
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
+        contactRepositoryStub = new AbstractContactRepositoryStub(){
 
             @Override
             public int addContact(Contact c) throws DalException {

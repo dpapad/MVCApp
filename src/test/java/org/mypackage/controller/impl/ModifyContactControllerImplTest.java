@@ -17,12 +17,16 @@ import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author dev-dp
  */
 public class ModifyContactControllerImplTest {
+
+    @Autowired
+    private AbstractContactRepositoryStub contactRepositoryStub;
 
     public ModifyContactControllerImplTest() {
     }
@@ -54,7 +58,7 @@ public class ModifyContactControllerImplTest {
 
         final Contact expectedContact = new Contact(1, "Joe", "Doe", "asdf");
 
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public void updateContact(Contact c) throws DalException {
@@ -80,10 +84,10 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = MalformedIdentifierException.class)
     public void testFailToModifyContactBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        contactRepositoryStub = new AbstractContactRepositoryStub() {
         };
         ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
-        
+
         controller.modifyContact("asd", null, null, null);
     }
 
@@ -94,19 +98,19 @@ public class ModifyContactControllerImplTest {
      * @throws MalformedIdentifierException
      */
     @Test(expected = DalException.class)
-    public void testFailToModifyContactBecauseOfDalError() throws DalException, MalformedIdentifierException{
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
+    public void testFailToModifyContactBecauseOfDalError() throws DalException, MalformedIdentifierException {
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public void updateContact(Contact c) throws DalException {
                 throw new DalException();
-            }           
+            }
         };
-        
+
         ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
         controller.modifyContact("1", null, null, null);
     }
-    
+
     /**
      * Test of retrieveContact method, of class ModifyContactControllerImpl.
      *
@@ -130,7 +134,7 @@ public class ModifyContactControllerImplTest {
 
         assertEquals(expectedContact, actualContact);
     }
-    
+
     /**
      * Test of retrieveContact method, of class ModifyContactControllerImpl.
      *
@@ -139,12 +143,13 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = MalformedIdentifierException.class)
     public void testFailToRetrieveContactBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){};
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        };
         ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
-        
+
         controller.retrieveContact("asdf");
     }
-    
+
     /**
      * Test of retrieveContact method, of class ModifyContactControllerImpl.
      *
@@ -153,14 +158,14 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = DalException.class)
     public void testFailToRetrieveContactBecauseOfDalError() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
+        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public Contact getContactById(int id) throws DalException {
                 throw new DalException();
-            }            
+            }
         };
-        
+
         ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
         controller.retrieveContact("1");
     }

@@ -16,15 +16,18 @@ import static org.junit.Assert.*;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
-import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author dev-dp
  */
 public class DeleteEmailControllerImplTest {
+
+    @Autowired
+    private AbstractContactRepositoryStub contactRepositoryStub;
 
     public DeleteEmailControllerImplTest() {
     }
@@ -57,7 +60,7 @@ public class DeleteEmailControllerImplTest {
         int expectedNumberOfEmails = 0;
         final List<Email> emailList = new ArrayList<>();
 
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public void deleteEmailById(int id) throws DalException {
@@ -67,8 +70,8 @@ public class DeleteEmailControllerImplTest {
 
         DeleteEmailController controller = new DeleteEmailControllerImpl(contactRepositoryStub);
 
-       emailList.add(new Email(1, "test@mail.asdf", Email.Category.PERSONAL, 1));
-        
+        emailList.add(new Email(1, "test@mail.asdf", Email.Category.PERSONAL, 1));
+
         controller.deleteEmail("1");
         int actualNumberOfEmails = emailList.size();
 
@@ -83,12 +86,12 @@ public class DeleteEmailControllerImplTest {
      */
     @Test(expected = MalformedIdentifierException.class)
     public void testFailDeleteEmailBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        contactRepositoryStub = new AbstractContactRepositoryStub() {
         };
         DeleteEmailController controller = new DeleteEmailControllerImpl(contactRepositoryStub);
         controller.deleteEmail("1asd");
     }
-    
+
     /**
      * Test of deleteEmail method, of class DeleteEmailControllerImpl.
      *
@@ -97,14 +100,14 @@ public class DeleteEmailControllerImplTest {
      */
     @Test(expected = DalException.class)
     public void testFailDeleteEmailBecauseOfDalError() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
+        contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public void deleteEmailById(int id) throws DalException {
                 throw new DalException();
-            }            
+            }
         };
-        
+
         DeleteEmailController controller = new DeleteEmailControllerImpl(contactRepositoryStub);
         controller.deleteEmail("1");
     }

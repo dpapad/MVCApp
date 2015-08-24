@@ -19,12 +19,16 @@ import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author dev-dp
  */
 public class NewEmailControllerImplTest {
+    
+    @Autowired
+    private AbstractContactRepositoryStub contactRepositoryStub;
 
     public NewEmailControllerImplTest() {
     }
@@ -58,7 +62,7 @@ public class NewEmailControllerImplTest {
 
         Email email = new Email(1, "test@mail.com", Email.Category.PERSONAL, 1);
         final int expectedContactId = email.getfContactId();
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        contactRepositoryStub = new AbstractContactRepositoryStub() {
 
             @Override
             public int addEmail(Email e) throws DalException {

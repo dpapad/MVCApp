@@ -17,7 +17,6 @@ import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
-import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
