@@ -26,5 +26,5 @@ public interface ContactRepository {
 
     void deleteEmailById(int id) throws DalException;
 
-    boolean checkIfEmailExists(Email e);
+    boolean checkIfEmailExists(Email e) throws DalException;
 }
