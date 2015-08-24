@@ -31,5 +31,5 @@
     <!--Transaction Manager-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"></bean>
     <!--Turn ON annotation based transaction-->
-    <tx:annotation-driven transaction-manager="transactionManager">
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
