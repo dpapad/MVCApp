@@ -7,6 +7,7 @@ import java.util.List;
  *
  * @author dpa
  */
+
 public class Contact {
 
     private int id;
