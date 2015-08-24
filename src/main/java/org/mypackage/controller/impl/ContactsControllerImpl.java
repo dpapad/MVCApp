@@ -6,7 +6,6 @@
 package org.mypackage.controller.impl;
 
 import java.util.List;
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
@@ -14,19 +13,20 @@ import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dev-dp
  */
+@Component
 public class ContactsControllerImpl implements ContactsController {
 
+    @Autowired
     private ContactRepository contactRepository;
 
-    public ContactsControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
-    }
-
+    @Autowired
     public ContactsControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
