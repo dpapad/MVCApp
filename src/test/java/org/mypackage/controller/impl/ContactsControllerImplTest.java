@@ -7,13 +7,8 @@ package org.mypackage.controller.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
@@ -21,40 +16,16 @@ import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author dev-dp
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:spring-config.xml")
 public class ContactsControllerImplTest {
     
-    @Autowired
-    AbstractContactRepositoryStub contactRepositoryStub;
+    
+    private AbstractContactRepositoryStub contactRepositoryStub;
 
-    public ContactsControllerImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-        
-    }
-
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of retrieveAllContacts method, of class ContactsControllerImpl.
@@ -63,6 +34,8 @@ public class ContactsControllerImplTest {
      */
     @Test
     public void testRetrieveAllContacts() throws DalException {
+        
+        
         final List<Contact> expectedContacts = new ArrayList();
         expectedContacts.add(new Contact(1, "John Doe", null, null));
         contactRepositoryStub = new AbstractContactRepositoryStub() {
