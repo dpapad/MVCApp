@@ -59,19 +59,6 @@ public class MySqlContactRepositoryTest {
         testJdbcTemplate.execute("DROP TABLE Contact;");
     }
 
-//    @Test
-//    public void testConnection() throws ClassNotFoundException, SQLException {
-//        Connection connection = null;
-//
-//        try {
-//            connection = connectionProvider.createConnection();
-//            assertNotNull(connection);
-//        } finally {
-//            if (connection != null) {
-//                connection.close();
-//            }
-//        }
-//    }
     @Test
     public void testAddContact() throws Exception {
 
