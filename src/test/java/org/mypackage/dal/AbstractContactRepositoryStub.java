@@ -3,11 +3,14 @@ package org.mypackage.dal;
 import java.util.List;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Nikolaos Nakas <nn@eworx.gr>
  */
+
+@Component
 public class AbstractContactRepositoryStub implements ContactRepository {
 
     @Override
