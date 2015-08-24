@@ -5,7 +5,6 @@
  */
 package org.mypackage.controller.impl;
 
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ModifyContactController;
 import org.mypackage.dal.ContactRepository;
