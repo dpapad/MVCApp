@@ -5,7 +5,6 @@
  */
 package org.mypackage.controller.impl;
 
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.DuplicateEmailException;
 import org.mypackage.application.errors.MalformedCategoryException;
 import org.mypackage.application.errors.MalformedIdentifierException;
@@ -13,19 +12,22 @@ import org.mypackage.controller.NewEmailController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dev-dp
  */
+@Component
 public class NewEmailControllerImpl implements NewEmailController {
-
+    @Autowired
     private ContactRepository contactRepository;
 
     public NewEmailControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
+        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
-
+    @Autowired
     public NewEmailControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }

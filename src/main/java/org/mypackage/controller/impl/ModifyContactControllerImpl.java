@@ -11,19 +11,22 @@ import org.mypackage.controller.ModifyContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dev-dp
  */
+@Component
 public class ModifyContactControllerImpl implements ModifyContactController {
-
+    @Autowired
     private ContactRepository contactRepository;
 
     public ModifyContactControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
+        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
-
+    @Autowired
     public ModifyContactControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }

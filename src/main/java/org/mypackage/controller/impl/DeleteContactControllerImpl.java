@@ -5,27 +5,29 @@
  */
 package org.mypackage.controller.impl;
 
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author dev-dp
  */
+
 public class DeleteContactControllerImpl implements DeleteContactController {
 
+    @Autowired
     private ContactRepository contactRepository;
-
-    public DeleteContactControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
+    public DeleteContactControllerImpl(){ 
+        
     }
-
+    @Autowired
     public DeleteContactControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
+    
 
     @Override
     public void deleteContact(String contactId) throws MalformedIdentifierException, DalException {

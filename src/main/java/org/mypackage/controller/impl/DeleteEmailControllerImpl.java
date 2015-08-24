@@ -5,24 +5,27 @@
  */
 package org.mypackage.controller.impl;
 
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dev-dp
  */
+@Component
 public class DeleteEmailControllerImpl implements DeleteEmailController {
 
+    @Autowired
     private ContactRepository contactRepository;
 
     public DeleteEmailControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
+        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
-
+    @Autowired
     public DeleteEmailControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }

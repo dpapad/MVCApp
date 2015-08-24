@@ -5,24 +5,26 @@
  */
 package org.mypackage.controller.impl;
 
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.controller.NewContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dev-dp
  */
+@Component
 public class NewContactControllerImpl implements NewContactController {
-
+    @Autowired
     private ContactRepository contactRepository;
 
     public NewContactControllerImpl() {
-        this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
+        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
-
+    @Autowired
     public NewContactControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }

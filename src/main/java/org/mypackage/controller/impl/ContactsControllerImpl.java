@@ -25,7 +25,11 @@ public class ContactsControllerImpl implements ContactsController {
 
     @Autowired
     private ContactRepository contactRepository;
-
+    
+    public ContactsControllerImpl() {
+        
+    }
+    
     @Autowired
     public ContactsControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
