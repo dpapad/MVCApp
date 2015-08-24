@@ -13,17 +13,22 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author dev-dp
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring-config.xml")
 public class DeleteContactControllerImplTest {
 
     @Autowired
