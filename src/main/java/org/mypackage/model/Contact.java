@@ -2,12 +2,13 @@ package org.mypackage.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dpa
  */
-
+@Component
 public class Contact {
 
     private int id;

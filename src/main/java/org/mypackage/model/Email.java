@@ -1,10 +1,12 @@
 package org.mypackage.model;
 
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author dpa
  */
-
+@Component
 public class Email {
 
     public static enum Category {
