@@ -7,18 +7,19 @@ package org.mypackage.controller.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
-import org.mypackage.dal.AbstractContactRepositoryStub;
+import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -26,26 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class DeleteContactControllerImplTest {
 
-    @Autowired
-    private AbstractContactRepositoryStub contactRepositoryStub;
-
-    public DeleteContactControllerImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    @Mock
+    private ContactRepository mockContactRepository;
 
     @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+    public void setUp() throws Exception {
+        initMocks(this);
     }
 
     /**
@@ -56,22 +43,17 @@ public class DeleteContactControllerImplTest {
      */
     @Test
     public void testDeleteContact() throws DalException, MalformedIdentifierException {
-        final int expectedNumberOfContacts = 0;
-        final List<Contact> contactsList = new ArrayList<>();
-        contactRepositoryStub = new AbstractContactRepositoryStub() {
-            @Override
-            public void deleteContactById(int i) throws DalException {
-                contactsList.remove(0);
-            }
-        };
+        final int expectedNumberOfContactsDeleted = 0;
+        when(mockContactRepository.deleteContactById(1)).thenReturn(0);
 
-        DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
-        contactsList.add(new Contact(1, null, null, null));
+        DeleteContactController controller = new DeleteContactControllerImpl(mockContactRepository);
 
         controller.deleteContact("1");
+        
+        final List<Contact> contactsList = new ArrayList<>();
         int actualNumberOfContacts = contactsList.size();
 
-        assertEquals(expectedNumberOfContacts, actualNumberOfContacts);
+        assertEquals(expectedNumberOfContactsDeleted, actualNumberOfContacts);
     }
 
     /**
@@ -82,8 +64,7 @@ public class DeleteContactControllerImplTest {
      */
     @Test(expected = MalformedIdentifierException.class)
     public void testFailDeleteContactBecauseOfMalformedId() throws MalformedIdentifierException, DalException {
-        contactRepositoryStub = new AbstractContactRepositoryStub();
-        DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
+        DeleteContactController controller = new DeleteContactControllerImpl(mockContactRepository);
         String contactId = "1s";
         controller.deleteContact(contactId);
     }
@@ -96,15 +77,9 @@ public class DeleteContactControllerImplTest {
      */
     @Test(expected = DalException.class)
     public void testFailDeleteContactBecauseOfDalError() throws MalformedIdentifierException, DalException {
-        contactRepositoryStub = new AbstractContactRepositoryStub() {
+        doThrow(new DalException()).when(mockContactRepository).deleteContactById(1);
 
-            @Override
-            public void deleteContactById(int i) throws DalException {
-                throw new DalException();
-            }
-        };
-
-        DeleteContactController controller = new DeleteContactControllerImpl(contactRepositoryStub);
+        DeleteContactController controller = new DeleteContactControllerImpl(mockContactRepository);
         controller.deleteContact("1");
     }
 

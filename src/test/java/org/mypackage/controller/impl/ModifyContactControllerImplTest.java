@@ -5,19 +5,18 @@
  */
 package org.mypackage.controller.impl;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.ModifyContactController;
-import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -25,26 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ModifyContactControllerImplTest {
 
-    @Autowired
-    private AbstractContactRepositoryStub contactRepositoryStub;
-
-    public ModifyContactControllerImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    @Mock
+    ContactRepository mockContactRepository;
 
     @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+    public void setUp() throws Exception {
+        initMocks(this);
     }
 
     /**
@@ -58,15 +43,8 @@ public class ModifyContactControllerImplTest {
 
         final Contact expectedContact = new Contact(1, "Joe", "Doe", "asdf");
 
-        contactRepositoryStub = new AbstractContactRepositoryStub() {
 
-            @Override
-            public void updateContact(Contact c) throws DalException {
-                //return expectedContact;
-            }
-        };
-
-        ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
+        ModifyContactController controller = new ModifyContactControllerImpl(mockContactRepository);
 
         Contact actualContact = controller.modifyContact("1", "Joe", "Doe", "asdf");
 
@@ -84,10 +62,7 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = MalformedIdentifierException.class)
     public void testFailToModifyContactBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
-        contactRepositoryStub = new AbstractContactRepositoryStub() {
-        };
-        ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
-
+        ModifyContactController controller = new ModifyContactControllerImpl(mockContactRepository);
         controller.modifyContact("asd", null, null, null);
     }
 
@@ -99,16 +74,10 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = DalException.class)
     public void testFailToModifyContactBecauseOfDalError() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        when(mockContactRepository.updateContact(any(Contact.class))).thenThrow(new DalException());
 
-            @Override
-            public void updateContact(Contact c) throws DalException {
-                throw new DalException();
-            }
-        };
-
-        ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
-        controller.modifyContact("1", null, null, null);
+        ModifyContactController controller = new ModifyContactControllerImpl(mockContactRepository);
+        controller.modifyContact("1", "John", "Doe", "asdf");
     }
 
     /**
@@ -121,14 +90,9 @@ public class ModifyContactControllerImplTest {
     public void testRetrieveContact() throws DalException, MalformedIdentifierException {
         final Contact expectedContact = new Contact(1, "Joe Doe", "asdf", "asdfasdf");
 
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
+        when(mockContactRepository.getContactById(1)).thenReturn(expectedContact);
 
-            @Override
-            public Contact getContactById(int id) throws DalException {
-                return expectedContact;
-            }
-        };
-        ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
+        ModifyContactController controller = new ModifyContactControllerImpl(mockContactRepository);
 
         Contact actualContact = controller.retrieveContact("1");
 
@@ -143,9 +107,7 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = MalformedIdentifierException.class)
     public void testFailToRetrieveContactBecauseOfMalformedId() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
-        };
-        ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
+        ModifyContactController controller = new ModifyContactControllerImpl(mockContactRepository);
 
         controller.retrieveContact("asdf");
     }
@@ -158,15 +120,10 @@ public class ModifyContactControllerImplTest {
      */
     @Test(expected = DalException.class)
     public void testFailToRetrieveContactBecauseOfDalError() throws DalException, MalformedIdentifierException {
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub() {
 
-            @Override
-            public Contact getContactById(int id) throws DalException {
-                throw new DalException();
-            }
-        };
+        when(mockContactRepository.getContactById(1)).thenThrow(new DalException());
 
-        ModifyContactController controller = new ModifyContactControllerImpl(contactRepositoryStub);
+        ModifyContactController controller = new ModifyContactControllerImpl(mockContactRepository);
         controller.retrieveContact("1");
     }
 

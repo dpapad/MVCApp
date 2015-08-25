@@ -5,89 +5,66 @@
  */
 package org.mypackage.controller.impl;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.NewContactController;
-import org.mypackage.dal.AbstractContactRepositoryStub;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author dev-dp
  */
 public class NewContactControllerImplTest {
-    
-    @Autowired
-    private AbstractContactRepositoryStub contactRepositoryStub;
 
-    public NewContactControllerImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    @Mock
+    ContactRepository mockContactRepository;
 
     @Before
     public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+        initMocks(this);
     }
 
     /**
      * Test of addNewContact method, of class NewContactControllerImpl.
-     * 
+     *
      * @throws DalException
      * @throws MalformedIdentifierException
      */
     @Test
     public void testAddNewContact() throws DalException, MalformedIdentifierException {
         Contact contact = new Contact(1, "John", "Doe", "asdf");
-        final int expectedContactId = contact.getId();
-        contactRepositoryStub = new AbstractContactRepositoryStub(){
+        final int expectedContactId = 0;
 
-            @Override
-            public int addContact(Contact c) throws DalException {
-                return expectedContactId;
-            }            
-        };
-        
-        NewContactController controller = new NewContactControllerImpl(contactRepositoryStub);
-        
+        when(mockContactRepository.addContact(contact)).thenReturn(0);
+
+        NewContactController controller = new NewContactControllerImpl(mockContactRepository);
+
         int actualContactId = controller.addNewContact("Test", "Contact", "test for NewContactController");
+        
 
         assertEquals(expectedContactId, actualContactId);
     }
-    
+
     /**
      * Test of addNewContact method, of class NewContactControllerImpl.
-     * 
+     *
      * @throws DalException
-     * 
+     *
      */
     @Test(expected = DalException.class)
-    public void testFailToAddNewContactBecauseOfDalError() throws DalException{
-        ContactRepository contactRepositoryStub = new AbstractContactRepositoryStub(){
+    public void testFailToAddNewContactBecauseOfDalError() throws DalException {
 
-            @Override
-            public int addContact(Contact c) throws DalException {
-                throw new DalException();
-            }        
-        };
-        NewContactController controller = new NewContactControllerImpl(contactRepositoryStub);
+        when(mockContactRepository.addContact(any(Contact.class))).thenThrow(new DalException());
+
+        NewContactController controller = new NewContactControllerImpl(mockContactRepository);
         controller.addNewContact("Joe", "Doe", null);
     }
 
