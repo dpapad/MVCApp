@@ -14,22 +14,30 @@ import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author dev-dp
  */
-@Component
+@Service
 public class ContactsControllerImpl implements ContactsController {
 
     @Autowired
     private ContactRepository contactRepository;
-    
-    public ContactsControllerImpl() {
-        
+
+    public ContactRepository getContactRepository() {
+        return contactRepository;
     }
-    
+
+    public void setContactRepository(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
+    }
+
+    public ContactsControllerImpl() {
+
+    }
+
     @Autowired
     public ContactsControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
