@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring-config.xml")
-
 public class MySqlContactRepositoryTest {
 
     @Autowired
@@ -232,21 +231,4 @@ public class MySqlContactRepositoryTest {
             return e1.getId() - e2.getId();
         }
     }
-
-    public JdbcTemplate getTestJdbcTemplate() {
-        return testJdbcTemplate;
-    }
-
-    public void setTestJdbcTemplate(JdbcTemplate testJdbcTemplate) {
-        this.testJdbcTemplate = testJdbcTemplate;
-    }
-
-    public ContactRepository getTestContactRepository() {
-        return testContactRepository;
-    }
-
-    public void setTestContactRepository(ContactRepository testContactRepository) {
-        this.testContactRepository = testContactRepository;
-    }
-
 }
