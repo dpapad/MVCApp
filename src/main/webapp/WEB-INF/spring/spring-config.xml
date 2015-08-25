@@ -30,7 +30,9 @@
     </bean>
     
     <!--Transaction Manager-->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"></bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
     <!--Turn ON annotation based transaction-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
