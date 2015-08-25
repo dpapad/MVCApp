@@ -64,11 +64,14 @@ public class MysqlContactRepository implements ContactRepository {
 
     @Override
     @Transactional
-    public void deleteContactById(final int id) throws DalException {
+    public int deleteContactById(final int id) throws DalException {
 
+        int totalAffectedRows;
+        int contactRowsDeleted;
+        int emailRowsDeleted;
         try {
             // Delete the emails first
-            jdbcTemplate.update(new PreparedStatementCreator() {
+            emailRowsDeleted = jdbcTemplate.update(new PreparedStatementCreator() {
 
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -78,7 +81,7 @@ public class MysqlContactRepository implements ContactRepository {
                 }
             });
             // Then, delete the contact
-            jdbcTemplate.update(new PreparedStatementCreator() {
+            contactRowsDeleted = jdbcTemplate.update(new PreparedStatementCreator() {
 
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -90,12 +93,16 @@ public class MysqlContactRepository implements ContactRepository {
         } catch (DataAccessException ex) {
             throw new DalException(ex);
         }
+        totalAffectedRows = emailRowsDeleted + contactRowsDeleted;
+        
+        return totalAffectedRows;
     }
 
     @Override
-    public void updateContact(final Contact contact) throws DalException {
+    public int updateContact(final Contact contact) throws DalException {
+        int updatedContactRows;
         try {
-            jdbcTemplate.update(new PreparedStatementCreator() {
+            updatedContactRows = jdbcTemplate.update(new PreparedStatementCreator() {
 
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -111,6 +118,7 @@ public class MysqlContactRepository implements ContactRepository {
         } catch (DataAccessException ex) {
             throw new DalException(ex);
         }
+        return updatedContactRows;
     }
 
     @Override
@@ -192,9 +200,10 @@ public class MysqlContactRepository implements ContactRepository {
     }
 
     @Override
-    public void deleteEmailById(final int id) throws DalException {
+    public int deleteEmailById(final int id) throws DalException {
+        int deletedEmailRows;
         try {
-            jdbcTemplate.update(new PreparedStatementCreator() {
+            deletedEmailRows = jdbcTemplate.update(new PreparedStatementCreator() {
 
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -207,6 +216,7 @@ public class MysqlContactRepository implements ContactRepository {
         } catch (DataAccessException ex) {
             throw new DalException(ex);
         }
+        return deletedEmailRows;
     }
 
     @Override

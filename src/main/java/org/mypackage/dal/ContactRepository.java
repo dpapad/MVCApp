@@ -12,9 +12,9 @@ public interface ContactRepository {
 
     int addContact(Contact c) throws DalException;
 
-    void deleteContactById(int i) throws DalException;
+    int deleteContactById(int i) throws DalException;
 
-    void updateContact(Contact c) throws DalException;
+    int updateContact(Contact c) throws DalException;
 
     Contact getContactById(int id) throws DalException;
 
@@ -24,7 +24,7 @@ public interface ContactRepository {
 
     List<Email> getAllEmailsByContactId(int id) throws DalException;
 
-    void deleteEmailById(int id) throws DalException;
+    int deleteEmailById(int id) throws DalException;
 
     boolean checkIfEmailExists(Email e) throws DalException;
 }
