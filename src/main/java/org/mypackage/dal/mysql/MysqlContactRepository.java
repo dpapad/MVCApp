@@ -46,7 +46,7 @@ public class MysqlContactRepository implements ContactRepository {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 
-                    PreparedStatement addContactStmt = connection.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)");
+                    PreparedStatement addContactStmt = connection.prepareStatement("INSERT INTO Contact (FullName, Nickname, Notes) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     addContactStmt.setString(1, contact.getFullName());
                     addContactStmt.setString(2, contact.getNickname());
                     addContactStmt.setString(3, contact.getNotes());
@@ -106,7 +106,7 @@ public class MysqlContactRepository implements ContactRepository {
 
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=?, WHERE Id=?");
+                    PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
                     updateContactStatement.setString(1, contact.getFullName());
                     updateContactStatement.setString(2, contact.getNickname());
                     updateContactStatement.setString(3, contact.getNotes());
