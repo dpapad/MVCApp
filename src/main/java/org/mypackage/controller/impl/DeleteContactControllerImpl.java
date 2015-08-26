@@ -10,37 +10,38 @@ import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dev-dp
  */
-
+@Component
 public class DeleteContactControllerImpl implements DeleteContactController {
 
     @Autowired
     private ContactRepository contactRepository;
-    public DeleteContactControllerImpl(){ 
-        
+
+    public DeleteContactControllerImpl() {
+
     }
+
     @Autowired
     public DeleteContactControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
-    
 
     @Override
     public void deleteContact(String contactId) throws MalformedIdentifierException, DalException {
         int id;
-        
+
         try {
             id = Integer.parseInt(contactId);
-        }
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             throw new MalformedIdentifierException(contactId, ex);
         }
-        
+
         this.contactRepository.deleteContactById(id);
-        
+
     }
 }
