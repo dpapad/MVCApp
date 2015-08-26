@@ -94,7 +94,7 @@ public class MysqlContactRepository implements ContactRepository {
             throw new DalException(ex);
         }
         totalAffectedRows = emailRowsDeleted + contactRowsDeleted;
-        
+
         return totalAffectedRows;
     }
 
@@ -238,6 +238,7 @@ public class MysqlContactRepository implements ContactRepository {
         @Override
         public Contact mapRow(ResultSet rs, int rowNum) throws SQLException {
             Contact contact = new Contact();
+            contact.setId(rs.getInt("Id"));
             contact.setFullName(rs.getString("FullName"));
             contact.setNickname(rs.getString("Nickname"));
             contact.setNotes(rs.getString("Notes"));
