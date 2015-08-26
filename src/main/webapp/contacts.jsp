@@ -12,7 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My contact list demo</title>
-        
+
         <%@include file="jsp_includes/head.jsp"%>
     </head>
     <body>
@@ -33,7 +33,7 @@
                             <td style="border: none;">                                
                                 <a href="<c:url value="/contacts/${contact.id}"/>">View</a>
                                 <a href="<c:url value="/modifyContact?contactId=${contact.id}" />">Modify</a>
-                                <a href="<c:url value="/deleteContact?contactId=${contact.id}" />">Delete</a>
+                                <a href="<c:url value="/delete/contacts/${contact.id}" />">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>
