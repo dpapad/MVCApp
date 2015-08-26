@@ -23,8 +23,8 @@ public class DeleteEmailControllerImpl implements DeleteEmailController {
     private ContactRepository contactRepository;
 
     public DeleteEmailControllerImpl() {
-        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
+
     @Autowired
     public DeleteEmailControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
@@ -39,7 +39,5 @@ public class DeleteEmailControllerImpl implements DeleteEmailController {
             throw new MalformedIdentifierException(eId, ex);
         }
         this.contactRepository.deleteEmailById(emailId);
-
     }
-
 }

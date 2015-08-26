@@ -18,12 +18,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class NewContactControllerImpl implements NewContactController {
+
     @Autowired
     private ContactRepository contactRepository;
 
     public NewContactControllerImpl() {
-        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
+
     @Autowired
     public NewContactControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
