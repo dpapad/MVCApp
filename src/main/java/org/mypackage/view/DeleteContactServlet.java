@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteContactController;
 import org.mypackage.dal.DalException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -22,10 +22,10 @@ public class DeleteContactServlet extends HttpServlet {
     private final static Logger logger = Logger.getLogger(DeleteContactServlet.class);
     private DeleteContactController deleteContactController;
 
-    public DeleteContactServlet() {
-        this(ApplicationDependencies.CONTROLLER_FACTORY.createDeleteContactController());
-    }
-
+//    public DeleteContactServlet() {
+//        this(ApplicationDependencies.CONTROLLER_FACTORY.createDeleteContactController());
+//    }
+    @Autowired
     public DeleteContactServlet(DeleteContactController deleteController) {
         this.deleteContactController = deleteController;
     }

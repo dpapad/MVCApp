@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.controller.DeleteEmailController;
 import org.mypackage.dal.DalException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -25,10 +25,10 @@ public class DeleteEmailServlet extends HttpServlet {
     private final static Logger logger = Logger.getLogger(DeleteEmailServlet.class);
     private DeleteEmailController deleteEmailController;
 
-    public DeleteEmailServlet() {
-        this(ApplicationDependencies.CONTROLLER_FACTORY.createDeleteEmailController());
-    }
-
+//    public DeleteEmailServlet() {
+//        this(ApplicationDependencies.CONTROLLER_FACTORY.createDeleteEmailController());
+//    }
+    @Autowired
     public DeleteEmailServlet(DeleteEmailController deleteEmailController) {
         this.deleteEmailController = deleteEmailController;
     }

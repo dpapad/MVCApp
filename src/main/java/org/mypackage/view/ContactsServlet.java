@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.mypackage.application.ApplicationDependencies;
 import org.mypackage.application.errors.MalformedIdentifierException;
 import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.controller.ContactsController;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -24,16 +24,15 @@ public final class ContactsServlet extends HttpServlet {
     // Create a logger for error logging
     private final static Logger logger = Logger.getLogger(ContactsServlet.class);
 
+    @Autowired
     private ContactsController contactsController;
 
-    public ContactsServlet() {
-        this(ApplicationDependencies.CONTROLLER_FACTORY.createContactsController());
-    }
-
-    public ContactsServlet(ContactsController contactsController) {
-        this.contactsController = contactsController;
-    }
-
+//    public ContactsServlet() {
+//        this(ApplicationDependencies.CONTROLLER_FACTORY.createContactsController());
+//    }
+//    public ContactsServlet(ContactsController contactsController) {
+//        this.contactsController = contactsController;
+//    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -69,4 +68,13 @@ public final class ContactsServlet extends HttpServlet {
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
     }
+
+    public ContactsController getContactsController() {
+        return contactsController;
+    }
+
+    public void setContactsController(ContactsController contactsController) {
+        this.contactsController = contactsController;
+    }
+
 }
