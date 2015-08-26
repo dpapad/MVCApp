@@ -12,14 +12,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>New Contact</title>
-        
+
         <%@include file="jsp_includes/head.jsp"%>
     </head>
     <body>
         <%@include file="jsp_includes/global_menu.jsp" %>
-        
+
         <div id="mystyle" class="myform">
-            <form id="form" name="form" action="newContact" method="post">
+            <form id="form" name="form" action="${pageContext.request.contextPath}/contacts" method="post">
                 <h1>Contact</h1>
                 <p>To add new Contact enter following information</p>
 
