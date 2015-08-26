@@ -32,8 +32,8 @@
                             <td><c:out value="${contact.fullName}" /></td>    
                             <td style="border: none;">                                
                                 <a href="<c:url value="/contacts/${contact.id}"/>">View</a>
-                                <a href="<c:url value="/modifyContact?contactId=${contact.id}" />">Modify</a>
-                                <a href="<c:url value="/delete/contacts/${contact.id}" />">Delete</a>
+                                <a href="<c:url value="/contacts/${contact.id}/modify" />">Modify</a>
+                                <a href="<c:url value="/contacts/${contact.id}/delete" />">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>
