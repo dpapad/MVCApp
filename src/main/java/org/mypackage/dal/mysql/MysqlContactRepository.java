@@ -252,11 +252,11 @@ public class MysqlContactRepository implements ContactRepository {
         @Override
         public Email mapRow(ResultSet rs, int rowNum) throws SQLException {
             Email email = new Email();
-            email.setId(rs.getInt(1));
-            email.setAddress(rs.getString(2));
-            byte categoryValue = rs.getByte(3);
+            email.setId(rs.getInt("Id"));
+            email.setAddress(rs.getString("Address"));
+            byte categoryValue = rs.getByte("Category");
             email.setCategory(Email.Category.forValue(categoryValue));
-            email.setfContactId(rs.getInt(4));
+            email.setfContactId(rs.getInt("fContactId"));
 
             return email;
         }
