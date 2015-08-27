@@ -49,15 +49,15 @@ public class NewEmailControllerImplTest {
      */
     @Test
     public void testAddNewEmail() throws DalException, MalformedIdentifierException, MalformedCategoryException, DuplicateEmailException {
-
-        Email email = new Email(1, "test@mail.com", Email.Category.PERSONAL, 1);
-        final int expectedContactId = email.getfContactId();
-        when(mockContactRepository.addEmail(email)).thenReturn(1);
+        // PROBLEM!
+        Email email = new Email();
+        final int expectedEmailId = 0;
+        when(mockContactRepository.addEmail(email)).thenReturn(expectedEmailId);
 
         NewEmailController controller = new NewEmailControllerImpl(mockContactRepository);
 
-        int actualContactId = controller.addNewEmail("test@mail.com", "1", "1");
-        assertEquals(expectedContactId, actualContactId);
+        int actualEmailId = controller.addNewEmail("test@mail.com", "1", "1");
+        assertEquals(expectedEmailId, actualEmailId);
 
     }
 
