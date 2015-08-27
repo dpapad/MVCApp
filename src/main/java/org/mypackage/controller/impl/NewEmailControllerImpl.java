@@ -21,47 +21,47 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class NewEmailControllerImpl implements NewEmailController {
+
     @Autowired
     private ContactRepository contactRepository;
 
     public NewEmailControllerImpl() {
         //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
+
     @Autowired
     public NewEmailControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
 
     @Override
-    public int addNewEmail(String address, String categoryValue, String contactId) 
+    public int addNewEmail(String address, String categoryValue, String contactId)
             throws MalformedIdentifierException, DalException, MalformedCategoryException, DuplicateEmailException {
         Email email = new Email();
         Byte category;
         email.setAddress(address);
-        
+
         try {
             category = Byte.parseByte(categoryValue);
             email.setCategory(Email.Category.forValue(category));
         } catch (NumberFormatException ex) {
             throw new MalformedCategoryException(categoryValue, ex);
-        }        
-        
+        }
+
         try {
             email.setfContactId(Integer.parseInt(contactId));
         } catch (NumberFormatException ex) {
             throw new MalformedIdentifierException(contactId, ex);
         }
-        
-
-        int passedContactId;
-
+//        int passedContactId;
+        int emailId;
         if (!(this.contactRepository.checkIfEmailExists(email))) {
-            this.contactRepository.addEmail(email);
-            passedContactId = email.getfContactId();
+            emailId = this.contactRepository.addEmail(email);
+//            passedContactId = email.getfContactId();
         } else {
             throw new DuplicateEmailException(email.getAddress());
         }
-
-        return passedContactId;
+        return emailId;
+//        return passedContactId;
     }
 }
