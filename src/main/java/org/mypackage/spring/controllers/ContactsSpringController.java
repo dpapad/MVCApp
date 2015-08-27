@@ -48,11 +48,12 @@ public class ContactsSpringController {
 
     @RequestMapping(value = "/")
     public ModelAndView index() {
-        return new ModelAndView("/contacts.jsp");
+        return getAllContacts();
+        //return new ModelAndView("/contacts.jsp");
     }
 
     // Get all Contacts    
-    // GET handler method that retrieves all contacts
+    // [handler] GET method that retrieves all contacts
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
     public ModelAndView getAllContacts() {
         ModelAndView modelAndView = new ModelAndView();
@@ -70,7 +71,7 @@ public class ContactsSpringController {
     }
 
     // Get a contact
-    // GET handler method that retrieves a specific contact, according to its ID
+    // [handler] GET method that retrieves a specific contact, according to its ID
     @RequestMapping(value = "/contacts/{id}", method = RequestMethod.GET)
     public ModelAndView getAContact(@PathVariable String id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -78,8 +79,9 @@ public class ContactsSpringController {
             Contact contact = contactsController.getContact(id);
 
             modelAndView.addObject("contact", contact);
-            List<Email> list = contactsController.retrieveAllEmails(id);
-            modelAndView.addObject("emailList", list);
+            List<Email> emailsList = contactsController.retrieveAllEmails(id);
+            modelAndView.addObject("emailList", emailsList);
+            modelAndView.addObject("contactId", id);
             modelAndView.setViewName("/viewContact.jsp");
 
         } catch (DalException ex) {
@@ -89,7 +91,7 @@ public class ContactsSpringController {
             modelAndView.setViewName("/errorPage.jsp");
         } catch (MalformedIdentifierException ex) {
             modelAndView.addObject("errorCode", HttpServletResponse.SC_BAD_REQUEST);
-            modelAndView.addObject("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            modelAndView.addObject("errorMessage", "An error occured because of a malformed id (id = " + id + "). Please use only numeric values.");
             modelAndView.setViewName("/errorPage.jsp");
         } catch (ResourceNotFoundException ex) {
             modelAndView.addObject("errorCode", HttpServletResponse.SC_NOT_FOUND);
@@ -100,7 +102,7 @@ public class ContactsSpringController {
     }
 
     // DELETE Contact handlers
-    // GET handler method that deletes a contact, according to its ID
+    // [handler] GET method that deletes a contact, according to its ID
     @RequestMapping(value = "/contacts/{id}/delete", method = RequestMethod.GET)
     public ModelAndView getDeleteContact(@PathVariable String id) {
 
@@ -122,13 +124,13 @@ public class ContactsSpringController {
     }
 
     // CREATE Contact handlers
-    // GET handler method for creating a new contact
+    // [handler] GET method for creating a new contact
     @RequestMapping(value = "/contacts/new")
     public ModelAndView getCreateNewContact() {
         return new ModelAndView("/newContact.jsp");
     }
 
-    // POST handler method for creating a new contact
+    // [handler] POST method for creating a new contact
     @RequestMapping(value = "/contacts", method = RequestMethod.POST)
     public ModelAndView postCreateNewContact(@RequestParam("fullname") String fullName, @RequestParam("nickname") String nickname, @RequestParam("notes") String notes) {
         ModelAndView modelAndView = new ModelAndView();
@@ -148,7 +150,7 @@ public class ContactsSpringController {
     }
 
     // UPDATE Contact Handlers
-    // GET handler method used to retrieve a contact to be updated according to its ID
+    // [handler] GET method used to retrieve a contact to be updated according to its ID
     @RequestMapping(value = "/contacts/{id}/modify", method = RequestMethod.GET)
     public ModelAndView getUpdateContact(@PathVariable String id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -170,7 +172,7 @@ public class ContactsSpringController {
         return modelAndView;
     }
 
-    // POST handler method used to update contact based to its ID
+    // [handler] POST method used to update contact based on its ID
     @RequestMapping(value = "/contacts/{id}", method = RequestMethod.POST)
     public ModelAndView postUpdateContact(@PathVariable String id, @RequestParam("contactId") String contactId, @RequestParam("fullname") String fullName, @RequestParam("nickname") String nickname, @RequestParam("notes") String note) {
         ModelAndView modelAndView = new ModelAndView();
