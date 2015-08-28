@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
+import org.mypackage.application.errors.ResourceNotFoundException;
 import org.mypackage.dal.ContactRepository;
 import org.mypackage.dal.DalException;
 import org.mypackage.model.Contact;
@@ -122,6 +123,50 @@ public class MysqlContactRepository implements ContactRepository {
         return updatedContactRows;
     }
 
+//    @Override
+//    public int updateContact(final Contact contact, final List<Email> emailsList) throws DalException {
+//        int updatedContactRows;
+//        int updatedEmailRows = 0;
+//        int totalUpdatedRows;
+//        try {
+//            for (final Email email : emailsList) {
+//                updatedEmailRows += jdbcTemplate.update(new PreparedStatementCreator() {
+//
+//                    @Override
+//                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+//                        PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Emails SET Address=?, Categor=? WHERE fContactId=?");
+//                        updateContactStatement.setString(1, email.getAddress());
+//                        updateContactStatement.setByte(2, email.getCategory().getByteValue());
+//                        updateContactStatement.setInt(3, email.getfContactId());
+//
+//                        return updateContactStatement;
+//                    }
+//                });
+//            }
+//        } catch (DataAccessException ex) {
+//            throw new DalException(ex);
+//        }
+//        try {
+//            updatedContactRows = jdbcTemplate.update(new PreparedStatementCreator() {
+//
+//                @Override
+//                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+//                    PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Contact SET FullName=?, Nickname=?, Notes=? WHERE Id=?");
+//                    updateContactStatement.setString(1, contact.getFullName());
+//                    updateContactStatement.setString(2, contact.getNickname());
+//                    updateContactStatement.setString(3, contact.getNotes());
+//                    updateContactStatement.setInt(4, contact.getId());
+//
+//                    return updateContactStatement;
+//                }
+//            });
+//        } catch (DataAccessException ex) {
+//            throw new DalException(ex);
+//        }
+//        totalUpdatedRows = updatedEmailRows + updatedContactRows;
+////        return updatedContactRows;
+//        return totalUpdatedRows;
+//    }    
     @Override
     public Contact getContactById(final int id) throws DalException {
         Contact retrievedContact = null;
