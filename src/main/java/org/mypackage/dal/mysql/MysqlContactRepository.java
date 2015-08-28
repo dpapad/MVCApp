@@ -14,6 +14,7 @@ import org.mypackage.model.Contact;
 import org.mypackage.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -128,6 +129,8 @@ public class MysqlContactRepository implements ContactRepository {
             retrievedContact = jdbcTemplate.queryForObject("SELECT * FROM Contact WHERE Id=?",
                     new Object[]{id},
                     new ContactMapper());
+        } catch (EmptyResultDataAccessException ex) {
+            return retrievedContact = null;
         } catch (DataAccessException ex) {
             throw new DalException(ex);
         }
