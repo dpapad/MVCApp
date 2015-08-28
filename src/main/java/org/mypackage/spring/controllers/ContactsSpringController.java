@@ -91,11 +91,11 @@ public class ContactsSpringController {
             modelAndView.setViewName("/errorPage.jsp");
         } catch (MalformedIdentifierException ex) {
             modelAndView.addObject("errorCode", HttpServletResponse.SC_BAD_REQUEST);
-            modelAndView.addObject("errorMessage", "An error occured because of a malformed id (id = " + id + "). Please use only numeric values.");
+            modelAndView.addObject("errorMessage", "An error occured because of a malformed id (caused by id = " + id + "). Please use only numeric values.");
             modelAndView.setViewName("/errorPage.jsp");
         } catch (ResourceNotFoundException ex) {
             modelAndView.addObject("errorCode", HttpServletResponse.SC_NOT_FOUND);
-            modelAndView.addObject("errorMessage", "Requested contact does not exist.");
+            modelAndView.addObject("errorMessage", "Requested contact (with id = " + id + ") does not exist.");
             modelAndView.setViewName("/errorPage.jsp");
         }
         return modelAndView;
@@ -117,7 +117,7 @@ public class ContactsSpringController {
             modelAndView.setViewName("/errorPage.jsp");
         } catch (MalformedIdentifierException ex) {
             modelAndView.addObject("errorCode", HttpServletResponse.SC_BAD_REQUEST);
-            modelAndView.addObject("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            modelAndView.addObject("errorMessage", "An error occured because of a malformed id (caused by id = " + id + "). Please use only numeric values.");
             modelAndView.setViewName("/errorPage.jsp");
         }
         return modelAndView;
@@ -157,7 +157,10 @@ public class ContactsSpringController {
 
         try {
             Contact contact = modifyContactController.retrieveContact(id);
+//            List emailsList = contactsController.retrieveAllEmails(id);
             modelAndView.addObject("contact", contact);
+//            modelAndView.addObject("emailsList", emailsList);
+//            modelAndView.addObject("mailCategories", Email.Category.values());
             modelAndView.setViewName("/modifyContact.jsp");
         } catch (DalException ex) {
             logger.error("A database error occured while trying to retrieve contact with ID = " + id, ex);
@@ -166,7 +169,7 @@ public class ContactsSpringController {
             modelAndView.setViewName("errorPage.jsp");
         } catch (MalformedIdentifierException ex) {
             modelAndView.addObject("errorCode", HttpServletResponse.SC_BAD_REQUEST);
-            modelAndView.addObject("errorMessage", "An error occured because of a malformed id. Please use only numeric values.");
+            modelAndView.addObject("errorMessage", "An error occured because of a malformed id (caused by id = " + id + "). Please use only numeric values.");
             modelAndView.setViewName("/errorPage.jsp");
         }
         return modelAndView;
@@ -186,7 +189,7 @@ public class ContactsSpringController {
             modelAndView.addObject("errorMessage", "There was a an internal database error.");
             modelAndView.setViewName("/errorPage.jsp");
         } catch (MalformedIdentifierException ex) {
-            modelAndView.addObject("errorMessage", "An error occured because of a malformed id. Please use only numeric values."
+            modelAndView.addObject("errorMessage", "An error occured because of a malformed id (caused by id = " + id + "). Please use only numeric values."
                     + "/nid that caused the error: " + contactId);
             modelAndView.setViewName("/errorPage.jsp");
         }
