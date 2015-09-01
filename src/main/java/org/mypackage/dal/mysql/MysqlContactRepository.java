@@ -181,6 +181,21 @@ public class MysqlContactRepository implements ContactRepository {
         }
         return addedEmailId;
     }
+    
+    @Override
+    public Email getEmailById(final int id) throws DalException {
+        Email retrievedEmail = null;
+        try {
+            retrievedEmail = jdbcTemplate.queryForObject("SELECT * FROM Email WHERE Id=?",
+                    new Object[]{id},
+                    new EmailMapper());
+        } catch (EmptyResultDataAccessException ex) {
+            return retrievedEmail = null;
+        } catch (DataAccessException ex) {
+            throw new DalException(ex);
+        }
+        return retrievedEmail;
+    }
 
     @Override
     public void updateEmailById(final Email email) throws DalException {
