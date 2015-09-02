@@ -191,6 +191,74 @@ public class MySqlContactRepositoryTest {
 
     }
 
+    /**
+     * Test for getEmailById()
+     * @exception  DalException
+     */
+    @Test
+    public void testGetEmail() throws DalException {
+        //Create a contact
+        Contact c = new Contact();
+        c.setFullName("asdf");
+        c.setNickname("asdf");
+        c.setNotes("asdf");
+        int id = this.testContactRepository.addContact(c);
+
+        String expectedResult = "mail1@test.com";
+
+        //Create a new email for the contact above
+        Email email = new Email();
+        email.setAddress(expectedResult);
+        email.setCategory(Email.Category.WORK);
+        email.setfContactId(id);
+        int emailId = this.testContactRepository.addEmail(email);
+
+        //Retrieve the email from the database
+        Email retrievedEmail = this.testContactRepository.getEmailById(emailId);
+
+        String actualResult = retrievedEmail.getAddress();
+
+        assertEquals(expectedResult, actualResult);
+
+    }
+
+    /**
+     * Test for updateEmailById()
+     *
+     * @throws DalException
+     */
+    @Test
+    public void testUpdateEmail() throws DalException {
+        //Create a contact
+        Contact c = new Contact();
+        c.setFullName("asdf");
+        c.setNickname("asdf");
+        c.setNotes("asdf");
+        int id = this.testContactRepository.addContact(c);
+
+        String emailAddress = "mail1@test.com";
+
+        //Create a new email for the contact above
+        Email emailDummy = new Email();
+        emailDummy.setAddress(emailAddress);
+        emailDummy.setCategory(Email.Category.WORK);
+        emailDummy.setfContactId(id);
+        int emailId = this.testContactRepository.addEmail(emailDummy);
+
+        String expectedValue = "updated@test.com";
+        Email updatedEmail = new Email();
+        updatedEmail.setId(emailId);
+        updatedEmail.setAddress(expectedValue);
+        updatedEmail.setCategory(Email.Category.PERSONAL);
+        updatedEmail.setfContactId(id);
+
+        this.testContactRepository.updateEmailById(updatedEmail);
+
+        String actualValue = this.testContactRepository.getEmailById(emailId).getAddress();
+
+        assertEquals(expectedValue, actualValue);
+    }
+
     private int getMaxContactId() throws DataAccessException {
 
         Integer maxContactId;
