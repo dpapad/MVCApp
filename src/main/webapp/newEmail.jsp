@@ -13,7 +13,7 @@
         <%@include file="jsp_includes/global_menu.jsp" %>
 
         <div id="mystyle" class="myform">
-            <form id="form" name="form"  method="post" action="${pageContext.request.contextPath}/contacts/${contactId}/new_email_submitted">
+            <form id="form" name="form"  method="post" action="${pageContext.request.contextPath}/contacts/${contactId}/modify/new_email_submitted">
                 <h1>Email</h1>
                 <p>To add a new Email enter following information</p>
                 <br/>
