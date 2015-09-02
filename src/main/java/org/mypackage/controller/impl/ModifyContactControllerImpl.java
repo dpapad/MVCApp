@@ -19,12 +19,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ModifyContactControllerImpl implements ModifyContactController {
+
     @Autowired
     private ContactRepository contactRepository;
 
     public ModifyContactControllerImpl() {
-        //this(ApplicationDependencies.REPOSITORY_FACTORY.createContactRepository());
     }
+
     @Autowired
     public ModifyContactControllerImpl(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
@@ -61,5 +62,4 @@ public class ModifyContactControllerImpl implements ModifyContactController {
         }
         return contact;
     }
-
 }
