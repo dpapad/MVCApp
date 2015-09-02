@@ -30,7 +30,8 @@
 
                         <td style="border: none;">                            
                             <div>
-                                <a href="<c:url value="/contacts/${contact.id}/new_email" />">Add New Email</a>
+                                <a href="<c:url value="/contacts/${contact.id}/modify" />">Modify</a>
+<!--                                <a href="<c:url value="/contacts/${contact.id}/new_email" />">Add New Email</a>-->
                             </div>                                    
                         </td>
                     </tr>                   
@@ -49,11 +50,11 @@
                         <tr>                    
                             <td><c:out value="${email.address}"/></td>
                             <td><c:out value="${email.category.name()}"/></td>
-                            <td>
+<!--                            <td>
                                 <div>
                                     <a href="<c:url value="/contacts/${contactId}/delete_email/${email.id}"/>">Delete</a>                                  
                                 </div>
-                            </td>
+                            </td>-->
                         </tr>
                     </c:forEach>
                 </tbody>
