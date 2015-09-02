@@ -186,7 +186,7 @@ public class MysqlContactRepository implements ContactRepository {
     public Email getEmailById(final int id) throws DalException {
         Email retrievedEmail = null;
         try {
-            retrievedEmail = jdbcTemplate.queryForObject("SELECT * FROM Email WHERE Id=?",
+            retrievedEmail = jdbcTemplate.queryForObject("SELECT * FROM Emails WHERE Id=?",
                     new Object[]{id},
                     new EmailMapper());
         } catch (EmptyResultDataAccessException ex) {
@@ -205,7 +205,7 @@ public class MysqlContactRepository implements ContactRepository {
 
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Contact SET Address=?, Category=? WHERE Id=? AND fContactId=?");
+                    PreparedStatement updateContactStatement = connection.prepareStatement("UPDATE Emails SET Address=?, Category=? WHERE Id=? AND fContactId=?");
                     updateContactStatement.setString(1, email.getAddress());
                     updateContactStatement.setByte(2, email.getCategory().getByteValue());
                     updateContactStatement.setInt(3, email.getId());
