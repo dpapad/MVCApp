@@ -157,10 +157,10 @@ public class ContactsSpringController {
 
         try {
             Contact contact = modifyContactController.retrieveContact(id);
-//            List emailsList = contactsController.retrieveAllEmails(id);
+            List emailsList = contactsController.retrieveAllEmails(id);
             modelAndView.addObject("contact", contact);
-//            modelAndView.addObject("emailsList", emailsList);
-//            modelAndView.addObject("mailCategories", Email.Category.values());
+            modelAndView.addObject("emailsList", emailsList);
+            modelAndView.addObject("mailCategories", Email.Category.values());
             modelAndView.setViewName("/modifyContact.jsp");
         } catch (DalException ex) {
             logger.error("A database error occured while trying to retrieve contact with ID = " + id, ex);
@@ -175,7 +175,7 @@ public class ContactsSpringController {
         return modelAndView;
     }
 
-    // [handler] POST method used to update contact based on its ID
+    // [handler] POST method used to update contact details/emails based on its ID
     @RequestMapping(value = "/contacts/{id}", method = RequestMethod.POST)
     public ModelAndView postUpdateContact(@PathVariable String id, @RequestParam("contactId") String contactId, @RequestParam("fullname") String fullName, @RequestParam("nickname") String nickname, @RequestParam("notes") String note) {
         ModelAndView modelAndView = new ModelAndView();
