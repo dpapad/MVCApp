@@ -197,7 +197,7 @@ public class MySqlContactRepository implements ContactRepository {
     }
 
     @Override
-    public void updateEmailById(final Email email) throws DalException {
+    public Email updateEmailById(final Email email) throws DalException {
         int updatedEmailRows;
         try {
             updatedEmailRows = jdbcTemplate.update(new PreparedStatementCreator() {
@@ -217,6 +217,7 @@ public class MySqlContactRepository implements ContactRepository {
             throw new DalException(ex);
         }
         //return updatedEmailRows;
+        return email;
     }
 
     @Override

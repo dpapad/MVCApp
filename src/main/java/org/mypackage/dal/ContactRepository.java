@@ -24,7 +24,7 @@ public interface ContactRepository {
     
     Email getEmailById(int id) throws DalException;
     
-    void updateEmailById(Email e) throws DalException;
+    Email updateEmailById(Email e) throws DalException;
 
     List<Email> getAllEmailsByContactId(int id) throws DalException;
 
