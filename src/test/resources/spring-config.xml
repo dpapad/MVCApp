@@ -22,15 +22,15 @@
     
     <context:component-scan base-package="org.mypackage" />
     
-    <context:property-placeholder location="classpath:/database.properties" />
+    <context:property-placeholder location="classpath:/h2Database.properties" />
     
     
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${h2.driverClassName}"/>
+        <property name="url" value="${h2.url}"/>
+        <property name="username" value="${h2.username}"/>
+        <property name="password" value="${h2.password}"/>
     </bean>   
     <bean id="jdbcTemplate"
           class="org.springframework.jdbc.core.JdbcTemplate">
