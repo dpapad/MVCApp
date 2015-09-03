@@ -115,30 +115,6 @@
             <scope>test</scope>
         </dependency>     
     </dependencies> 
-    
-    <profiles>
-        <profile>
-            <id>production</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <db.driver>com.mysql.jdbc.Driver</db.driver>
-                <db.url>jdbc:mysql://localhost:3306/mvcproject</db.url>
-                <db.username>root</db.username>
-                <db.password>adminadmin</db.password>
-            </properties>
-        </profile>    
-        <profile>
-            <id>test</id>
-            <properties>
-                <db.driver>org.h2.Driver</db.driver>
-                <db.url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</db.url>
-                <db.username></db.username>
-                <db.password></db.password>
-            </properties>
-        </profile>
-    </profiles>
 
     <build>            
         <resources>
