@@ -78,29 +78,29 @@
                 <div class="spacer"></div>
             </form>                                
 
-<!--            <table>
-                <thead>
-                    <tr>
-                        <th>Email Address</th>
-                        <th>Email Type</th>
-                    </tr>
-                </thead>
-                <tbody>e-mails
-                    <c:forEach var="email" items="${emailList}">
-                        <tr>                    
-                            <td><c:out value="${email.address}"/></td>
-                            <td><c:out value="${email.category.name()}"/></td>
-                            <td>
-                                <div>
-                                    <a href="<c:url value="/contacts/${contact.id}/modify/delete_email/${email.id}"/>">Delete Email</a>
-                                    <a href="<c:url value="/contacts/${contact.id}/modify/update_email/${email.id}"/>">Update Email</a>
-                                    <p></p>
-                                </div>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>-->
+            <!--            <table>
+                            <thead>
+                                <tr>
+                                    <th>Email Address</th>
+                                    <th>Email Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>e-mails
+            <c:forEach var="email" items="${emailList}">
+                <tr>                    
+                    <td><c:out value="${email.address}"/></td>
+                    <td><c:out value="${email.category.name()}"/></td>
+                    <td>
+                        <div>
+                            <a href="<c:url value="/contacts/${contact.id}/modify/delete_email/${email.id}"/>">Delete Email</a>
+                            <a href="<c:url value="/contacts/${contact.id}/modify/update_email/${email.id}"/>">Update Email</a>
+                            <p></p>
+                        </div>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>-->
         </div>   
     </body>
 </html>
