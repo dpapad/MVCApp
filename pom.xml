@@ -122,6 +122,10 @@
                 <directory>./src/main/resources/</directory>
                 <filtering>true</filtering>
             </resource>
+            <resource>
+                <directory>./test/resources/</directory>
+                <filtering>true</filtering>
+            </resource>
         </resources>        
         <plugins>
             <plugin>
