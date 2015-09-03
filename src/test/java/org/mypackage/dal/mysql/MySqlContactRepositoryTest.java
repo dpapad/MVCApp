@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author dev-dp
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:spring-config.xml")
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/spring-config.xml")
 public class MySqlContactRepositoryTest {
 
     @Autowired
