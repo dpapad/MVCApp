@@ -50,4 +50,11 @@
     </bean>
     <!--Turn ON annotation based transaction-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!--Liquibase-->
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="changeLog" value="classpath:/resources/liquibase/db.changelog-master.xml"/>
+    </bean>
+    
 </beans>
