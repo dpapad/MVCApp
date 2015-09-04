@@ -65,12 +65,21 @@
             <artifactId>spring-webmvc</artifactId>
             <version>4.2.0.RELEASE</version>
         </dependency>
+        <!--TEST dependency-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.2.0.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        
         <!--LOG4J Dependency-->        
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
-        </dependency>        
+        </dependency>  
+              
         <!--MYSQL Dependency-->
         <dependency>
             <groupId>mysql</groupId>
@@ -79,6 +88,7 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        
         <!--JUNIT Dependency-->
         <dependency>
             <groupId>junit</groupId>
@@ -86,6 +96,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        
         <!--H2DATABASE Dependency-->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -93,19 +104,13 @@
             <version>1.4.187</version>
             <scope>test</scope>
         </dependency>
+        
         <!--LIQUIBASE dependency-->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>3.4.1</version>
             <scope>compile</scope>
-        </dependency>
-        <!--TEST dependency-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.2.0.RELEASE</version>
-            <scope>test</scope>
         </dependency>
         
         <!--MOCKITO--> 
@@ -117,7 +122,8 @@
         </dependency>     
     </dependencies> 
 
-    <build>            
+    <build>        
+  
         <resources>
             <resource>
                 <directory>./src/main/resources/</directory>
@@ -125,16 +131,19 @@
             </resource>
         </resources>
         
-        <testResources>
-            <testResource>
+        <testResources>          
+            <testResource>          
                 <directory>./src/test/resources/</directory>
                 <filtering>true</filtering>
             </testResource>
         </testResources>     
         
-        <filters>
+        <filters>            
             <filter>${env}.properties</filter>
-        </filters>
+            <!--can be skipped if properties are passed directly from ${env}.properties-->
+            <filter>./src/test/resources/app.properties</filter>    
+            <filter>./src/main/resources/app.properties</filter>             
+        </filters>  
         
         <plugins>
             <plugin>
@@ -184,8 +193,9 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>            
-<!--            <plugin>
+            </plugin>           
+            <!--LIQUIBASE plugin--> 
+            <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.4.1</version>
@@ -194,6 +204,7 @@
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <propertyFile>target/classes/liquibase/liquibase.properties</propertyFile>
                     <dropFirst>true</dropFirst>
+                    <changeLogFile>target/classes/liquibase/db.changelog-master.xml</changeLogFile>
                   
                 </configuration>
                 <executions>
@@ -204,7 +215,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>            -->
+            </plugin>            
         </plugins>
     </build>
     
