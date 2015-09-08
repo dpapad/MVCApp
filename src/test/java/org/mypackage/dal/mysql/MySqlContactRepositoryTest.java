@@ -33,29 +33,12 @@ public class MySqlContactRepositoryTest {
     @Autowired
     private ContactRepository testContactRepository;
 
-    @Before
-    public void setUp() throws SQLException, ClassNotFoundException {
-        testJdbcTemplate.execute("CREATE TABLE Contact ("
-                + "Id INT PRIMARY KEY AUTO_INCREMENT, "
-                + "FullName VARCHAR(45), "
-                + "Nickname VARCHAR(45), "
-                + "Notes VARCHAR(45) "
-                + ");");
-
-        testJdbcTemplate.execute("CREATE TABLE Emails ("
-                + "Id INT PRIMARY KEY AUTO_INCREMENT, "
-                + "Address VARCHAR(150) UNIQUE, "
-                + "Category TINYINT, "
-                + "fContactId INT, "
-                + "FOREIGN KEY (fContactId) "
-                + "REFERENCES Contact (Id) "
-                + "ON UPDATE CASCADE); ");
-    }
-
     @After
     public void tearDown() throws ClassNotFoundException, SQLException {
-        testJdbcTemplate.execute("DROP TABLE Emails;");
-        testJdbcTemplate.execute("DROP TABLE Contact;");
+        testJdbcTemplate.execute("DELETE FROM Emails;");
+        testJdbcTemplate.execute("ALTER TABLE Emails ALTER COLUMN Id RESTART WITH 1;");
+        testJdbcTemplate.execute("DELETE FROM Contact;");
+        testJdbcTemplate.execute("ALTER TABLE Contact ALTER COLUMN Id RESTART WITH 1;");
     }
 
     @Test
@@ -157,12 +140,12 @@ public class MySqlContactRepositoryTest {
         c.setFullName("asdf");
         c.setNickname("asdf");
         c.setNotes("asdf");
-        this.testContactRepository.addContact(c);
+        int contactId = this.testContactRepository.addContact(c);
 
         Email e = new Email();
         e.setAddress("mail2@test.com");
         e.setCategory(Email.Category.PERSONAL);
-        e.setfContactId(1);
+        e.setfContactId(contactId);
         int expectedResult = this.testContactRepository.addEmail(e);
         int actualResult = this.getEmailCount();
 
@@ -172,17 +155,18 @@ public class MySqlContactRepositoryTest {
     @Test
     public void testAddDuplicateEmail() throws DalException {
         boolean exists;
+        int contactId;
 
         Contact c = new Contact();
         c.setFullName("asdf");
         c.setNickname("asdf");
         c.setNotes("asdf");
-        this.testContactRepository.addContact(c);
+        contactId = this.testContactRepository.addContact(c);
 
         Email e = new Email();
         e.setAddress("mail@test.com");
         e.setCategory(Email.Category.PERSONAL);
-        e.setfContactId(1);
+        e.setfContactId(contactId);
         this.testContactRepository.addEmail(e);
 
         exists = this.testContactRepository.checkIfEmailExists(e);
@@ -193,7 +177,8 @@ public class MySqlContactRepositoryTest {
 
     /**
      * Test for getEmailById()
-     * @exception  DalException
+     *
+     * @exception DalException
      */
     @Test
     public void testGetEmail() throws DalException {
