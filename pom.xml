@@ -13,7 +13,6 @@
         <env>local</env>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log.home>home/dev-dp/Projects/mvcapplogs.log</log.home>
         <db.changelogfile>src/main/resources/liquibase/db.changelog-master.xml</db.changelogfile>
     </properties>
     
